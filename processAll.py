@@ -1,17 +1,21 @@
 import os
+import subprocess
 
 def processFolder():
   for folder in os.listdir('prepro'):
 
     os.makedirs(f'postpro/{folder}', exist_ok=True)
+
     print("I'm working on " + folder)
 
     for file in os.listdir(f'prepro/{folder}'):
 
+      print(file)
+
       if(file.endswith(".txt")):
 
-        with open("./prepro/" + folder + "/" + file, "r") as pk1, \
-          open("./postpro/" + folder + "/" + file, "w") as pk2:
+        with open("prepro/" + folder + "/" + file, "r") as pk1, \
+          open("postpro/" + folder + "/" + file, "w") as pk2:
 
             pk2.write("Rank,Pokemon,Usage,Raw,Percent,Real,RealPercent\n")
 
@@ -46,13 +50,11 @@ def processFolder():
                 if '---' not in final:
                   pk2.write(final + '\n')
 
-
+    os.makedirs(f'postpro/{folder}/leads/', exist_ok=True)
     for file in os.listdir(f'prepro/{folder}/leads/'):
 
-      os.makedirs(f'postpro/{folder}/leads/', exist_ok=True)
-
-      with open("./prepro/" + folder + "/leads/" + file, "r") as pk1, \
-        open("./postpro/" + folder + "/leads/" + file, "w") as pk2:
+      with open("prepro/" + folder + "/leads/" + file, "r") as pk1, \
+        open("postpro/" + folder + "/leads/" + file, "w") as pk2:
 
           pk2.write("Rank,Pokemon,Usage,Raw,Percent\n")
 
@@ -83,12 +85,11 @@ def processFolder():
               if '---' not in final:
                 pk2.write(final + '\n')
 
+    os.makedirs(f'postpro/{folder}/metagame/', exist_ok=True)
     for file in os.listdir(f'prepro/{folder}/metagame/'):
 
-      os.makedirs(f'postpro/{folder}/metagame/', exist_ok=True)
-
-      with open("./prepro/" + folder + "/metagame/" + file, "r") as pk1, \
-        open("./postpro/" + folder + "/metagame/" + file, "w") as pk2:
+      with open("prepro/" + folder + "/metagame/" + file, "r") as pk1, \
+        open("postpro/" + folder + "/metagame/" + file, "w") as pk2:
 
           pk2.write("Meta,Percent,Stall\n")
 
@@ -118,12 +119,11 @@ def processFolder():
 
             pk2.write(final + "\n")
 
+    os.makedirs(f'postpro/{folder}/moveset/', exist_ok=True)
     for file in os.listdir(f'prepro/{folder}/moveset/'):
 
-      os.makedirs(f'postpro/{folder}/moveset/', exist_ok=True)
-
-      with open("./prepro/" + folder + "/moveset/" + file, "r") as pk1, \
-        open("./postpro/" + folder + "/moveset/" + file, "w") as pk2:
+      with open("prepro/" + folder + "/moveset/" + file, "r") as pk1, \
+        open("postpro/" + folder + "/moveset/" + file, "w") as pk2:
 
           pk2.write("Pokemon,Raw,Abilities,Items,Spreads,Moves,Teammates\n")
 

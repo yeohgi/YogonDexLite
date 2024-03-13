@@ -29,6 +29,7 @@ class dex:
         print(f"Type: {type1} {type2}")
 
         #type matchup defensive
+        self.slashWeak(type1, type2)
         
         #abilities + descs (ordered by usage)
         print('Abilities: ')
@@ -330,6 +331,91 @@ class dex:
                     return True
             
             return False
+        
+    def slashWeak(self, type1, type2):
+
+        t1 = -1
+        t2 = -1
+
+        immunities = []
+        weaknessesx4 = []
+        weaknesses = []
+        neutral = []
+        resistances = []
+        resistancesx4 = []
+
+        for i, type in enumerate(pk.types):
+            if type.lower() == type1:
+                t1 = i
+            if type.lower() == type2:
+                t2 = i
+
+        if t2 == -1:
+
+            for i, typei in enumerate(pk.universeMatrix):
+
+                if pk.immunityMatrix[i][t1] == 1:
+                    immunities.append(pk.types[i])
+                elif pk.universeMatrix[i][t1] == 1:
+                    weaknesses.append(pk.types[i])
+                elif pk.universeMatrix[i][t1] == 0:
+                    neutral.append(pk.types[i])
+                elif pk.universeMatrix[i][t1] == -1:
+                    resistances.append(pk.types[i])
+
+        else:
+
+            for i, typei in enumerate(pk.universeMatrix):
+
+                if pk.immunityMatrix[i][t1] == 1 or pk.immunityMatrix[i][t2] == 1:
+                    immunities.append(pk.types[i])
+                elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == 2:
+                    weaknessesx4.append(pk.types[i])
+                elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == 1:
+                    weaknesses.append(pk.types[i])
+                elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == 0:
+                    neutral.append(pk.types[i])
+                elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == -1:
+                    resistances.append(pk.types[i])
+                elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == -2:
+                    resistancesx4.append(pk.types[i])
+
+        # immunities = []
+        if len(immunities) != 0:
+            print("Immunities :")
+            for type in immunities:
+                print(type, end=' ')
+            print("")
+        # weaknessesx4 = []
+        if len(weaknessesx4) != 0:
+            print("weaknessesx4 :")
+            for type in weaknessesx4:
+                print(type, end=' ')
+            print("")
+        # weaknesses = []
+        if len(weaknesses) != 0:
+            print("weaknesses :")
+            for type in weaknesses:
+                print(type, end=' ')
+            print("")
+        # neutral = []
+        if len(neutral) != 0:
+            print("neutral :")
+            for type in neutral:
+                print(type, end=' ')
+            print("")
+        # resistances = []
+        if len(resistances) != 0:
+            print("resistances :")
+            for type in resistances:
+                print(type, end=' ')
+            print("")
+        # resistancesx4 = []
+        if len(resistancesx4) != 0:
+            print("resistancesx4 :")
+            for type in resistancesx4:
+                print(type, end=' ')
+            print("")
 
     # tostring
     def __repr__(self):
