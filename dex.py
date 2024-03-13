@@ -345,9 +345,9 @@ class dex:
         resistancesx4 = []
 
         for i, type in enumerate(pk.types):
-            if type.lower() == type1:
+            if type.lower() == type1.lower():
                 t1 = i
-            if type.lower() == type2:
+            if type.lower() == type2.lower():
                 t2 = i
 
         if t2 == -1:
@@ -380,39 +380,40 @@ class dex:
                 elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == -2:
                     resistancesx4.append(pk.types[i])
 
+        print("Defensive Matchups: ")
         # immunities = []
         if len(immunities) != 0:
-            print("Immunities :")
+            print("0x Immunities :", end=' ')
             for type in immunities:
                 print(type, end=' ')
             print("")
         # weaknessesx4 = []
         if len(weaknessesx4) != 0:
-            print("weaknessesx4 :")
+            print("    4x Weaknesses :", end=' ')
             for type in weaknessesx4:
                 print(type, end=' ')
             print("")
         # weaknesses = []
         if len(weaknesses) != 0:
-            print("weaknesses :")
+            print("    2x Weaknesses :", end=' ')
             for type in weaknesses:
                 print(type, end=' ')
             print("")
         # neutral = []
         if len(neutral) != 0:
-            print("neutral :")
+            print("    Neutral :", end=' ')
             for type in neutral:
                 print(type, end=' ')
             print("")
         # resistances = []
         if len(resistances) != 0:
-            print("resistances :")
+            print("    1/2 Resistances :", end=' ')
             for type in resistances:
                 print(type, end=' ')
             print("")
         # resistancesx4 = []
         if len(resistancesx4) != 0:
-            print("resistancesx4 :")
+            print("    1/4x Resistances :", end=' ')
             for type in resistancesx4:
                 print(type, end=' ')
             print("")

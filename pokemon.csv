@@ -520,8 +520,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 421,Cherrim-Sunshine,Grass,,70,60,70,87,78,85,Flower Gift,,
 422,Shellos-East,Water,,76,48,48,57,62,34,Sticky Hold,Storm Drain,Sand Force
 422,Shellos-West,Water,,76,48,48,57,62,34,Sticky Hold,Storm Drain,Sand Force
-423,Gastrodon-East,Water,Ground,111,83,68,92,82,39,Sticky Hold,Storm Drain,Sand Force
-423,Gastrodon-West,Water,Ground,111,83,68,92,82,39,Sticky Hold,Storm Drain,Sand Force
+423,Gastrodon,Water,Ground,111,83,68,92,82,39,Sticky Hold,Storm Drain,Sand Force
 424,Ambipom,Normal,,75,100,66,60,66,115,Technician,Pickup,Skill Link
 425,Drifloon,Ghost,Flying,90,50,34,60,44,70,Aftermath,Unburden,Flare Boost
 426,Drifblim,Ghost,Flying,150,80,44,90,54,80,Aftermath,Unburden,Flare Boost

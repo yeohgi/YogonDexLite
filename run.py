@@ -32,6 +32,7 @@ dex = dex.dex(format)
 pokemon = input("Who's that Pokemon? ")
 while pokemon != 'exit':
     if(dex.pokemonExist(pokemon)):
+        print("")
         dex.query_pokemon(pokemon)
     else:
         print("Invalid Pokemon, check your spelling? (Alola, Hisui, Therian)")
