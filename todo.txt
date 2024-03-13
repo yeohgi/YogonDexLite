@@ -1,0 +1,3 @@
+add berries to item list
+
+fix retriving pokemon that are banned/shit
