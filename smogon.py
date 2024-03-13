@@ -70,9 +70,13 @@ def grabOneFormat(format):
 
         subprocess.Popen(f"php grabBasic.php {formatDate} {format}", shell = True, stdout = subprocess.PIPE)
 
+        time.sleep(0.3)
+
         for specialFolder in specialFolders:
 
             subprocess.Popen(f"php grabSpecial.php {formatDate} {specialFolder} {format}", shell = True, stdout = subprocess.PIPE)
+
+            time.sleep(0.3)
 
 def checkForLatest(format):
 

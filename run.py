@@ -30,10 +30,15 @@ print("Your set up! Time to kick some ass!")
 dex = dex.dex(format)
 
 pokemon = input("Who's that Pokemon? ")
-while pokemon != 'exit':
+while pokemon != 'exit' and pokemon != 'quit':
     if(dex.pokemonExist(pokemon)):
-        print("")
-        dex.query_pokemon(pokemon)
-    else:
+        if(dex.pokemonInForamt(pokemon)):
+            dex.query_pokemon(pokemon)
+        else:
+            print("There is no information about this Pokemon in the format you are playing, either it's super niche or banned")
+            print("Here is some basic information about the Pokemon")
+            dex.printPokemon(pokemon)
+        
+    elif(pokemon != 'exit' and pokemon != 'quit'):
         print("Invalid Pokemon, check your spelling? (Alola, Hisui, Therian)")
     pokemon = input("Who's that Pokemon? ")

@@ -769,13 +769,13 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 638,Cobalion,Steel,Fighting,91,90,129,90,72,108,Justified,,
 639,Terrakion,Rock,Fighting,91,129,90,72,90,108,Justified,,
 640,Virizion,Grass,Fighting,91,90,72,90,129,108,Justified,,
-641,Tornadus-Incarnate,Flying,,79,115,70,125,80,111,Prankster,Defiant,Defiant
+641,Tornadus,Flying,,79,115,70,125,80,111,Prankster,Defiant,Defiant
 641,Tornadus-Therian,Flying,,79,100,80,110,90,121,Regenerator,,
-642,Thundurus-Incarnate,Electric,Flying,79,115,70,125,80,111,Prankster,Defiant,Defiant
+642,Thundurus,Electric,Flying,79,115,70,125,80,111,Prankster,Defiant,Defiant
 642,Thundurus-Therian,Electric,Flying,79,105,70,145,80,101,Volt Absorb,,
 643,Reshiram,Dragon,Fire,100,120,100,150,120,90,Turboblaze,,
 644,Zekrom,Dragon,Electric,100,150,120,120,100,90,Teravolt,,
-645,Landorus-Incarnate,Ground,Flying,89,125,90,115,80,101,Sand Force,Sheer Force,Sheer Force
+645,Landorus,Ground,Flying,89,125,90,115,80,101,Sand Force,Sheer Force,Sheer Force
 645,Landorus-Therian,Ground,Flying,89,145,90,105,80,91,Intimidate,,
 646,Kyurem,Dragon,Ice,125,130,90,130,90,95,Pressure,,
 646,Kyurem-Black,Dragon,Ice,125,170,100,120,90,95,Teravolt,,
@@ -1060,8 +1060,8 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 874,Stonjourner,Rock,,100,125,135,20,20,70,Power Spot,,
 875,Eiscue-Ice Face,Ice,,75,80,110,65,90,50,Ice Face,,
 875,Eiscue-No Ice Face,Ice,,75,80,70,65,50,130,Ice Face,,
-876,Indeedee-Male,Psychic,Normal,60,65,55,105,95,95,Inner Focus,Synchronize,Psychic Surge
-876,Indeedee-Female,Psychic,Normal,70,55,65,95,105,85,Own Tempo,Synchronize,Psychic Surge
+876,Indeedee-M,Psychic,Normal,60,65,55,105,95,95,Inner Focus,Synchronize,Psychic Surge
+876,Indeedee-F,Psychic,Normal,70,55,65,95,105,85,Own Tempo,Synchronize,Psychic Surge
 877,Morpeko-Full Belly,Electric,Dark,58,95,58,70,58,97,Hunger Switch,,
 877,Morpeko-Hangry,Electric,Dark,58,95,58,70,58,97,Hunger Switch,,
 878,Cufant,Steel,,72,80,49,40,49,40,Sheer Force,,Heavy Metal

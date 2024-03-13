@@ -383,7 +383,7 @@ class dex:
         print("Defensive Matchups: ")
         # immunities = []
         if len(immunities) != 0:
-            print("0x Immunities :", end=' ')
+            print("    0x Immunities :", end=' ')
             for type in immunities:
                 print(type, end=' ')
             print("")
@@ -417,6 +417,101 @@ class dex:
             for type in resistancesx4:
                 print(type, end=' ')
             print("")
+
+    def pokemonInForamt(self, pokemon):
+
+        db = 'moveset.db'
+
+        pokemon = pokemon.title()
+
+        tryNames = []           
+        if '-' in pokemon or ' ' in pokemon:
+            tryNames.append(pokemon.replace(' ','-'))
+            tryNames.append(pokemon.replace('-',' '))
+        else:
+            tryNames.append(pokemon)
+
+        if os.path.exists(db):
+
+            conn = sqlite3.connect(db)
+            cursor = conn.cursor()
+
+            for name in tryNames:
+                sqlCommand = f"SELECT Pokemon FROM moveset WHERE Pokemon == '{name}'"
+
+                cursor.execute(sqlCommand)
+
+                rows = cursor.fetchall()
+
+                if len(rows) >= 1:
+                    return True
+            
+            return False
+        
+    def printPokemon(self, pokemon):
+
+        db = 'pokemon.db'
+
+        pokemon = pokemon.title()
+
+        tryNames = []           
+        if '-' in pokemon or ' ' in pokemon:
+            tryNames.append(pokemon.replace(' ','-'))
+            tryNames.append(pokemon.replace('-',' '))
+        else:
+            tryNames.append(pokemon)
+
+        if os.path.exists(db):
+
+            conn = sqlite3.connect(db)
+            cursor = conn.cursor()
+
+            for name in tryNames:
+                sqlCommand = f"SELECT * FROM pokemon WHERE Pokemon == '{name}'"
+
+                cursor.execute(sqlCommand)
+
+                rows = cursor.fetchall()[0]
+
+                if len(rows) > 12:
+
+                    #header
+                    print(f'{rows[1]} | Number: {rows[0]} Rank: N/A Usage: N/A')
+
+                    type1 = 'None'
+                    type2 = 'None'
+
+                    #type + weak
+                    print("Type: ", end='')
+                    if(len(rows[2]) > 0):
+                        print(rows[2].upper(), end='')
+                        type1 = rows[2]
+                    if(len(rows[3]) > 0):
+                        print(" " + rows[3].upper(), end='')
+                        type2 = rows[3]
+                    print("")
+
+                    self.slashWeak(type1, type2)
+
+                    #abilities
+                    print("Abilities: ")
+                    for i in range(10,13):
+                        if len(rows[i]) > 0:
+                            desc = self.ablFetch(rows[i])
+                            print(f"    {rows[i]} : {desc}")
+
+                    print('Stats: ')
+
+                    stats = []
+                    stats.append(self.dexFetch('pokemon', pokemon, 'HP').upper())
+                    stats.append(self.dexFetch('pokemon', pokemon, 'ATK').upper())
+                    stats.append(self.dexFetch('pokemon', pokemon, 'DEF').upper())
+                    stats.append(self.dexFetch('pokemon', pokemon, 'SPATK').upper())
+                    stats.append(self.dexFetch('pokemon', pokemon, 'SPDEF').upper())
+                    stats.append(self.dexFetch('pokemon', pokemon, 'SPD').upper())
+
+                    for index, stat in enumerate(stats):
+                        print('    ' + pk.stats[index] + ': ' + stat)
 
     # tostring
     def __repr__(self):
