@@ -142,6 +142,7 @@ class dex:
                     print(f"    {teammate[-1]} {teammateName}")
     
         #possible defensive tera types
+        self.teraGuess(type1, type2)
     
     def dexFetch(self, table, pokemon, column):
 
@@ -263,23 +264,49 @@ class dex:
             print("TABLE DNE")
             return None
         
-    def teraGuess(self, pokemon):
-        
-        db = 'pokemon.db'
+    def teraGuess(self, type1, type2):
 
-        if os.path.exists(db):
+        pass
 
-            conn = sqlite3.connect(db)
-            cursor = conn.cursor()
+        # t1 = -1
+        # t2 = -1
 
-            sqlCommand = f"SELECT Type1, Type2 FROM pokemon WHERE Pokemon == '{pokemon}'"
+        # for i, type in enumerate(pk.types):
+        #     if type.lower() == type1.lower():
+        #         t1 = i
+        #     if type.lower() == type2.lower():
+        #         t2 = i
 
-            cursor.execute(sqlCommand)
+        # if t2 == -1:
 
-            rows = cursor.fetchall()
+        #     typeScore = []
+        #     weaknesses = []
 
-            for row in rows:
-                print(row)
+        #     teraTypes = []
+
+        #     for i, typei in enumerate(pk.universeMatrix):
+
+        #         if pk.immunityMatrix[i][t1] == 1:
+        #             #do nothing we dont need to worry about an immunity
+        #             pass
+        #         elif pk.universeMatrix[i][t1] == 1:
+        #             #if we are weak let us consider a defenseive tera
+        #             weaknesses.append(i)
+
+        #     print(teraTypes)
+                        
+        # else:
+
+        #     for i, typei in enumerate(pk.universeMatrix):
+
+        #         weaknesses = []
+
+        #         if pk.immunityMatrix[i][t1] == 1 or pk.immunityMatrix[i][t2] == 1:
+        #             pass
+        #         elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == 2:
+        #             weaknesses.append(pk.types[i], 2)
+        #         elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == 1:
+        #             weaknesses.append(pk.types[i], 1)
 
     def getFormat(self):
         return self.format

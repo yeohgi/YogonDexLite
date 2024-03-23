@@ -3,10 +3,10 @@ import dex
 import time
 
 print("Welcome to Yogon Dex Lite")
-format = input("Please enter the format you will be playing (Gen#Format) (For example: gen9doublesou): ")
+format = input("Please enter the format you will be playing (For example: gen9doublesou): ")
 
 while not smogon.validFormat(format):
-    format = input("No no no, look at the style guide -> (Gen#Format) (For example: gen9doublesou): ")
+    format = input("No no no, that format might not exist anymore (For example: gen9doublesou): ")
 
 if not smogon.checkForLatest(format):
     smogon.grabOneFormat(format)
