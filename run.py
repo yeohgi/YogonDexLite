@@ -40,6 +40,8 @@ while pokemon != 'exit' and pokemon != 'quit':
     elif pokemon.startswith('!'):
         if pokemon == '!EV':
             dex.explainSpreads()
+        if pokemon == '!TC':
+            dex.printTypeChart()
     elif(dex.pokemonExist(pokemon)):
         if(dex.pokemonInForamt(pokemon)):
             dex.query_pokemon(pokemon)

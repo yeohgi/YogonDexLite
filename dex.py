@@ -26,7 +26,57 @@ class dex:
         print("EVs make all the difference, Pokemon interactions can completely change based on what stats are invested into.")
         print("For example, Pokemon who are invested into offensively may be able to threaten OHKOs previously unattainable.")
         print("Or Pokemon who are invested into defensively may be able to just barely survive attacks that would previously knock them out, allowing for another turns worth of value.")
-    
+
+    def printTypeChart(self):
+
+        print("                                                                                          Attacking ▼ Defending ►")
+
+        print("          ", end='')
+        for i, typei in enumerate(pk.types):
+            print(f"{pk.types[i]:>10}", end='')
+        print("")
+
+        for i, typei in enumerate(pk.types):
+            print("          ", end='')
+            for j in range(0,len(pk.types) * 10 + 1):
+                if j%10 == 0:
+                    print(f"\033[1m|\033[0m", end='')
+                else:
+                    print(f"\033[1m-\033[0m", end='')
+            print("")
+
+            print(f"{pk.types[i]:>10}", end='')
+
+            for j in range(0,len(pk.types) * 10 + 1):
+                if j%10 == 0:
+                    print(f"\033[1m|\033[0m", end='')
+                elif j%10 - 5 == 0:
+
+                    typej = j//10
+
+                    if pk.immunityMatrix[i][typej] == 1:
+                        print(f"\033[1m\033[35m0\033[0m", end='')
+                        print(f"\033[37m", end='')
+                    elif pk.universeMatrix[i][typej] == 1:
+                        print(f"\033[1m\033[32m2\033[0m", end='')
+                        print(f"\033[37m", end='')
+                    elif pk.universeMatrix[i][typej] == 0:
+                        print(f"1", end='')
+                    else:
+                        print(f"\033[1m\033[31m½\033[0m", end='')
+                        print(f"\033[37m", end='')
+                else:
+                    print(f" ", end='')
+            print("")
+        
+        print("          ", end='')
+        for j in range(0,len(pk.types) * 10 + 1):
+            if j%10 == 0:
+                print(f"\033[1m|\033[0m", end='')
+            else:
+                print(f"\033[1m-\033[0m", end='')
+        print("")
+        
     def my_pokemon(self, pokemon):
         print(f"{pokemon.title()}")
 
