@@ -138,6 +138,8 @@ class dex:
 
             desc = self.itemFetch(itemName)
 
+            item[-1] = item[-1].strip('"')
+
             if (float(item[-1]) > 12.00):
                 if(itemName == 'Other'):
                     print(f"    {item[-1]}% {'Other'}")
@@ -303,45 +305,108 @@ class dex:
 
         pass
 
-        # t1 = -1
-        # t2 = -1
+        t1 = -1
+        t2 = -1
 
-        # for i, type in enumerate(pk.types):
-        #     if type.lower() == type1.lower():
-        #         t1 = i
-        #     if type.lower() == type2.lower():
-        #         t2 = i
+        for i, type in enumerate(pk.types):
+            if type.lower() == type1.lower():
+                t1 = i
+            if type.lower() == type2.lower():
+                t2 = i
 
-        # if t2 == -1:
+        if t2 == -1:
 
-        #     typeScore = []
-        #     weaknesses = []
+            typeScore = []
+            weaknesses = []
 
-        #     teraTypes = []
+            for i, typei in enumerate(pk.universeMatrix):
 
-        #     for i, typei in enumerate(pk.universeMatrix):
+                if pk.immunityMatrix[i][t1] == 1:
+                    #do nothing we dont need to worry about an immunity
+                    pass
+                elif pk.universeMatrix[i][t1] == 1:
+                    #if we are weak let us consider a defenseive tera
+                    weaknesses.append(i)
 
-        #         if pk.immunityMatrix[i][t1] == 1:
-        #             #do nothing we dont need to worry about an immunity
-        #             pass
-        #         elif pk.universeMatrix[i][t1] == 1:
-        #             #if we are weak let us consider a defenseive tera
-        #             weaknesses.append(i)
+            # print(weaknesses)
+            # for i in weaknesses:
+            #     print(pk.types[i])
 
-        #     print(teraTypes)
+            for i, typei in enumerate(pk.universeMatrix):
+                typeScore.append(0) 
+                for j in weaknesses:
+                    if pk.immunityMatrix[j][i] == 1:
+                        typeScore[i] = -16
+                        break
+                    else:
+                        typeScore[i] += pk.universeMatrix[j][i]
+
+            # print(typeScore)
+            for i, type in enumerate(typeScore):
+                typeScore[i] = (typeScore[i], pk.types[i])
+
+            typeScore = sorted(typeScore, key=lambda x: x[0], reverse=False)
+            # print(typeScore)
+
+            print("Guessed Defensive Tera Types: ")
+            for type in typeScore:
+                if type[0] >= 0:
+                    break
+                elif type[0] == -16:
+                    print(f"    {type[1]:>10}:      Grants an immunity to a 2x super effective weakness")
+                else:
+                    print(f"    {type[1]:>10}:      Provides a net {abs(type[0])} resistances to previously threating types")
                         
-        # else:
+        else:
 
-        #     for i, typei in enumerate(pk.universeMatrix):
+            typeScore = []
+            weaknesses = []
 
-        #         weaknesses = []
+            for i, typei in enumerate(pk.universeMatrix):
 
-        #         if pk.immunityMatrix[i][t1] == 1 or pk.immunityMatrix[i][t2] == 1:
-        #             pass
-        #         elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == 2:
-        #             weaknesses.append(pk.types[i], 2)
-        #         elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == 1:
-        #             weaknesses.append(pk.types[i], 1)
+                if pk.immunityMatrix[i][t1] == 1 or pk.immunityMatrix[i][t2] == 1:
+                    pass
+                elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == 2:
+                    weaknesses.append((i, 2))
+                elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == 1:
+                    weaknesses.append((i, 1))
+
+            # print(weaknesses)
+
+            for i, typei in enumerate(pk.universeMatrix):
+                typeScore.append(0) 
+                for j in weaknesses:
+                    if pk.immunityMatrix[j[0]][i] == 1 and j[1] == 2:
+                        typeScore[i] = -32
+                        break
+                    elif pk.immunityMatrix[j[0]][i] == 1:   
+                        typeScore[i] = -16
+                        break
+                    elif j[1] == 2:
+                        typeScore[i] += 2 * pk.universeMatrix[j[0]][i]
+                    else:
+                        typeScore[i] += pk.universeMatrix[j[0]][i]
+
+            # print(typeScore)
+
+            for i, type in enumerate(typeScore):
+                typeScore[i] = (typeScore[i], pk.types[i])
+
+            typeScore = sorted(typeScore, key=lambda x: x[0], reverse=False)
+            # print(typeScore)
+
+            print("Guessed Defensive Tera Types: ")
+            for type in typeScore:
+                if type[0] >= 0:
+                    break
+                elif type[0] == -32:
+                    print(f"    {type[1]:>10}:      Grants an immunity to a 4x super effective weakness")
+                elif type[0] == -16:
+                    print(f"    {type[1]:>10}:      Grants an immunity to a 2x super effective weakness")
+                else:
+                    print(f"    {type[1]:>10}:      Provides a net {abs(type[0])} resistances to previously threating types (Dual type calculations factor in 4x weaknesses)")
+
+                
 
     def getFormat(self):
         return self.format
@@ -442,6 +507,13 @@ class dex:
                 elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == -2:
                     resistancesx4.append(pk.types[i])
 
+        immunities = sorted(immunities)
+        weaknessesx4 = sorted(weaknessesx4)
+        weaknesses = sorted(weaknesses)
+        neutral = sorted(neutral)
+        resistances = sorted(resistances)
+        resistancesx4 = sorted(resistancesx4)
+
         print("Defensive Matchups: ")
         # immunities = []
         if len(immunities) != 0:
@@ -510,6 +582,11 @@ class dex:
             elif pk.universeMatrix[t1][i] == -1:
                 resistances.append(pk.types[i])
 
+        immunities = sorted(immunities)
+        weaknesses = sorted(weaknesses)
+        neutral = sorted(neutral)
+        resistances = sorted(resistances)
+
         print(f"Offensive Matchups For {type1.title()}: ")
         # immunities = []
         if len(immunities) != 0:
@@ -554,6 +631,11 @@ class dex:
                     neutral.append(pk.types[i])
                 elif pk.universeMatrix[t2][i] == -1:
                     resistances.append(pk.types[i])
+
+            immunities = sorted(immunities)
+            weaknesses = sorted(weaknesses)
+            neutral = sorted(neutral)
+            resistances = sorted(resistances)
 
             print("")
             print(f"Offensive Matchups For {type2.title()}: ")
@@ -674,7 +756,7 @@ class dex:
                             desc = self.ablFetch(rows[i])
                             print(f"    {rows[i]} : {desc}")
 
-                    print('Stats: ')
+                    print('Pokemons Base Stats: ')
 
                     stats = []
                     stats.append(self.dexFetch('pokemon', pokemon, 'HP').upper())
@@ -685,7 +767,8 @@ class dex:
                     stats.append(self.dexFetch('pokemon', pokemon, 'SPD').upper())
 
                     for index, stat in enumerate(stats):
-                        print('    ' + pk.stats[index] + ': ' + stat)
+                        bar = self.printStatBar(int(stat))
+                        print(f"{pk.stats[index]:>10}: {stat:>5}", end=bar + '\n')
             
 
     # tostring
