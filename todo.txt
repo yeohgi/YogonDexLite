@@ -1,3 +1,0 @@
-experiment with "my pokemon"
-
-move power and accuracy, move type

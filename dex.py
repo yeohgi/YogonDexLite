@@ -21,6 +21,12 @@ class dex:
             bar += '|'
         return bar
     
+    def explainSpreads(self):
+        print("Effort Value Spreads AKA EV Spreads allow players to invest 508 EVs into any of a Pokemons stats with each stat allowing for a maximum of 252 EVs.")
+        print("EVs make all the difference, Pokemon interactions can completely change based on what stats are invested into.")
+        print("For example, Pokemon who are invested into offensively may be able to threaten OHKOs previously unattainable.")
+        print("Or Pokemon who are invested into defensively may be able to just barely survive attacks that would previously knock them out, allowing for another turns worth of value.")
+    
     def my_pokemon(self, pokemon):
         print(f"{pokemon.title()}")
 
@@ -80,7 +86,7 @@ class dex:
             bar = self.printStatBar(int(stat))
             print(f"{pk.stats[index]:>10}: {stat:>5}", end=bar + '\n')
 
-        print('Most Used Spreads: ')
+        print("Most Used Spreads(For more info on EV Spreads '!EV'): ")
         
         for spread in spreads:
             spreadSplit = spread.split(' ')

@@ -37,6 +37,9 @@ while pokemon != 'exit' and pokemon != 'quit':
     if pokemon.startswith('my '):
         mypokemon = pokemon[3:]
         dex.my_pokemon(mypokemon)
+    elif pokemon.startswith('!'):
+        if pokemon == '!EV':
+            dex.explainSpreads()
     elif(dex.pokemonExist(pokemon)):
         if(dex.pokemonInForamt(pokemon)):
             dex.query_pokemon(pokemon)
