@@ -15,6 +15,20 @@ class dex:
     def __init__(self, format):
         self.setFormat(format)
 
+    def printStatBar(self, stat):
+        bar = ''
+        for i in range(0,stat//5):
+            bar += '|'
+        return bar
+    
+    def my_pokemon(self, pokemon):
+        print(f"{pokemon.title()}")
+
+        type1 = self.dexFetch('pokemon', pokemon, 'Type1').upper()
+        type2 = self.dexFetch('pokemon', pokemon, 'Type2').upper()
+
+        self.slashStrong(type1, type2)
+
     def query_pokemon(self, pokemon):
 
         #pokemon number + rank in format + usage in current format
@@ -32,7 +46,7 @@ class dex:
         self.slashWeak(type1, type2)
         
         #abilities + descs (ordered by usage)
-        print('Abilities: ')
+        print('Most Used Abilities: ')
 
         abilities = self.dexFetch('moveset', pokemon, 'Abilities').split(';')
         abilitiesAndUsages = [ability.split(' ') for ability in abilities]
@@ -47,10 +61,10 @@ class dex:
 
             desc = self.ablFetch(abilityName)
 
-            print(f"    {ability[-1]} {abilityName} : {desc}")
+            print(f"    {ability[-1]:>10}% {abilityName} : {desc}")
 
         #base stats + common spreads
-        print('Stats: ')
+        print('Pokemons Base Stats: ')
 
         stats = []
         stats.append(self.dexFetch('pokemon', pokemon, 'HP').upper())
@@ -63,17 +77,18 @@ class dex:
         spreads = self.dexFetch('moveset', pokemon, 'Spreads').upper().split(';')
 
         for index, stat in enumerate(stats):
-            print('    ' + pk.stats[index] + ': ' + stat)
+            bar = self.printStatBar(int(stat))
+            print(f"{pk.stats[index]:>10}: {stat:>5}", end=bar + '\n')
 
-        print('Spreads: ')
+        print('Most Used Spreads: ')
         
         for spread in spreads:
             spreadSplit = spread.split(' ')
             if (float(spreadSplit[-1]) > 20.00):
-                print('    ' + spreadSplit[-1] + ' ' + spreadSplit[0])
+                print(f"    {spreadSplit[-1]}%   {spreadSplit[0]}")
 
         #moves sorted by usage
-        print('Moves: ')
+        print('Most Used Moves: ')
         moves = self.dexFetch('moveset', pokemon, 'Moves').split(';')
         movesAndUsages = [move.split(' ') for move in moves]
 
@@ -87,18 +102,23 @@ class dex:
 
             desc = self.moveFetch(moveName)
 
+            if str(desc[0]) != 'Other':
+                # print(1,desc, len(desc)) #1,effect, 2,type, 3,power, 4,cat
+                for i, row in enumerate(desc):
+                    if row is None or len(str(row)) == 0:
+                        desc[i] = '-'
+
             if (float(move[-1]) > 20.00):
                 if(moveName == 'Other'):
-                    print(f"    {move[-1]} {'Other'}")
+                    print(f"    {move[-1]}% {'Other'}")
                 else:
-                    if(desc is not None and len(desc) != 0):
-                        desc = desc.strip('"')
-                        print(f"    {move[-1]} {moveName} : {desc}")
+                    if(desc is not None and len(desc) != 0 and desc[0] != 'Other'):
+                        print(f"    {move[-1]:>10}% {moveName:>20}      Type: {desc[1]:>10}     Power: {desc[2]:>5}        Category: {desc[3]:>10}     Description: {desc[0]}")
                     else:
-                        print(f"    {move[-1]} {moveName} : {'No Effect'}")
+                        print(f"    {move[-1]:>10}% Other")
                 
         #commonly held items + item desc
-        print('Items: ')
+        print('Most Used Items: ')
         items = self.dexFetch('moveset', pokemon, 'Items').split(';')
         itemsAndUsages = [item.split(' ') for item in items]
 
@@ -114,14 +134,14 @@ class dex:
 
             if (float(item[-1]) > 12.00):
                 if(itemName == 'Other'):
-                    print(f"    {item[-1]} {'Other'}")
+                    print(f"    {item[-1]}% {'Other'}")
                 else:
                     if(desc is not None and len(desc) != 0):
                         desc = desc.strip('"')
-                        print(f"    {item[-1]} {itemName} : {desc}")
+                        print(f"    {item[-1]}% {itemName} : {desc}")
 
         #common teammates + potenial synergys 
-        print('Teammates: ')
+        print('Most Common Teammates: ')
         teammates = self.dexFetch('moveset', pokemon, 'Teammates').split(';')
         teammatesAndUsages = [teammate.split(' ') for teammate in teammates]
 
@@ -137,9 +157,9 @@ class dex:
 
             if float(teammate[-1]) > 20:
                 if(teammateName == 'Other'):
-                    print(f"    {teammate[-1]} {'Other'}")
+                    print(f"    {teammate[-1]}% {'Other'}")
                 else:
-                    print(f"    {teammate[-1]} {teammateName}")
+                    print(f"    {teammate[-1]}% {teammateName}")
     
         #possible defensive tera types
         self.teraGuess(type1, type2)
@@ -225,16 +245,25 @@ class dex:
             conn = sqlite3.connect(db)
             cursor = conn.cursor()
 
-            sqlCommand = f"SELECT Effect FROM moves WHERE Move == '{move}'"
+            sqlCommand = f"SELECT Effect, Type, Power, Category FROM moves WHERE Move == '{move}'"
 
             cursor.execute(sqlCommand)
 
             rows = cursor.fetchall()
+
+            final = []
+
+            if rows is not None and len(rows) != 0:
+                for row in rows[0]:
+                    if rows is None:
+                        final.append('-')
+                    else:
+                        final.append(row)
             
-            if(len(rows) != 0):
-                return str(rows[-1]).strip('(').strip(')').strip(',').strip("'")
+            if(len(final) != 0):
+                return final
             else:
-                return None
+                return ['Other']
         
         else:
             print("TABLE DNE")
@@ -445,6 +474,118 @@ class dex:
                 print(type, end=' ')
             print("")
 
+    def slashStrong(self, type1, type2):
+
+        t1 = -1
+        t2 = -1
+
+        dualtype = []
+
+        immunities = []
+        weaknesses = []
+        neutral = []
+        resistances = []
+
+        for i, type in enumerate(pk.types):
+            if type.lower() == type1.lower():
+                t1 = i
+            if type.lower() == type2.lower():
+                t2 = i
+
+        for i, typei in enumerate(pk.universeMatrix):
+
+            if pk.immunityMatrix[t1][i] == 1:
+                immunities.append(pk.types[i])
+            elif pk.universeMatrix[t1][i] == 1:
+                weaknesses.append(pk.types[i])
+                dualtype.append(pk.types[i])
+            elif pk.universeMatrix[t1][i] == 0:
+                neutral.append(pk.types[i])
+            elif pk.universeMatrix[t1][i] == -1:
+                resistances.append(pk.types[i])
+
+        print(f"Offensive Matchups For {type1.title()}: ")
+        # immunities = []
+        if len(immunities) != 0:
+            print("    0x Cannot Hit:", end=' ')
+            for type in immunities:
+                print(type, end=' ')
+            print("")
+        # weaknesses = []
+        if len(weaknesses) != 0:
+            print("    2x Supereffective Aganist:", end=' ')
+            for type in weaknesses:
+                print(type, end=' ')
+            print("")
+        # neutral = []
+        if len(neutral) != 0:
+            print("    1x Neutral:", end=' ')
+            for type in neutral:
+                print(type, end=' ')
+            print("")
+        # resistances = []
+        if len(resistances) != 0:
+            print("    1/2x Not Very Effective Aganist:", end=' ')
+            for type in resistances:
+                print(type, end=' ')
+            print("")
+
+        immunities = []
+        weaknesses = []
+        neutral = []
+        resistances = []
+
+        if t2 != -1:
+
+            for i, typei in enumerate(pk.universeMatrix):
+
+                if pk.immunityMatrix[t2][i] == 1:
+                    immunities.append(pk.types[i])
+                elif pk.universeMatrix[t2][i] == 1:
+                    weaknesses.append(pk.types[i])
+                    dualtype.append(pk.types[i])
+                elif pk.universeMatrix[t2][i] == 0:
+                    neutral.append(pk.types[i])
+                elif pk.universeMatrix[t2][i] == -1:
+                    resistances.append(pk.types[i])
+
+            print("")
+            print(f"Offensive Matchups For {type2.title()}: ")
+            # immunities = []
+            if len(immunities) != 0:
+                print("    0x Cannot Hit:", end=' ')
+                for type in immunities:
+                    print(type, end=' ')
+                print("")
+            # weaknesses = []
+            if len(weaknesses) != 0:
+                print("    2x Supereffective Aganist:", end=' ')
+                for type in weaknesses:
+                    print(type, end=' ')
+                print("")
+            # neutral = []
+            if len(neutral) != 0:
+                print("    1x Neutral:", end=' ')
+                for type in neutral:
+                    print(type, end=' ')
+                print("")
+            # resistances = []
+            if len(resistances) != 0:
+                print("    1/2x Not Very Effective Aganist:", end=' ')
+                for type in resistances:
+                    print(type, end=' ')
+                print("")
+
+            print("")
+            dualtype = list(set(dualtype))
+            if len(dualtype) != 0:
+                    print("What Your Dual Type Pokemon Can Hit For Super Effective:", end=' ')
+                    for type in dualtype:
+                        print(type, end=' ')
+                    print("")
+
+
+
     def pokemonInForamt(self, pokemon):
 
         db = 'moveset.db'
@@ -539,6 +680,7 @@ class dex:
 
                     for index, stat in enumerate(stats):
                         print('    ' + pk.stats[index] + ': ' + stat)
+            
 
     # tostring
     def __repr__(self):

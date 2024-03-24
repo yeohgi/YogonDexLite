@@ -1,7 +1,3 @@
-add berries to item list
-
-fix galarian
-
 experiment with "my pokemon"
 
 move power and accuracy, move type

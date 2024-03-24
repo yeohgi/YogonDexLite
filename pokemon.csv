@@ -38,10 +38,10 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 27,Sandshrew-Alolan,Ice,Steel,50,75,90,10,35,40,Snow Cloak,,Slush Rush
 28,Sandslash,Ground,,75,100,110,45,55,65,Sand Veil,,Sand Rush
 28,Sandslash-Alolan,Ice,Steel,75,100,120,25,65,65,Snow Cloak,,Slush Rush
-29,Nidoran-Female,Poison,,55,47,52,40,40,41,Poison Point,Rivalry,Hustle
+29,Nidoran-F,Poison,,55,47,52,40,40,41,Poison Point,Rivalry,Hustle
 30,Nidorina,Poison,,70,62,67,55,55,56,Poison Point,Rivalry,Hustle
 31,Nidoqueen,Poison,Ground,90,92,87,75,85,76,Poison Point,Rivalry,Sheer Force
-32,Nidoran-Male,Poison,,46,57,40,40,40,50,Poison Point,Rivalry,Hustle
+32,Nidoran-M,Poison,,46,57,40,40,40,50,Poison Point,Rivalry,Hustle
 33,Nidorino,Poison,,61,72,57,55,55,65,Poison Point,Rivalry,Hustle
 34,Nidoking,Poison,Ground,81,102,77,85,75,85,Poison Point,Rivalry,Sheer Force
 35,Clefairy,Fairy,,70,45,48,60,65,35,Cute Charm,Magic Guard,Friend Guard
@@ -67,7 +67,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 51,Dugtrio-Alolan,Ground,Steel,35,100,60,50,70,110,Sand Veil,Tangling Hair,Sand Force
 52,Meowth,Normal,,40,45,35,40,40,90,Pickup,Technician,Unnerve
 52,Meowth-Alolan,Dark,,40,35,35,50,40,90,Pickup,Technician,Rattled
-52,Meowth-Galarian,Steel,,50,65,55,40,40,40,Pickup,Tough Claws,Unnerve
+52,Meowth-Galar,Steel,,50,65,55,40,40,40,Pickup,Tough Claws,Unnerve
 53,Persian,Normal,,65,70,60,65,65,115,Limber,Technician,Unnerve
 53,Persian-Alolan,Dark,,65,60,60,75,65,115,Fur Coat,Technician,Rattled
 54,Psyduck,Water,,50,52,48,65,50,55,Damp,Cloud Nine,Swift Swim
@@ -100,18 +100,18 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 76,Golem,Rock,Ground,80,120,130,55,65,45,Rock Head,Sturdy,Sand Veil
 76,Golem-Alolan,Rock,Electric,80,120,130,55,65,45,Magnet Pull,Sturdy,Galvanize
 77,Ponyta,Fire,,50,85,55,65,65,90,Run Away,Flash Fire,Flame Body
-77,Ponyta-Galarian,Psychic,,50,85,55,65,65,90,Run Away,Pastel Veil,Anticipation
+77,Ponyta-Galar,Psychic,,50,85,55,65,65,90,Run Away,Pastel Veil,Anticipation
 78,Rapidash,Fire,,65,100,70,80,80,105,Run Away,Flash Fire,Flame Body
-78,Rapidash-Galarian,Psychic,Fairy,65,100,70,80,80,105,Run Away,Pastel Veil,Anticipation
+78,Rapidash-Galar,Psychic,Fairy,65,100,70,80,80,105,Run Away,Pastel Veil,Anticipation
 79,Slowpoke,Water,Psychic,90,65,65,40,40,15,Oblivious,Own Tempo,Regenerator
-79,Slowpoke-Galarian,Psychic,,90,65,65,40,40,15,Gluttony,Own Tempo,Regenerator
+79,Slowpoke-Galar,Psychic,,90,65,65,40,40,15,Gluttony,Own Tempo,Regenerator
 80,Slowbro,Water,Psychic,95,75,110,100,80,30,Oblivious,Own Tempo,Regenerator
 80,Slowbro-Mega,Water,Psychic,95,75,180,130,80,30,Shell Armor,,
-80,Slowbro-Galarian,Poison,Psychic,95,100,85,100,70,30,Quick Draw,Own Tempo,Regenerator
+80,Slowbro-Galar,Poison,Psychic,95,100,85,100,70,30,Quick Draw,Own Tempo,Regenerator
 81,Magnemite,Electric,Steel,25,35,70,95,55,45,Magnet Pull,Sturdy,Analytic
 82,Magneton,Electric,Steel,50,60,95,120,70,70,Magnet Pull,Sturdy,Analytic
 83,Farfetch'd,Normal,Flying,52,90,55,58,62,60,Keen Eye,Inner Focus,Defiant
-83,Farfetch'd-Galarian,Fighting,,52,95,55,58,62,55,Steadfast,Steadfast,Scrappy
+83,Farfetch'd-Galar,Fighting,,52,95,55,58,62,55,Steadfast,Steadfast,Scrappy
 84,Doduo,Normal,Flying,35,85,45,35,35,75,Run Away,Early Bird,Tangled Feet
 85,Dodrio,Normal,Flying,60,110,70,60,60,110,Run Away,Early Bird,Tangled Feet
 86,Seel,Water,,65,45,55,45,70,45,Thick Fat,Hydration,Ice Body
@@ -146,7 +146,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 108,Lickitung,Normal,,90,55,75,60,75,30,Own Tempo,Oblivious,Cloud Nine
 109,Koffing,Poison,,40,65,95,60,45,35,Levitate,Neutralizing Gas,Stench
 110,Weezing,Poison,,65,90,120,85,70,60,Levitate,Neutralizing Gas,Stench
-110,Weezing-Galarian,Poison,Fairy,65,90,120,85,70,60,Levitate,Neutralizing Gas,Misty Surge
+110,Weezing-Galar,Poison,Fairy,65,90,120,85,70,60,Levitate,Neutralizing Gas,Misty Surge
 111,Rhyhorn,Ground,Rock,80,85,95,30,30,25,Lightningrod,Rock Head,Reckless
 112,Rhydon,Ground,Rock,105,130,120,45,45,40,Lightningrod,Rock Head,Reckless
 113,Chansey,Normal,,250,5,5,35,105,50,Natural Cure,Serene Grace,Healer
@@ -160,7 +160,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 120,Staryu,Water,,30,45,55,70,55,85,Illuminate,Natural Cure,Analytic
 121,Starmie,Water,Psychic,60,75,85,100,85,115,Illuminate,Natural Cure,Analytic
 122,Mr. Mime,Psychic,Fairy,40,45,65,100,120,90,Soundproof,Filter,Technician
-122,Mr. Mime-Galarian,Ice,Psychic,50,65,65,90,90,100,Vital Spirit,Screen Cleaner,Ice Body
+122,Mr. Mime-Galar,Ice,Psychic,50,65,65,90,90,100,Vital Spirit,Screen Cleaner,Ice Body
 123,Scyther,Bug,Flying,70,110,80,55,80,105,Swarm,Technician,Steadfast
 124,Jynx,Ice,Psychic,65,50,35,115,95,95,Oblivious,Forewarn,Dry Skin
 125,Electabuzz,Electric,,65,83,57,95,85,105,Static,,Vital Spirit
@@ -168,9 +168,9 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 127,Pinsir,Bug,,65,125,100,55,70,85,Hyper Cutter,Mold Breaker,Moxie
 127,Pinsir-Mega,Bug,Flying,65,155,120,65,90,105,Aerilate,,
 128,Tauros,Normal,,75,100,95,40,70,110,Intimidate,Anger Point,Sheer Force
-128,"Tauros-Paldean, Combat",Fighting,,75,110,105,30,70,100,Intimidate,Anger Point,Cud Chew
-128,"Tauros-Paldean, Blaze",Fighting,Fire,75,110,105,30,70,100,Intimidate,Anger Point,Cud Chew
-128,"Tauros-Paldean, Aqua",Fighting,Water,75,110,105,30,70,100,Intimidate,Anger Point,Cud Chew
+128,Tauros-Paldean-Combat,Fighting,,75,110,105,30,70,100,Intimidate,Anger Point,Cud Chew
+128,Tauros-Paldean-Blaze,Fighting,Fire,75,110,105,30,70,100,Intimidate,Anger Point,Cud Chew
+128,Tauros-Paldean-Aqua,Fighting,Water,75,110,105,30,70,100,Intimidate,Anger Point,Cud Chew
 129,Magikarp,Water,,20,10,55,15,20,80,Swift Swim,,Rattled
 130,Gyarados,Water,Flying,95,125,79,60,100,81,Intimidate,,Moxie
 130,Gyarados-Mega,Water,Dark,95,155,109,70,130,81,Mold Breaker,,
@@ -189,11 +189,11 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 142,Aerodactyl-Mega,Rock,Flying,80,135,85,70,95,150,Tough Claws,,
 143,Snorlax,Normal,,160,110,65,65,110,30,Immunity,Thick Fat,Gluttony
 144,Articuno,Ice,Flying,90,85,100,95,125,85,Pressure,,Snow Cloak
-144,Articuno-Galarian,Psychic,Flying,90,85,85,125,100,95,Competitive,,
+144,Articuno-Galar,Psychic,Flying,90,85,85,125,100,95,Competitive,,
 145,Zapdos,Electric,Flying,90,90,85,125,90,100,Pressure,,Static
-145,Zapdos-Galarian,Fighting,Flying,90,125,90,85,90,100,Defiant,,
+145,Zapdos-Galar,Fighting,Flying,90,125,90,85,90,100,Defiant,,
 146,Moltres,Fire,Flying,90,100,90,125,85,90,Pressure,,Flame Body
-146,Moltres-Galarian,Dark,Flying,90,85,90,100,125,90,Berserk,,
+146,Moltres-Galar,Dark,Flying,90,85,90,100,125,90,Berserk,,
 147,Dratini,Dragon,,41,64,45,50,50,50,Shed Skin,,Marvel Scale
 148,Dragonair,Dragon,,61,84,65,70,70,70,Shed Skin,,Marvel Scale
 149,Dragonite,Dragon,Flying,91,134,95,100,100,80,Inner Focus,,Multiscale
@@ -252,7 +252,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 197,Umbreon,Dark,,95,65,110,60,130,65,Synchronize,,Inner Focus
 198,Murkrow,Dark,Flying,60,85,42,85,42,91,Insomnia,Super Luck,Prankster
 199,Slowking,Water,Psychic,95,75,80,100,110,30,Oblivious,Own Tempo,Regenerator
-199,Slowking-Galarian,Poison,Psychic,95,65,80,110,110,30,Curious Medicine,Own Tempo,Regenerator
+199,Slowking-Galar,Poison,Psychic,95,65,80,110,110,30,Curious Medicine,Own Tempo,Regenerator
 200,Misdreavus,Ghost,,60,60,60,85,85,85,Levitate,,
 201,Unown,Psychic,,48,72,48,72,48,48,Levitate,,
 202,Wobbuffet,Psychic,,190,33,58,33,58,33,Shadow Tag,,Telepathy
@@ -281,7 +281,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 220,Swinub,Ice,Ground,50,50,40,30,30,50,Oblivious,Snow Cloak,Thick Fat
 221,Piloswine,Ice,Ground,100,100,80,60,60,50,Oblivious,Snow Cloak,Thick Fat
 222,Corsola,Water,Rock,65,55,95,65,95,35,Hustle,Natural Cure,Regenerator
-222,Corsola-Galarian,Ghost,,60,55,100,65,100,30,Weak Armor,,Cursed Body
+222,Corsola-Galar,Ghost,,60,55,100,65,100,30,Weak Armor,,Cursed Body
 223,Remoraid,Water,,35,65,35,65,35,65,Hustle,Sniper,Moody
 224,Octillery,Water,,75,105,75,105,75,45,Suction Cups,Sniper,Moody
 225,Delibird,Ice,Flying,45,55,45,65,45,75,Vital Spirit,Hustle,Insomnia
@@ -328,9 +328,9 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 261,Poochyena,Dark,,35,55,35,30,30,35,Run Away,Quick Feet,Rattled
 262,Mightyena,Dark,,70,90,70,60,60,70,Intimidate,Quick Feet,Moxie
 263,Zigzagoon,Normal,,38,30,41,30,41,60,Pickup,Gluttony,Quick Feet
-263,Zigzagoon-Galarian,Dark,Normal,38,30,41,30,41,60,Pickup,Gluttony,Quick Feet
+263,Zigzagoon-Galar,Dark,Normal,38,30,41,30,41,60,Pickup,Gluttony,Quick Feet
 264,Linoone,Normal,,78,70,61,50,61,100,Pickup,Gluttony,Quick Feet
-264,Linoone-Galarian,Dark,Normal,78,70,61,50,61,100,Pickup,Gluttony,Quick Feet
+264,Linoone-Galar,Dark,Normal,78,70,61,50,61,100,Pickup,Gluttony,Quick Feet
 265,Wurmple,Bug,,45,45,35,20,30,20,Shield Dust,,Run Away
 266,Silcoon,Bug,,50,35,55,25,25,15,Shed Skin,,
 267,Beautifly,Bug,Flying,60,70,50,100,50,65,Swarm,,Rivalry
@@ -426,7 +426,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 348,Armaldo,Rock,Bug,75,125,100,70,80,45,Battle Armor,,Swift Swim
 349,Feebas,Water,,20,15,20,10,55,80,Swift Swim,,Adaptability
 350,Milotic,Water,,95,60,79,100,125,81,Marvel Scale,Competitive,Cute Charm
-351,Castform-Normal,Normal,,70,70,70,70,70,70,Forecast,,
+351,Castform,Normal,,70,70,70,70,70,70,Forecast,,
 351,Castform-Rainy,Water,,70,70,70,70,70,70,Forecast,,
 351,Castform-Snowy,Ice,,70,70,70,70,70,70,Forecast,,
 351,Castform-Sunny,Fire,,70,70,70,70,70,70,Forecast,,
@@ -590,13 +590,13 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 480,Uxie,Psychic,,75,75,130,75,130,95,Levitate,,
 481,Mesprit,Psychic,,80,105,105,105,105,80,Levitate,,
 482,Azelf,Psychic,,75,125,70,125,70,115,Levitate,,
-483,Dialga-Altered,Steel,Dragon,100,120,120,150,100,90,Pressure,,Telepathy
+483,Dialga,Steel,Dragon,100,120,120,150,100,90,Pressure,,Telepathy
 483,Dialga-Origin,Steel,Dragon,100,100,120,150,120,90,Pressure,,Telepathy
-484,Palkia-Altered,Water,Dragon,90,120,100,150,120,100,Pressure,,Telepathy
+484,Palkia,Water,Dragon,90,120,100,150,120,100,Pressure,,Telepathy
 484,Palkia-Origin,Water,Dragon,90,100,100,150,120,120,Pressure,,Telepathy
 485,Heatran,Fire,Steel,91,90,106,130,106,77,Flash Fire,,Flame Body
 486,Regigigas,Normal,,110,160,110,80,110,100,Slow Start,,
-487,Giratina-Altered,Ghost,Dragon,150,100,120,100,120,90,Pressure,,Telepathy
+487,Giratina,Ghost,Dragon,150,100,120,100,120,90,Pressure,,Telepathy
 487,Giratina-Origin,Ghost,Dragon,150,120,100,120,100,90,Levitate,,
 488,Cresselia,Psychic,,120,70,110,75,120,85,Levitate,,
 489,Phione,Water,,80,80,80,80,80,80,Hydration,,
@@ -665,17 +665,17 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 549,Lilligant,Grass,,70,60,75,110,75,90,Chlorophyll,Own Tempo,Leaf Guard
 549,Lilligant-Hisui,Grass,Fighting,70,105,75,50,75,105,Chlorophyll,Hustle,Leaf Guard
 550,Basculin-Red-Striped,Water,,70,92,65,80,55,98,Reckless,Adaptability,Mold Breaker
-550,Basculin-Blue-STriped,Water,,70,92,65,80,55,98,Rock Head,Adaptability,Mold Breaker
+550,Basculin-Blue-Striped,Water,,70,92,65,80,55,98,Rock Head,Adaptability,Mold Breaker
 550,Basculin-Hisui,Water,,70,92,65,80,55,98,Rattled,Adaptability,Mold Breaker
 551,Sandile,Ground,Dark,50,72,35,35,35,65,Intimidate,Moxie,Anger Point
 552,Krokorok,Ground,Dark,60,82,45,45,45,74,Intimidate,Moxie,Anger Point
 553,Krookodile,Ground,Dark,95,117,80,65,70,92,Intimidate,Moxie,Anger Point
 554,Darumaka,Fire,,70,90,45,15,45,50,Hustle,,Inner Focus
-554,Darumaka-Galarian,Ice,,70,90,45,15,45,50,Hustle,,Inner Focus
+554,Darumaka-Galar,Ice,,70,90,45,15,45,50,Hustle,,Inner Focus
 555,Darmanitan,Fire,,105,140,55,30,55,95,Sheer Force,,Zen Mode
 555,Darmanitan-Zen Mode,Fire,Psychic,105,30,105,140,105,55,,,Zen Mode
-555,Darmanitan-Galarian,Ice,,105,140,55,30,55,95,Gorilla Tactics,,Zen Mode
-555,"Darmanitan-Galarian, Zen Mode",Ice,Fire,105,160,55,30,55,135,Gorilla Tactics,,Zen Mode
+555,Darmanitan-Galar,Ice,,105,140,55,30,55,95,Gorilla Tactics,,Zen Mode
+555,Darmanitan-Galar-Zen-Mode,Ice,Fire,105,160,55,30,55,135,Gorilla Tactics,,Zen Mode
 556,Maractus,Grass,,75,86,67,106,67,60,Water Absorb,Chlorophyll,Storm Drain
 557,Dwebble,Bug,Rock,50,65,85,35,35,55,Sturdy,Shell Armor,Weak Armor
 558,Crustle,Bug,Rock,70,105,125,65,75,45,Sturdy,Shell Armor,Weak Armor
@@ -683,7 +683,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 560,Scrafty,Dark,Fighting,65,90,115,45,115,58,Shed Skin,Moxie,Intimidate
 561,Sigilyph,Psychic,Flying,72,58,80,103,80,97,Wonder Skin,Magic Guard,Tinted Lens
 562,Yamask,Ghost,,38,30,85,55,65,30,Mummy,,
-562,Yamask-Galarian,Ground,Ghost,38,55,85,30,65,30,Wandering Spirit,,
+562,Yamask-Galar,Ground,Ghost,38,55,85,30,65,30,Wandering Spirit,,
 563,Cofagrigus,Ghost,,58,50,145,95,105,30,Mummy,,
 564,Tirtouga,Water,Rock,54,78,103,53,45,22,Solid Rock,Sturdy,Swift Swim
 565,Carracosta,Water,Rock,74,108,133,83,65,32,Solid Rock,Sturdy,Swift Swim
@@ -708,10 +708,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 582,Vanillite,Ice,,36,50,50,65,60,44,Ice Body,Snow Cloak,Weak Armor
 583,Vanillish,Ice,,51,65,65,80,75,59,Ice Body,Snow Cloak,Weak Armor
 584,Vanilluxe,Ice,,71,95,85,110,95,79,Ice Body,Snow Warning,Weak Armor
-585,Deerling-Spring,Normal,Grass,60,60,50,40,50,75,Chlorophyll,Sap Sipper,Serene Grace
-585,Deerling-Summer,Normal,Grass,60,60,50,40,50,75,Chlorophyll,Sap Sipper,Serene Grace
-585,Deerling-Autumn,Normal,Grass,60,60,50,40,50,75,Chlorophyll,Sap Sipper,Serene Grace
-585,Deerling-Winter,Normal,Grass,60,60,50,40,50,75,Chlorophyll,Sap Sipper,Serene Grace
+585,Deerling,Normal,Grass,60,60,50,40,50,75,Chlorophyll,Sap Sipper,Serene Grace
 586,Sawsbuck,Normal,Grass,80,100,70,60,70,95,Chlorophyll,Sap Sipper,Serene Grace
 587,Emolga,Electric,Flying,55,75,60,75,60,103,Static,,Motor Drive
 588,Karrablast,Bug,,50,75,45,40,45,60,Swarm,Shed Skin,No Guard
@@ -745,7 +742,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 616,Shelmet,Bug,,50,40,85,40,65,25,Hydration,Shell Armor,Overcoat
 617,Accelgor,Bug,,80,70,40,100,60,145,Hydration,Sticky Hold,Unburden
 618,Stunfisk,Ground,Electric,109,66,84,81,99,32,Static,Limber,Sand Veil
-618,Stunfisk-Galarian,Ground,Steel,109,81,99,66,84,32,Mimicry,,
+618,Stunfisk-Galar,Ground,Steel,109,81,99,66,84,32,Mimicry,,
 619,Mienfoo,Fighting,,45,85,50,55,50,65,Inner Focus,Regenerator,Reckless
 620,Mienshao,Fighting,,65,125,60,95,60,105,Inner Focus,Regenerator,Reckless
 621,Druddigon,Dragon,,77,120,90,60,90,48,Rough Skin,Sheer Force,Mold Breaker
@@ -781,7 +778,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 646,Kyurem-Black,Dragon,Ice,125,170,100,120,90,95,Teravolt,,
 646,Kyurem-White,Dragon,Ice,125,120,90,170,100,95,Turboblaze,,
 647,Keldeo,Water,Fighting,91,72,90,129,90,108,Justified,,
-648,Meloetta-Aria,Normal,Psychic,100,77,77,128,128,90,Serene Grace,,
+648,Meloetta,Normal,Psychic,100,77,77,128,128,90,Serene Grace,,
 648,Meloetta-Pirouette,Normal,Fighting,100,128,90,77,77,128,Serene Grace,,
 649,Genesect,Bug,Steel,71,120,95,120,95,99,Download,,
 650,Chespin,Grass,,56,61,65,48,45,38,Overgrow,,Bulletproof
@@ -801,15 +798,9 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 663,Talonflame,Fire,Flying,78,81,71,74,69,126,Flame Body,,Gale Wings
 664,Scatterbug,Bug,,38,35,40,27,25,35,Shield Dust,Compound Eyes,Friend Guard
 665,Spewpa,Bug,,45,22,60,27,30,29,Shed Skin,,Friend Guard
-666,Vivillon-Meadow/Fancy,Bug,Flying,80,52,50,90,50,89,Shield Dust,Compound Eyes,Friend Guard
-666,Vivillon-Polar/Tundra/Marine,Bug,Flying,80,52,50,90,50,89,Shield Dust,Compound Eyes,Friend Guard
-666,Vivillon-Continental,Bug,Flying,80,52,50,90,50,89,Shield Dust,Compound Eyes,Friend Guard
-666,Vivillon-Garden/Savanna/Jungle,Bug,Flying,80,52,50,90,50,89,Shield Dust,Compound Eyes,Friend Guard
-666,Vivillon-Elegant,Bug,Flying,80,52,50,90,50,89,Shield Dust,Compound Eyes,Friend Guard
-666,Vivillon-Icy Snow,Bug,Flying,80,52,50,90,50,89,Shield Dust,Compound Eyes,Friend Guard
-666,Vivillon-Mod/Sun/Ocean/Poke Ball,Bug,Flying,80,52,50,90,50,89,Shield Dust,Compound Eyes,Friend Guard
-666,Vivillon-HiPl/SS/Arch/Riv,Bug,Flying,80,52,50,90,50,89,Shield Dust,Compound Eyes,Friend Guard
-666,Vivillon-Monsoon,Bug,Flying,80,52,50,90,50,89,Shield Dust,Compound Eyes,Friend Guard
+666,Vivillon,Bug,Flying,80,52,50,90,50,89,Shield Dust,Compound Eyes,Friend Guard
+666,Vivillon-Fancy,Bug,Flying,80,52,50,90,50,89,Shield Dust,Compound Eyes,Friend Guard
+666,Vivillon-Pokeball,Bug,Flying,80,52,50,90,50,89,Shield Dust,Compound Eyes,Friend Guard
 667,Litleo,Fire,Normal,62,50,58,73,54,72,Rivalry,Unnerve,Moxie
 668,Pyroar,Fire,Normal,86,68,72,109,66,106,Rivalry,Unnerve,Moxie
 669,Flabébé,Fairy,,44,38,39,61,79,42,Flower Veil,,Symbiosis
@@ -821,8 +812,8 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 675,Pangoro,Fighting,Dark,95,124,78,69,71,58,Iron Fist,Mold Breaker,Scrappy
 676,Furfrou,Normal,,75,80,60,65,90,102,Fur Coat,,
 677,Espurr,Psychic,,62,48,54,63,60,68,Keen Eye,Infiltrator,Own Tempo
-678,Meowstic-Female,Psychic,,74,48,76,83,81,104,Keen Eye,Infiltrator,Competitive
-678,Meowstic-Male,Psychic,,74,48,76,83,81,104,Keen Eye,Infiltrator,Prankster
+678,Meowstic-F,Psychic,,74,48,76,83,81,104,Keen Eye,Infiltrator,Competitive
+678,Meowstic,Psychic,,74,48,76,83,81,104,Keen Eye,Infiltrator,Prankster
 679,Honedge,Steel,Ghost,45,80,100,35,37,28,No Guard,,
 680,Doublade,Steel,Ghost,59,110,150,45,49,35,No Guard,,
 681,Aegislash-Shield,Steel,Ghost,60,50,140,50,140,60,Stance Change,,
@@ -860,7 +851,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 710,Pumpkaboo-Small,Ghost,Grass,44,66,70,44,55,56,Pickup,Frisk,Insomnia
 710,Pumpkaboo-Average,Ghost,Grass,49,66,70,44,55,51,Pickup,Frisk,Insomnia
 710,Pumpkaboo-Large,Ghost,Grass,54,66,70,44,55,46,Pickup,Frisk,Insomnia
-710,Pumpkaboo-Super Size,Ghost,Grass,59,66,70,44,55,41,Pickup,Frisk,Insomnia
+710,Pumpkaboo-Super-Size,Ghost,Grass,59,66,70,44,55,41,Pickup,Frisk,Insomnia
 711,Gourgeist-Small,Ghost,Grass,55,85,122,58,75,99,Pickup,Frisk,Insomnia
 711,Gourgeist-Average,Ghost,Grass,65,90,122,58,75,84,Pickup,Frisk,Insomnia
 711,Gourgeist-Large,Ghost,Grass,75,95,122,58,75,69,Pickup,Frisk,Insomnia
@@ -908,7 +899,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 743,Ribombee,Bug,Fairy,60,55,60,95,70,124,Honey Gather ,Shield Dust ,Sweet Veil
 744,Rockruff,Rock,,45,65,40,30,40,60,Keen Eye ,Vital Spirit ,Steadfast
 744,Rockruff-Own Tempo,Rock,,45,65,40,30,40,60,Keen Eye ,Vital Spirit ,Own Tempo
-745,Lycanroc-Midday,Rock,,75,115,65,55,65,112,Keen Eye ,Sand Rush ,Steadfast
+745,Lycanroc,Rock,,75,115,65,55,65,112,Keen Eye ,Sand Rush ,Steadfast
 745,Lycanroc-Midnight,Rock,,85,115,75,55,75,82,Keen Eye ,Vital Spirit ,No Guard
 745,Lycanroc-Dusk,Rock,,75,117,65,55,65,110,Tough Claws,,
 746,Wishiwashi-Solo,Water,,45,20,20,25,25,40,Schooling,,
@@ -1026,7 +1017,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 846,Arrokuda,Water,,41,63,40,40,30,66,Swift Swim,,Propeller Tail
 847,Barraskewda,Water,,61,123,60,60,50,136,Swift Swim,,Propeller Tail
 848,Toxel,Electric,Poison,40,38,35,54,35,40,Rattled,Static,Klutz
-849,Toxtricity-Amped,Electric,Poison,75,98,70,114,70,75,Punk Rock,Plus,Technician
+849,Toxtricity,Electric,Poison,75,98,70,114,70,75,Punk Rock,Plus,Technician
 849,Toxtricity-Low Key,Electric,Poison,75,98,70,114,70,75,Punk Rock,Minus,Technician
 850,Sizzlipede,Fire,Bug,50,65,45,50,50,45,Flash Fire,White Smoke,Flame Body
 851,Centiskorch,Fire,Bug,100,115,65,90,90,65,Flash Fire,White Smoke,Flame Body
@@ -1047,12 +1038,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 866,Mr. Rime,Ice,Psychic,80,85,75,110,100,70,Tangled Feet,Screen Cleaner,Ice Body
 867,Runerigus,Ground,Ghost,58,95,145,50,105,30,Wandering Spirit,,
 868,Milcery,Fairy,,45,40,40,50,61,34,Sweet Veil,,Aroma Veil
-869,Alcremie-VaCr/SaCr,Fairy,,65,60,75,110,121,64,Sweet Veil,,Aroma Veil
-869,Alcremie-RuCr,Fairy,,65,60,75,110,121,64,Sweet Veil,,Aroma Veil
-869,Alcremie-MaCr,Fairy,,65,60,75,110,121,64,Sweet Veil,,Aroma Veil
-869,Alcremie-MiCr,Fairy,,65,60,75,110,121,64,Sweet Veil,,Aroma Veil
-869,Alcremie-LeCr/RuSw/RaSw,Fairy,,65,60,75,110,121,64,Sweet Veil,,Aroma Veil
-869,Alcremie-CaSw,Fairy,,65,60,75,110,121,64,Sweet Veil,,Aroma Veil
+869,Alcremie,Fairy,,65,60,75,110,121,64,Sweet Veil,,Aroma Veil
 870,Falinks,Fighting,,65,100,100,70,60,75,Battle Armor,,Defiant
 871,Pincurchin,Electric,,48,101,95,91,85,15,Lightningrod,,Electric Surge
 872,Snom,Ice,Bug,30,25,35,45,30,20,Shield Dust,,Ice Scales
@@ -1060,10 +1046,9 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 874,Stonjourner,Rock,,100,125,135,20,20,70,Power Spot,,
 875,Eiscue-Ice Face,Ice,,75,80,110,65,90,50,Ice Face,,
 875,Eiscue-No Ice Face,Ice,,75,80,70,65,50,130,Ice Face,,
-876,Indeedee-M,Psychic,Normal,60,65,55,105,95,95,Inner Focus,Synchronize,Psychic Surge
+876,Indeedee,Psychic,Normal,60,65,55,105,95,95,Inner Focus,Synchronize,Psychic Surge
 876,Indeedee-F,Psychic,Normal,70,55,65,95,105,85,Own Tempo,Synchronize,Psychic Surge
-877,Morpeko-Full Belly,Electric,Dark,58,95,58,70,58,97,Hunger Switch,,
-877,Morpeko-Hangry,Electric,Dark,58,95,58,70,58,97,Hunger Switch,,
+877,Morpeko,Electric,Dark,58,95,58,70,58,97,Hunger Switch,,
 878,Cufant,Steel,,72,80,49,40,49,40,Sheer Force,,Heavy Metal
 879,Copperajah,Steel,,122,130,69,80,69,30,Sheer Force,,Heavy Metal
 880,Dracozolt,Electric,Dragon,90,100,90,80,70,75,Volt Absorb,Hustle,Sand Rush
@@ -1074,14 +1059,14 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 885,Dreepy,Dragon,Ghost,28,60,30,40,30,82,Clear Body,Infiltrator,Cursed Body
 886,Drakloak,Dragon,Ghost,68,80,50,60,50,102,Clear Body,Infiltrator,Cursed Body
 887,Dragapult,Dragon,Ghost,88,120,75,100,75,142,Clear Body,Infiltrator,Cursed Body
-888,Zacian-Hero,Fairy,,92,120,115,80,115,138,Intrepid Sword,,
+888,Zacian,Fairy,,92,120,115,80,115,138,Intrepid Sword,,
 888,Zacian-Crowned,Fairy,Steel,92,150,115,80,115,148,Intrepid Sword,,
-889,Zamazenta-Hero,Fighting,,92,120,115,80,115,138,Dauntless Shield,,
+889,Zamazenta,Fighting,,92,120,115,80,115,138,Dauntless Shield,,
 889,Zamazenta-Crowned,Fighting,Steel,92,120,140,80,140,128,Dauntless Shield,,
 890,Eternatus,Poison,Dragon,140,85,95,145,95,130,Pressure,,
 891,Kubfu,Fighting,,60,90,60,53,50,72,Inner Focus,,
-892,Urshifu-Single Strike,Fighting,Dark,100,130,100,63,60,97,Unseen Fist,,
-892,Urshifu-Rapid Strike,Fighting,Water,100,130,100,63,60,97,Unseen Fist,,
+892,Urshifu-Single-Strike,Fighting,Dark,100,130,100,63,60,97,Unseen Fist,,
+892,Urshifu-Rapid-Strike,Fighting,Water,100,130,100,63,60,97,Unseen Fist,,
 893,Zarude,Dark,Grass,105,120,105,70,95,105,Leaf Guard ,,
 894,Regieleki,Electric,,80,100,50,100,50,200,Transistor,,
 895,Regidrago,Dragon,,200,100,50,100,50,80,Dragon's Maw,,
@@ -1093,11 +1078,11 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 899,Wyrdeer,Normal,Psychic,103,105,72,105,75,65,Intimidate,Frisk,Sap Sipper
 900,Kleavor,Bug,Rock,70,130,95,45,75,85,Swarm,Sheer Force,Sharpness
 901,Ursaluna,Ground,Normal,130,140,105,45,80,50,Guts,Bulletproof,Unnerve
-902,Basculegion-Male,Water,Ghost,120,112,65,80,75,78,Swift Swim,Adaptability,Mold Breaker
-902,Basculegion-Female,Water,Ghost,120,92,65,100,75,78,Swift Swim,Adaptability,Mold Breaker
+902,Basculegion,Water,Ghost,120,112,65,80,75,78,Swift Swim,Adaptability,Mold Breaker
+902,Basculegion-F,Water,Ghost,120,92,65,100,75,78,Swift Swim,Adaptability,Mold Breaker
 903,Sneasler,Fighting,Poison,80,130,60,40,80,120,Pressure,Unburden,Poison Touch
 904,Overqwil,Dark,Poison,85,115,95,65,65,85,Poison Point,Swift Swim,Intimidate
-905,Enamorus-Incarnate,Fairy,Flying,74,115,70,135,80,106,Healer,,Contrary
+905,Enamorus,Fairy,Flying,74,115,70,135,80,106,Healer,,Contrary
 905,Enamorus-Therian,Fairy,Flying,74,115,110,135,100,46,Overcoat,,
 906,Sprigatito,Grass,,40,61,54,45,45,65,Overgrow,,Protean
 907,Floragato,Grass,,61,80,63,60,63,83,Overgrow,,Protean
@@ -1109,8 +1094,8 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 913,Quaxwell,Water,,70,85,65,65,60,65,Torrent,,Moxie
 914,Quaquaval,Water,Fighting,85,120,80,85,75,85,Torrent,,Moxie
 915,Lechonk,Normal,,54,45,40,35,45,35,Aroma Veil,Gluttony,Thick Fat
-916,Oinkologne-Male,Normal,,110,100,75,59,80,65,Lingering Aroma,Gluttony,Thick Fat
-916,Oinkologne-Female,Normal,,115,90,70,59,90,65,Aroma Veil,Gluttony,Thick Fat
+916,Oinkologne,Normal,,110,100,75,59,80,65,Lingering Aroma,Gluttony,Thick Fat
+916,Oinkologne-F,Normal,,115,90,70,59,90,65,Aroma Veil,Gluttony,Thick Fat
 917,Tarountula,Bug,,35,41,45,29,40,20,Insomnia,,Stakeout
 918,Spidops,Bug,,60,79,92,52,86,35,Insomnia,,Stakeout
 919,Nymble,Bug,,33,46,40,21,25,45,Swarm,,Tinted Lens

@@ -27,11 +27,17 @@ while not elo.isdigit():
 format += str('-') + str(smogon.assignElo(format, elo))
 
 print("Your set up! Time to kick some ass!")
+print("To see information about your opponents Pokemon, type 'pokemons name'")
+print("To see information about your own Pokemon, type 'my pokemons name'")
 dex = dex.dex(format)
 
 pokemon = input("Who's that Pokemon? ")
 while pokemon != 'exit' and pokemon != 'quit':
-    if(dex.pokemonExist(pokemon)):
+
+    if pokemon.startswith('my '):
+        mypokemon = pokemon[3:]
+        dex.my_pokemon(mypokemon)
+    elif(dex.pokemonExist(pokemon)):
         if(dex.pokemonInForamt(pokemon)):
             dex.query_pokemon(pokemon)
         else:
