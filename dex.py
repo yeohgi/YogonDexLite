@@ -773,13 +773,17 @@ class dex:
             cursor = conn.cursor()
 
             for name in tryNames:
+
                 sqlCommand = f"SELECT * FROM pokemon WHERE Pokemon == '{name}'"
 
                 cursor.execute(sqlCommand)
 
-                rows = cursor.fetchall()[0]
+                rows = cursor.fetchall()
 
-                if len(rows) > 12:
+                if rows is not None and len(rows) > 0:
+                    rows = rows[0]
+
+                if rows is not None and len(rows) > 12:
 
                     #header
                     print(f'{rows[1]} | Number: {rows[0]} Rank: N/A Usage: N/A')
