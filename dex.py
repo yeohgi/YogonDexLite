@@ -279,6 +279,9 @@ class dex:
             conn = sqlite3.connect(db)
             cursor = conn.cursor()
 
+            if "'" in ability:
+                ability = ability.replace("'",";")
+
             sqlCommand = f"SELECT Desc FROM abilities WHERE Ability == '{ability}'"
 
             cursor.execute(sqlCommand)

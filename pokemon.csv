@@ -1078,6 +1078,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 899,Wyrdeer,Normal,Psychic,103,105,72,105,75,65,Intimidate,Frisk,Sap Sipper
 900,Kleavor,Bug,Rock,70,130,95,45,75,85,Swarm,Sheer Force,Sharpness
 901,Ursaluna,Ground,Normal,130,140,105,45,80,50,Guts,Bulletproof,Unnerve
+901,Ursaluna-Bloodmoon,Ground,Normal,113,70,120,135,65,52,Mind's Eye,,
 902,Basculegion,Water,Ghost,120,112,65,80,75,78,Swift Swim,Adaptability,Mold Breaker
 902,Basculegion-F,Water,Ghost,120,92,65,100,75,78,Swift Swim,Adaptability,Mold Breaker
 903,Sneasler,Fighting,Poison,80,130,60,40,80,120,Pressure,Unburden,Poison Touch
