@@ -1,0 +1,260 @@
+<html>
+
+    <head>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script>
+
+            format = "";
+            elo = -1;
+
+            //FORMAT
+            function setFormat(){
+
+                format = $('#getformat').val()
+                console.log(format)
+
+                checkFormat(function(valid){
+
+                    if(valid){
+                        showElo()
+                    }else{
+                        console.log("no no no, bad format")
+                    }
+
+                });
+            }
+
+            function checkFormat(callback) {
+
+                var url = format + ".format";
+
+                $.get(url, function(data) {
+                    validFormatString = data;
+
+                    if(validFormatString === "True"){
+                        validFormat = true
+                    }else{
+                        validFormat = false
+                    }
+
+                    callback(validFormat);
+                });
+            }
+
+            //ELO
+            function setElo(){
+                elo = $('#getelo').val()
+                console.log(elo)
+
+                if(elo >= 1000){
+                    showMain()
+                }else{
+                    console.log("no no no, bad elo")
+                }
+                
+            }
+
+            function showElo(){
+                $('#getformatbody').css('display', 'none');
+                $('#getelobody').css('display', 'block');
+                $('#mainbody').css('display', 'none');
+                $('#getformatbody').remove();
+            }
+
+            //MAIN
+            function showMain(){
+                $('#getformatbody').css('display', 'none');
+                $('#getelobody').css('display', 'none');
+                $('#mainbody').css('display', 'block');
+                $('#getelobody').remove();
+            }
+
+            function searchPokemon(){
+
+                pokemon = $('#searchpokemonfield').val()
+                console.log(pokemon)
+
+                getPokemonInfo(function(info){
+                    console.log(info)
+                    
+                    //0
+                    if(info[0] == 0){
+                        //handle in format case
+
+                        //1 - update name
+                        $('#pokemonname').text(info[1]);
+
+                        //5 - update type
+                        $('#pokemontype1').text(info[5][0]);
+                        if(info[5][1].length > 1){
+                            $('#pokemontype2').text(info[5][1]);
+                        }else{
+                            $('#pokemontype2').text("");
+                        }
+
+                        //7 - ablities
+                        ablIds = ['#pokemonabl1', '#pokemonabl2', '#pokemonablhidden']
+                        for(var i = 0; i < 3; i++){
+
+                            if(info[7].length < i + 1){
+                                $(ablIds[i]).text("");
+                            }else if(info[7][i].length == 3){
+                                $(ablIds[i]).text(info[7][i][1]);
+                            }else{
+                                $(ablIds[i]).text("");
+                            }
+
+                        }
+                        
+                        
+                        //update
+                    }else if(info[0] == 1){
+                        //handle exists as a pokemon case
+                    }else{
+                        //must be -1, return error/invalid
+                    }
+                }, pokemon);
+            }
+
+            function getPokemonInfo(callback, pokemon) {
+
+                var url = pokemon + ".pokemon";
+                var params = {format: format, elo:elo};
+
+                console.log(params)
+
+                $.get(url, params, function(data) {
+                    callback(data);
+                });
+            }
+
+        </script>
+
+        <style>
+            
+            body{
+            margin: 0;
+            margin-bottom: 100vh;
+            padding: 0;
+            text-align: center;
+            /* background-image: url("background.png");
+            background-repeat: no-repeat;
+            background-size: 100%;
+            background-color:rgb(24, 18, 8); */
+            }
+
+            #getelobody{
+                display: none;
+            }
+            #mainbody {
+                display: none;
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <!-- get format -->
+        <div id="getformatbody">
+            <input id="getformat" name="getformat" value="gen9doublesou" />
+            <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="setFormat();" id="setFormatButton">Set Format</button>
+        </div>
+
+        <!-- get elo -->
+        <div id="getelobody">
+            <input id="getelo" name="getelo" value="1000" />
+            <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="setElo();" id="setEloButton">Set Elo</button>
+        </div>
+
+        <!-- mainpage -->
+        <div id="mainbody">
+
+            <h2>Main Menu</h2>
+
+            <!-- huge table -->
+            <table style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+
+                <!-- name -->
+                <tr id="pokemonnamerow">
+
+                    <table id="pokemonnametable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                        <tr><td id="pokemonnames"><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonname">A Pokemon</p></td></tr>
+                    </table>
+
+                </tr>
+
+                <!-- type -->
+                <tr id="pokemontypesrow">
+
+                    <table id="pokemontypestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemontype1">Type 1</p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemontype2">Type 2</p></td>
+                        </tr>
+
+                    </table>
+
+                </tr>
+
+                <!-- abl -->
+                <tr id="pokemonabilitiesrow">
+
+                    
+
+                    <table id="pokemontypestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl1">Abl 1</p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl2">Abl 2</p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonablhidden">Abl Hidden</p></td>
+                        </tr>
+        
+                    </table>
+
+                </tr>
+
+                <!-- def matchups -->
+                <tr id="pokemondefmatchupsrow">
+
+                    <table id="pokemondefmatchupstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemon0xmu">0x</p></td></tr>
+                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemon4xmu">4x</p></td></tr>
+                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemon2xmu">2x</p></td></tr>
+                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemon1xmu">1x</p></td></tr>
+                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemon1/2xmu">1/2x</p></td></tr>
+                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemon1/4xmu">1/4x</p></td></tr>
+                    </table>
+
+                </tr>
+
+                <!-- stats -->
+                <tr id="pokemonstatsrow">      
+
+                    <table id="pokemonstatstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonhp">HP</p></td></tr>
+                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonatk">ATK</p></td></tr>
+                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemondef">DEF</p></td></tr>
+                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspatk">SPATK</p></td></tr>
+                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspdef">SPDEF</p></td></tr>
+                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspd">SPD</p></td></tr>
+                    </table>
+
+                </tr>
+
+                <!-- search -->
+                <tr id="pokemonsearchrow">
+
+                    <input id="searchpokemonfield" name="searchpokemonfield" value="raging bolt"/>
+                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="searchPokemon();" id="searchPokemonButton">Search Pokemon</button>
+
+                </tr>
+
+            </table>
+        </div>
+
+    </body>
+
+    
+</html>

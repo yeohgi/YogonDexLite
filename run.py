@@ -43,7 +43,7 @@ while pokemon != 'exit' and pokemon != 'quit':
         if pokemon == '!TC':
             dex.printTypeChart()
     elif(dex.pokemonExist(pokemon)):
-        if(dex.pokemonInForamt(pokemon)):
+        if(dex.pokemonInFormat(pokemon)):
             dex.query_pokemon(pokemon)
         else:
             print("There is no information about this Pokemon in the format you are playing, either it's super niche or banned")

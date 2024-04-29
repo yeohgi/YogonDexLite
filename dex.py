@@ -605,6 +605,8 @@ class dex:
                 print(type, end=' ')
             print("")
 
+        return [immunities, weaknessesx4, weaknesses, neutral, resistances, resistancesx4]
+
     def slashStrong(self, type1, type2):
 
         t1 = -1
@@ -727,7 +729,7 @@ class dex:
 
 
 
-    def pokemonInForamt(self, pokemon):
+    def pokemonInFormat(self, pokemon):
 
         db = 'moveset.db'
 

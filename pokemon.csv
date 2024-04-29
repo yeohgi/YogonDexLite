@@ -766,9 +766,9 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 638,Cobalion,Steel,Fighting,91,90,129,90,72,108,Justified,,
 639,Terrakion,Rock,Fighting,91,129,90,72,90,108,Justified,,
 640,Virizion,Grass,Fighting,91,90,72,90,129,108,Justified,,
-641,Tornadus,Flying,,79,115,70,125,80,111,Prankster,Defiant,Defiant
+641,Tornadus,Flying,,79,115,70,125,80,111,Prankster,,Defiant
 641,Tornadus-Therian,Flying,,79,100,80,110,90,121,Regenerator,,
-642,Thundurus,Electric,Flying,79,115,70,125,80,111,Prankster,Defiant,Defiant
+642,Thundurus,Electric,Flying,79,115,70,125,80,111,Prankster,,Defiant
 642,Thundurus-Therian,Electric,Flying,79,105,70,145,80,101,Volt Absorb,,
 643,Reshiram,Dragon,Fire,100,120,100,150,120,90,Turboblaze,,
 644,Zekrom,Dragon,Electric,100,150,120,120,100,90,Teravolt,,
