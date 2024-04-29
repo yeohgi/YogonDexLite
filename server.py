@@ -100,18 +100,18 @@ class MyHandler( BaseHTTPRequestHandler ):
                 if returnStatus == 0:
                     content.append(pkdex.dexFetch('basic', pokemon, 'Rank'))
                 else:
-                    content.append("N/A")
+                    content.append([])
 
                 #4 - pokemon usage
                 if returnStatus == 0:
                     content.append(pkdex.dexFetch('basic', pokemon, 'Usage'))
                 else:
-                    content.append("N/A")
+                    content.append([])
 
                 #5 - pokemon types
                 types = []
-                types.append(pkdex.dexFetch('pokemon', pokemon, 'Type1').upper())
-                types.append(pkdex.dexFetch('pokemon', pokemon, 'Type2').upper())
+                types.append(pkdex.dexFetch('pokemon', pokemon, 'Type1').title())
+                types.append(pkdex.dexFetch('pokemon', pokemon, 'Type2').title())
                 content.append(types)
 
                 #6 - def matchups
@@ -120,35 +120,50 @@ class MyHandler( BaseHTTPRequestHandler ):
 
                 #7 - abilities
                 ablContent = []
-                abilities = pkdex.dexFetch('moveset', pokemon, 'Abilities').split(';') #NO RETURN STATUS CHECK COME BACK LATER
-                abilitiesAndUsages = [ability.split(' ') for ability in abilities]
 
-                ablContent.append(pkdex.dexFetch('pokemon', pokemon, 'Ability1'))
-                ablContent.append(pkdex.dexFetch('pokemon', pokemon, 'Ability2'))
-                ablContent.append(pkdex.dexFetch('pokemon', pokemon, 'Hidden'))
+                if returnStatus == 0:
+                    abilities = pkdex.dexFetch('moveset', pokemon, 'Abilities').split(';')
+                    abilitiesAndUsages = [ability.split(' ') for ability in abilities]
 
-                for ability in abilitiesAndUsages:
+                    ablContent.append(pkdex.dexFetch('pokemon', pokemon, 'Ability1'))
+                    ablContent.append(pkdex.dexFetch('pokemon', pokemon, 'Ability2'))
+                    ablContent.append(pkdex.dexFetch('pokemon', pokemon, 'Hidden'))
 
-                    abilityName = ''
+                    for ability in abilitiesAndUsages:
 
-                    for part in ability[:-1]:
-                        abilityName += ' ' + part
-                    abilityName = abilityName.strip(' ').strip('"')
+                        abilityName = ''
 
-                    desc = pkdex.ablFetch(abilityName)
+                        for part in ability[:-1]:
+                            abilityName += ' ' + part
+                        abilityName = abilityName.strip(' ').strip('"')
+
+                        desc = pkdex.ablFetch(abilityName)
+
+                        for i, abl in enumerate(ablContent):
+                            if '"' in abl:
+                                ablContent[i] = ablContent[i].strip('"')
+
+                        for i, abl in enumerate(ablContent):
+                            if abl in [ability[-1], abilityName, desc]:
+                                ablContent[i] = [ability[-1], abilityName, desc]
+                            elif len(abl) < 3:
+                                ablContent[i] = ['','','']
+                elif returnStatus == 1:
+
+                    ablContent.append(pkdex.dexFetch('pokemon', pokemon, 'Ability1'))
+                    ablContent.append(pkdex.dexFetch('pokemon', pokemon, 'Ability2'))
+                    ablContent.append(pkdex.dexFetch('pokemon', pokemon, 'Hidden'))
 
                     for i, abl in enumerate(ablContent):
-                        if '"' in abl:
-                            ablContent[i] = ablContent[i].strip('"')
+                        desc = pkdex.ablFetch(abl)
 
-                    # print(abilityName, desc, ablContent, ablContent[0])
+                        if desc is None:
+                            desc = ''
 
-                    for i, abl in enumerate(ablContent):
-                        if abl in [ability[-1], abilityName, desc]:
-                            ablContent[i] = [ability[-1], abilityName, desc]
-                        elif len(abl) < 3:
-                            ablContent[i] = ['','','']
-                        
+                        ablContent[i] = [ablContent[i], desc]
+
+                    print(ablContent)
+
 
                 
                 content.append(ablContent)
@@ -166,69 +181,81 @@ class MyHandler( BaseHTTPRequestHandler ):
                 #9 - spreads
                 if returnStatus == 0:
                     spreads = pkdex.dexFetch('moveset', pokemon, 'Spreads').upper().split(';')
+                    for i, spread in enumerate(spreads):
+                        spreads[i] = spreads[i].replace(":", " ")
+                        spreads[i] = spreads[i].split(" ")
+                        spreads[i] = list(filter(None, spreads[i]))
                     content.append(spreads)
                 else:
-                    content.append("N/A")
+                    content.append([])
 
                 #10 - moves
                 movesContent = []
-                moves = pkdex.dexFetch('moveset', pokemon, 'Moves').split(';')
-                movesAndUsages = [move.split(' ') for move in moves]
+                if returnStatus == 0:
+                    moves = pkdex.dexFetch('moveset', pokemon, 'Moves').split(';')
+                    movesAndUsages = [move.split(' ') for move in moves]
 
-                for move in movesAndUsages:
+                    for move in movesAndUsages:
 
-                    moveName = ''
+                        moveName = ''
 
-                    for part in move[:-1]:
-                        moveName += ' ' + part
-                    moveName = moveName.strip(' ')
+                        for part in move[:-1]:
+                            moveName += ' ' + part
+                        moveName = moveName.strip(' ')
 
-                    desc = pkdex.moveFetch(moveName)
+                        desc = pkdex.moveFetch(moveName)
 
-                    if str(desc[0]) != 'Other':
-                        #usage, name, type, power, cat, desc
-                        movesContent.append([move[-1], moveName, desc[1], desc[2], desc[3], desc[0]])
+                        if str(desc[0]) != 'Other':
+                            #usage, name, type, power, cat, desc
+                            movesContent.append([move[-1], moveName, desc[1], desc[2], desc[3], desc[0]])
 
                 content.append(movesContent)
 
                 #11 - items
                 itemContent = []
-                items = pkdex.dexFetch('moveset', pokemon, 'Items').split(';')
-                itemsAndUsages = [item.split(' ') for item in items]
+                if returnStatus == 0:
+                    items = pkdex.dexFetch('moveset', pokemon, 'Items').split(';')
+                    itemsAndUsages = [item.split(' ') for item in items]
 
-                for item in itemsAndUsages:
+                    for item in itemsAndUsages:
 
-                    itemName = ''
+                        itemName = ''
 
-                    for part in item[:-1]:
-                        itemName += ' ' + part
-                    itemName = itemName.strip(' ').strip('"')
+                        for part in item[:-1]:
+                            itemName += ' ' + part
+                        itemName = itemName.strip(' ').strip('"')
 
-                    desc = pkdex.itemFetch(itemName)
+                        desc = pkdex.itemFetch(itemName)
 
-                    item[-1] = item[-1].strip('"')
+                        item[-1] = item[-1].strip('"')
 
-                    if itemName != 'Other':
-                        itemContent.append([item[-1], itemName, desc])
+                        if itemName != 'Other':
+                            itemContent.append([item[-1], itemName, desc])
 
                 content.append(itemContent)
 
                 #12 - teammates
                 teammatesContent = []
-                teammates = pkdex.dexFetch('moveset', pokemon, 'Teammates').split(';')
-                teammatesAndUsages = [teammate.split(' ') for teammate in teammates]
+                if returnStatus == 0:
+                    teammates = pkdex.dexFetch('moveset', pokemon, 'Teammates').split(';')
+                    teammatesAndUsages = [teammate.split(' ') for teammate in teammates]
 
-                for teammate in teammatesAndUsages:
+                    for teammate in teammatesAndUsages:
 
-                    teammateName = ''
+                        teammateName = ''
 
-                    for part in teammate[:-1]:
-                        teammateName += ' ' + part
-                    teammateName = teammateName.strip(' ').strip('"')
+                        for part in teammate[:-1]:
+                            teammateName += ' ' + part
+                        teammateName = teammateName.strip(' ').strip('"')
 
-                    teammatesContent.append([teammate[-1], teammateName])
+                        teammatesContent.append([teammate[-1], teammateName])
 
                 content.append(teammatesContent)
+
+                #13 - image name
+
+                savedAs = smogon.grabImage(pokemon)
+                content.append([savedAs])
 
             print("CONTENT INFO BELOW", format)
 

@@ -464,15 +464,15 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 378,Regice,Ice,,80,50,100,100,200,50,Clear Body,,Ice Body
 379,Registeel,Steel,,80,75,150,75,150,50,Clear Body,,Light Metal
 380,Latias,Dragon,Psychic,80,80,90,110,130,110,Levitate,,
-380,Latias,Dragon,Psychic,80,100,120,140,150,110,Levitate,,
+380,Latias-Mega,Dragon,Psychic,80,100,120,140,150,110,Levitate,,
 381,Latios,Dragon,Psychic,80,90,80,130,110,110,Levitate,,
-381,Latios,Dragon,Psychic,80,130,100,160,120,110,Levitate,,
+381,Latios-Mega,Dragon,Psychic,80,130,100,160,120,110,Levitate,,
 382,Kyogre,Water,,100,100,90,150,140,90,Drizzle,,
 382,Kyogre-Primal,Water,,100,150,90,180,160,90,Primordial Sea,,
 383,Groudon,Ground,,100,150,140,100,90,90,Drought,,
 383,Groudon-Primal,Ground,Fire,100,180,160,150,90,90,Desolate Land,,
 384,Rayquaza,Dragon,Flying,105,150,90,150,90,95,Air Lock,,
-384,Rayquaza,Dragon,Flying,105,180,100,180,100,115,Delta Stream,,
+384,Rayquaza-Mega,Dragon,Flying,105,180,100,180,100,115,Delta Stream,,
 385,Jirachi,Steel,Psychic,100,100,100,100,100,100,Serene Grace,,
 386,Deoxys-Normal,Psychic,,50,150,50,150,50,150,Pressure,,
 386,Deoxys-Attack,Psychic,,50,180,20,180,20,150,Pressure,,

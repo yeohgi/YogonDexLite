@@ -79,38 +79,108 @@
                     console.log(info)
                     
                     //0
-                    if(info[0] == 0){
+                    if(info[0] > -1){
                         //handle in format case
 
                         //1 - update name
                         $('#pokemonname').text(info[1]);
 
-                        //5 - update type
-                        $('#pokemontype1').text(info[5][0]);
-                        if(info[5][1].length > 1){
-                            $('#pokemontype2').text(info[5][1]);
+                        //2 - update dex number
+                        $('#pokemondexnumber').text(info[2]);
+
+                        //3 - update rank
+                        if(info[0] == 0){
+                            $('#pokemonrank').text(info[3]);
                         }else{
-                            $('#pokemontype2').text("");
+                            $('#pokemonrank').text("N/A");
+                        }
+                        
+                        //4 - update usage
+                        if(info[0] == 0){
+                            $('#pokemonusage').text(info[4]);
+                        }else{
+                            $('#pokemonusage').text("N/A");
                         }
 
-                        //7 - ablities
-                        ablIds = ['#pokemonabl1', '#pokemonabl2', '#pokemonablhidden']
-                        for(var i = 0; i < 3; i++){
+                        //5 - update type
+                        $("#pokemontype1image").attr("src", "https://play.pokemonshowdown.com/sprites/types/" + info[5][0] + ".png");
+                        if(info[5][1].length > 1){
+                            $("#pokemontype2image").attr("src", "https://play.pokemonshowdown.com/sprites/types/" + info[5][1] + ".png");
+                        }else{
+                            $("#pokemontype2image").attr("src", "https://play.pokemonshowdown.com/sprites/types/%3f%3f%3f.png");
+                        }
 
-                            if(info[7].length < i + 1){
-                                $(ablIds[i]).text("");
-                            }else if(info[7][i].length == 3){
-                                $(ablIds[i]).text(info[7][i][1]);
-                            }else{
-                                $(ablIds[i]).text("");
+                        //6 - defensive matchups
+                        defRowIds = ['#pokemon0xmu', '#pokemon4xmu', '#pokemon2xmu', '#pokemon1xmu', '#pokemon1d2xmu', '#pokemon1d4xmu']
+                        defRowMUs = ['0x: ', '4x: ', '2x: ', '1x: ', '1/2x: ', '1/4x: ']
+                        for(var i = 0; i < 6; i++){
+                            $(defRowIds[i]).empty();
+                            if(info[6][i].length > 0){
+                                rowData = '<td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + defRowMUs[i] + '</p></td>'
+                                $(defRowIds[i]).append(rowData);
+                            }
+                            for(var j = 0; j < info[6][i].length; j++){
+                                imageData = '<td><img id="pokemontype2image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/' + info[6][i][j] + '.png" alt="???"></td>'
+                                $(defRowIds[i]).append(imageData)
+                            }
+                        }
+
+
+                        //7 - update ablities
+                        ablIds = ['#pokemonabl1', '#pokemonabl2', '#pokemonablhidden']
+                        if(info[0] == 0){
+
+                            for(var i = 0; i < 3; i++){
+
+                                if(info[7].length < i + 1){
+                                    $(ablIds[i]).text("");
+                                    $(ablIds[i]).attr("title", "");
+                                }else if(info[7][i].length == 3){
+                                    $(ablIds[i]).text(info[7][i][1]);
+                                    $(ablIds[i]).attr("title", info[7][i][2]);
+                                }else{
+                                    $(ablIds[i]).text("");
+                                    $(ablIds[i]).attr("title", "");
+                                }
                             }
 
+                        }else if(info[0] == 1){
+                            for(var i = 0; i < 3; i++){
+
+                                if(info[7].length < i + 1){
+                                    $(ablIds[i]).text("");
+                                }else if(info[7][i].length == 2){
+                                    $(ablIds[i]).text(info[7][i][0]);
+                                }else{
+                                    $(ablIds[i]).text("");
+                                }
+                            }
                         }
                         
+                        //8 - update stats
+                        stats = ['#pokemonhp', '#pokemonatk', '#pokemondef', '#pokemonspatk', '#pokemonspdef', '#pokemonspd']
+                        for(var i = 0; i < 6; i++){
+                            $(stats[i]).text(info[8][i]);
+                        }
+
+                        //9 - update spreads
+                        $('#pokemonspreadstable').empty();
+                        newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Spreads: </p></td></tr>'
+                        $('#pokemonspreadstable').append(newRow);
+                        for(var i = 0; i < info[9].length; i++){
+                            if(info[9][i].length > 2){
+                                newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12;">'+ info[9][i][2] + '% ' + info[9][i][1] + ' ' + info[9][i][0] + '</p></td></tr>'
+                                $('#pokemonspreadstable').append(newRow);
+                            }else{
+                                newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12;">'+ info[9][i][1] + '% ' + info[9][i][0] + '</p></td></tr>'
+                                $('#pokemonspreadstable').append(newRow);
+                            }
+                        }
+
+                        //13 - update image
+                        $("#pokemonImage").attr("src", "https://play.pokemonshowdown.com/sprites/gen5/" + info[13] + ".png")
                         
                         //update
-                    }else if(info[0] == 1){
-                        //handle exists as a pokemon case
                     }else{
                         //must be -1, return error/invalid
                     }
@@ -150,6 +220,30 @@
             #mainbody {
                 display: none;
             }
+
+            .tooltip {
+                position: relative; /* Make sure the tooltip is positioned relative */
+            }
+
+            .tooltip::after {
+                content: attr(title); /* Set the content of the tooltip */
+                display: none; /* Hide the tooltip by default */
+                position: absolute; /* Position the tooltip absolutely */
+                top: 100%; /* Position the tooltip below the element */
+                left: 50%; /* Align the tooltip with the center of the element */
+                transform: translateX(-50%); /* Center the tooltip horizontally */
+                background-color: rgba(0, 0, 0, 0.9); /* Tooltip background color */
+                color: #fff; /* Tooltip text color */
+                padding: 5px; /* Add padding to the tooltip */
+                border-radius: 5px; /* Add border radius to the tooltip */
+                white-space: nowrap; /* Prevent line breaks in the tooltip */
+                z-index: 1; /* Ensure the tooltip appears above other elements */
+            }
+
+            .tooltip:hover::after {
+                display: block; /* Show the tooltip when hovering over the element */
+            }
+
         </style>
 
     </head>
@@ -170,16 +264,26 @@
         <!-- mainpage -->
         <div id="mainbody">
 
-            <h2>Main Menu</h2>
+            <h2>YogonDexLite</h2>
+
+            <img id="pokemonImage" src="https://play.pokemonshowdown.com/sprites/substitutes/gen5/substitute.png" alt="INPUT A POKEMON TO SEE IT!!!">
 
             <!-- huge table -->
             <table style="margin-left:auto; margin-right:auto; vertical-align:middle;">
 
                 <!-- name -->
+                <!-- dex number -->
+                <!-- rank -->
+                <!-- usage -->
                 <tr id="pokemonnamerow">
 
                     <table id="pokemonnametable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
-                        <tr><td id="pokemonnames"><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonname">A Pokemon</p></td></tr>
+                        <tr>
+                            <td id="pokemonnames"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Name: </p>            <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonname">A Pokemon</p></td>
+                            <td id="pokemondexnumbers"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Dex Number: </p> <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemondexnumber">A Number</p></td>
+                            <td id="pokemonranks"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Rank: </p>            <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonrank">A Rank</p></td>
+                            <td id="pokemonusages"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Usage: </p>          <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonusage">A Usage</p></td>
+                        </tr>
                     </table>
 
                 </tr>
@@ -190,8 +294,8 @@
                     <table id="pokemontypestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
 
                         <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemontype1">Type 1</p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemontype2">Type 2</p></td>
+                            <td><img id="pokemontype1image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/%3f%3f%3f.png" alt="???"></td>
+                            <td><img id="pokemontype2image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/%3f%3f%3f.png" alt="???"></td>
                         </tr>
 
                     </table>
@@ -201,14 +305,13 @@
                 <!-- abl -->
                 <tr id="pokemonabilitiesrow">
 
-                    
-
-                    <table id="pokemontypestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                    <table id="pokemonabilitiestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
 
                         <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl1">Abl 1</p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl2">Abl 2</p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonablhidden">Abl Hidden</p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="pokemonabls">Abilities: </p></td>
+                            <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl1" title="DESCRIPTION 1">Abl 1</p></td>
+                            <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl2" title="DESCRIPTION 2">Abl 2</p></td>
+                            <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonablhidden" title="DESCRIPTION HIDDEN">Abl Hidden</p></td>
                         </tr>
         
                     </table>
@@ -219,12 +322,36 @@
                 <tr id="pokemondefmatchupsrow">
 
                     <table id="pokemondefmatchupstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
-                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemon0xmu">0x</p></td></tr>
-                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemon4xmu">4x</p></td></tr>
-                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemon2xmu">2x</p></td></tr>
-                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemon1xmu">1x</p></td></tr>
-                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemon1/2xmu">1/2x</p></td></tr>
-                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemon1/4xmu">1/4x</p></td></tr>
+                        <tr id="pokemon0xmu">
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">0x: </p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;">0x</p></td>
+                        </tr>
+
+                        <tr id="pokemon4xmu">
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">4x: </p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;">4x</p></td>
+                        </tr>
+
+                        <tr id="pokemon2xmu">
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">2x :</p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;">2x</p></td>
+                        </tr>
+
+                        <tr id="pokemon1xmu">
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">1x: </p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;">1x</p></td>
+                        </tr>
+
+                        <tr id="pokemon1d2xmu">
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">1/2x: </p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;">1/2x</p></td>
+                        </tr>
+
+                        <tr id="pokemon1d4xmu">
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">1/4x: </p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;">1/4x</p></td>
+                        </tr>
+
                     </table>
 
                 </tr>
@@ -233,14 +360,50 @@
                 <tr id="pokemonstatsrow">      
 
                     <table id="pokemonstatstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
-                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonhp">HP</p></td></tr>
-                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonatk">ATK</p></td></tr>
-                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemondef">DEF</p></td></tr>
-                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspatk">SPATK</p></td></tr>
-                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspdef">SPDEF</p></td></tr>
-                        <tr><td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspd">SPD</p></td></tr>
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="hplabel">HP:</p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonhp">HP</p></td>
+                        </tr>
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="atklabel">ATK:</p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonatk">ATK</p></td>
+                        </tr>
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="deflabel">DEF:</p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemondef">DEF</p></td>
+                        </tr>
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="spatklabel">SPATK:</p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspatk">SPATK</p></td>
+                        </tr>
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="spdeflabel">SPDEF:</p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspdef">SPDEF</p></td>
+                        </tr>
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="spdlabel">SPD:</p></td>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspd">SPD</p></td>
+                        </tr>
+
                     </table>
 
+                </tr>
+
+                <tr id="pokemonspreadsrow">
+
+                    <table id="pokemonspreadstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Spreads: </p></td>
+                        </tr>
+                    
+                    </table>
                 </tr>
 
                 <!-- search -->

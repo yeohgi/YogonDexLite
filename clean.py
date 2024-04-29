@@ -7,6 +7,9 @@ if os.path.exists('prepro'):
 if os.path.exists('postpro'):
     subprocess.run(["rm", "-r", "postpro"], check=True)
 
+if os.path.exists('pksprites'):
+    subprocess.run(["rm", "-r", "pksprites"], check=True)
+
 if os.path.exists('leads.csv'):
     os.remove('leads.csv')
 if os.path.exists('metagame.csv'):

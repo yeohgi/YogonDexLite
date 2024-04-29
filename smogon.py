@@ -314,3 +314,42 @@ def validFormat(format):
         return False
     
     return True
+
+def grabImage(pokemon):
+
+    if not os.path.exists(f'pksprites/'):
+        subprocess.run(["mkdir", f'pksprites'])
+
+    tryPokemon = []
+    if ' ' not in pokemon:
+        tryPokemon.append(pokemon)
+    tryPokemon.append(pokemon.replace(' ', '-'))
+    tryPokemon.append(pokemon.replace(' ', ''))
+    tryPokemon.append(pokemon.replace('-', ' '))
+    tryPokemon.append(pokemon.replace('-', ''))
+
+    print(tryPokemon)
+
+    savedAs = ''
+
+    for tryName in tryPokemon:
+
+        process = subprocess.Popen(f"php grabImage.php {tryName}", shell = True, stdout = subprocess.PIPE)
+
+        process.wait()
+
+        output = process.stdout.read().strip().decode("utf-8")
+
+        returnValue = int(output)
+
+        print(tryName, returnValue)
+
+        if returnValue == 0:
+            savedAs = tryName
+            break
+
+    time.sleep(0.3)
+
+    return savedAs
+
+

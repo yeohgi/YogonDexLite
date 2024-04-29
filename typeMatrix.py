@@ -46,3 +46,31 @@ types = ["Normal", "Fire", "Water", "Electric", "Grass",
          "Dark", "Steel", "Fairy"]
 
 stats = ["HP", "ATK", "DEF", "SPATK", "SPDEF", "SPD"]
+
+natures = [
+    ["Adamant", "ATK", "SPATK"],
+    ["Bashful", "SPATK", "SPATK"],
+    ["Bold", "DEF", "ATK"],
+    ["Brave", "ATK", "SPD"],
+    ["Calm", "SPDEF", "ATK"],
+    ["Careful", "SPDEF", "SPATK"],
+    ["Docile", "DEF", "DEF"],
+    ["Gentle", "SPDEF", "DEF"],
+    ["Hardy", "ATK", "ATK"],
+    ["Hasty", "SPD", "DEF"],
+    ["Impish", "DEF", "SPATK"],
+    ["Jolly", "SPD", "SPATK"],
+    ["Lax", "DEF", "SPDEF"],
+    ["Lonely", "ATK", "DEF"],
+    ["Mild", "SPATK", "DEF"],
+    ["Modest", "SPATK", "ATK"],
+    ["Naive", "SPD", "SPDEF"],
+    ["Naughty", "ATK", "SPDEF"],
+    ["Quiet", "SPATK", "SPD"],
+    ["Quirky", "SPDEF", "SPDEF"],
+    ["Rash", "SPATK", "SPDEF"],
+    ["Relaxed", "DEF", "SPD"],
+    ["Sassy", "SPDEF", "SPD"],
+    ["Serious", "SPD", "SPD"],
+    ["Timid", "SPD", "ATK"]
+]
