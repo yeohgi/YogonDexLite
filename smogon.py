@@ -317,8 +317,13 @@ def validFormat(format):
 
 def grabImage(pokemon):
 
-    if not os.path.exists(f'pksprites/'):
-        subprocess.run(["mkdir", f'pksprites'])
+    if "'" in pokemon:
+        pokemon = pokemon.replace("'", "")
+
+    if '.' in pokemon:
+        pokemon = pokemon.replace('. ', '')
+        pokemon = pokemon.replace('.', '')
+
 
     tryPokemon = []
     if ' ' not in pokemon:
@@ -347,8 +352,6 @@ def grabImage(pokemon):
         if returnValue == 0:
             savedAs = tryName
             break
-
-    time.sleep(0.3)
 
     return savedAs
 

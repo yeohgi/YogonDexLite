@@ -228,6 +228,21 @@ class dex:
 
         pokemon = pokemon.title()
 
+        if "'" in pokemon:
+            newPokemon = ''
+            skip = False
+            for i, letter in enumerate(pokemon):
+                if not skip:
+                    if letter == "'" and i + 1 < len(pokemon):
+                        newPokemon += letter + pokemon[i + 1].lower()
+                        skip = True
+                    else:
+                        newPokemon += letter
+                else:
+                    skip = False
+
+            pokemon = newPokemon
+
         column = column.capitalize()
 
         if os.path.exists(table + '.db'):
@@ -242,11 +257,15 @@ class dex:
                 tryNames.append(pokemon.replace(' ','-'))
                 tryNames.append(pokemon.replace('-',' '))
 
+                if "." in pokemon:
+                    for i, name in enumerate(tryNames):
+                        tryNames[i] = tryNames[i].replace('.-', '. ')
+
                 for name in tryNames:
                     if(self.columnExists(table, "Year") and self.columnExists(table, "Month")):
-                        sqlCommand = f"SELECT {column} FROM {table} WHERE Pokemon == '{name}' AND Format == '{self.format}' ORDER BY Year DESC, Month DESC LIMIT 1"
+                        sqlCommand = f'SELECT {column} FROM {table} WHERE Pokemon == "{name}" AND Format == "{self.format}" ORDER BY Year DESC, Month DESC LIMIT 1'
                     else:
-                        sqlCommand = f"SELECT {column} FROM {table} WHERE Pokemon == '{name}'"
+                        sqlCommand = f'SELECT {column} FROM {table} WHERE Pokemon == "{name}"'
                     cursor.execute(sqlCommand)
                     rows = cursor.fetchall()
                     if(len(rows) != 0):
@@ -256,9 +275,9 @@ class dex:
 
             else:
                 if(self.columnExists(table, "Year") and self.columnExists(table, "Month")):
-                    sqlCommand = f"SELECT {column} FROM {table} WHERE Pokemon == '{pokemon}' AND Format == '{self.format}' ORDER BY Year DESC, Month DESC LIMIT 1"
+                    sqlCommand = f'SELECT {column} FROM {table} WHERE Pokemon == "{pokemon}" AND Format == "{self.format}" ORDER BY Year DESC, Month DESC LIMIT 1'
                 else:
-                    sqlCommand = f"SELECT {column} FROM {table} WHERE Pokemon == '{pokemon}'"
+                    sqlCommand = f'SELECT {column} FROM {table} WHERE Pokemon == "{pokemon}"'
                 cursor.execute(sqlCommand)
                 rows = cursor.fetchall()
                 if(len(rows) != 0):
@@ -488,10 +507,32 @@ class dex:
 
         pokemon = pokemon.title()
 
-        tryNames = []           
+        tryNames = []  
+
+        if "'" in pokemon:
+            newPokemon = ''
+            skip = False
+            for i, letter in enumerate(pokemon):
+                if not skip:
+                    if letter == "'" and i + 1 < len(pokemon):
+                        newPokemon += letter + pokemon[i + 1].lower()
+                        skip = True
+                    else:
+                        newPokemon += letter
+                else:
+                    skip = False
+
+            pokemon = newPokemon
+
         if '-' in pokemon or ' ' in pokemon:
+
             tryNames.append(pokemon.replace(' ','-'))
             tryNames.append(pokemon.replace('-',' '))
+
+            #mime and rime
+            if "." in pokemon:
+                for i, name in enumerate(tryNames):
+                    tryNames[i] = tryNames[i].replace('.-', '. ')
         else:
             tryNames.append(pokemon)
 
@@ -500,8 +541,11 @@ class dex:
             conn = sqlite3.connect(db)
             cursor = conn.cursor()
 
+            print(tryNames)
+
             for name in tryNames:
-                sqlCommand = f"SELECT Pokemon FROM pokemon WHERE Pokemon == '{name}'"
+
+                sqlCommand = f'SELECT Pokemon FROM pokemon WHERE Pokemon == "{name}"'
 
                 cursor.execute(sqlCommand)
 
@@ -748,7 +792,11 @@ class dex:
             cursor = conn.cursor()
 
             for name in tryNames:
-                sqlCommand = f"SELECT Pokemon FROM moveset WHERE Pokemon == '{name}'"
+
+                if "'" in name:
+                    name = name.capitalize()
+
+                sqlCommand = f'SELECT Pokemon FROM moveset WHERE Pokemon == "{name}"'
 
                 cursor.execute(sqlCommand)
 

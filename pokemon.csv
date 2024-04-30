@@ -1073,8 +1073,8 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 896,Glastrier,Ice,,100,145,130,65,110,30,Chilling Neigh,,
 897,Spectrier,Ghost,,100,65,60,145,80,130,Grim Neigh,,
 898,Calyrex,Psychic,Grass,100,80,80,80,80,80,Unnerve,,
-898,Calyrex-Ice Rider,Psychic,Ice,100,165,150,85,130,50,As One,,
-898,Calyrex-Shadow Rider,Psychic,Ghost,100,85,80,165,100,150,As One,,
+898,Calyrex-Ice,Psychic,Ice,100,165,150,85,130,50,As One,,
+898,Calyrex-Shadow,Psychic,Ghost,100,85,80,165,100,150,As One,,
 899,Wyrdeer,Normal,Psychic,103,105,72,105,75,65,Intimidate,Frisk,Sap Sipper
 900,Kleavor,Bug,Rock,70,130,95,45,75,85,Swarm,Sheer Force,Sharpness
 901,Ursaluna,Ground,Normal,130,140,105,45,80,50,Guts,Bulletproof,Unnerve

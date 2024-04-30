@@ -84,6 +84,8 @@ class MyHandler( BaseHTTPRequestHandler ):
                 if inFormat:
                     returnStatus = 0
 
+            print(returnStatus, 9000)
+
             if returnStatus > -1:
 
                 content.append(returnStatus)
@@ -254,7 +256,7 @@ class MyHandler( BaseHTTPRequestHandler ):
 
                 #13 - image name
 
-                savedAs = smogon.grabImage(pokemon)
+                savedAs = smogon.grabImage(pokemon.lower())
                 content.append([savedAs])
 
             print("CONTENT INFO BELOW", format)

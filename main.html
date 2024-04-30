@@ -7,6 +7,8 @@
 
             format = "";
             elo = -1;
+            shiny = false;
+            showing = ""
 
             //FORMAT
             function setFormat(){
@@ -178,7 +180,8 @@
                         }
 
                         //13 - update image
-                        $("#pokemonImage").attr("src", "https://play.pokemonshowdown.com/sprites/gen5/" + info[13] + ".png")
+                        showing = info[13]
+                        updatePokemonSprite()
                         
                         //update
                     }else{
@@ -197,6 +200,24 @@
                 $.get(url, params, function(data) {
                     callback(data);
                 });
+            }
+
+            function updatePokemonSprite(){
+                if(shiny){
+                    $("#pokemonImage").attr("src", "https://play.pokemonshowdown.com/sprites/gen5-shiny/" + showing + ".png")
+                }else{
+                    $("#pokemonImage").attr("src", "https://play.pokemonshowdown.com/sprites/gen5/" + showing + ".png")
+                }
+                
+            }
+
+            function toggleShiny(){
+                if(shiny){
+                    shiny = false;
+                }else{
+                    shiny = true;
+                }
+                updatePokemonSprite()
             }
 
         </script>
@@ -411,6 +432,14 @@
 
                     <input id="searchpokemonfield" name="searchpokemonfield" value="raging bolt"/>
                     <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="searchPokemon();" id="searchPokemonButton">Search Pokemon</button>
+
+                </tr>
+
+                <!-- shiny -->
+                <tr id="pokemonshiny">
+
+                    <br>
+                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="toggleShiny();" id="toggleShinyButton">Toggle Shiny</button>
 
                 </tr>
 
