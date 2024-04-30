@@ -161,8 +161,14 @@
                         
                         //8 - update stats
                         stats = ['#pokemonhp', '#pokemonatk', '#pokemondef', '#pokemonspatk', '#pokemonspdef', '#pokemonspd']
+                        bars = ['#hpbar', '#atkbar', '#defbar', '#spatkbar', '#spdefbar', '#spdbar']
                         for(var i = 0; i < 6; i++){
                             $(stats[i]).text(info[8][i]);
+                            $(bars[i]).css("width", barLength(info[8][i]) + "px");
+                            colors = barColor(info[8][i])
+                            console.log(colors)
+                            $(bars[i]).css("background-color", colors[0]);
+                            $(bars[i]).css("border", "2px solid "+ colors[1]);
                         }
 
                         //9 - update spreads
@@ -177,6 +183,34 @@
                                 newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12;">'+ info[9][i][1] + '% ' + info[9][i][0] + '</p></td></tr>'
                                 $('#pokemonspreadstable').append(newRow);
                             }
+                        }
+
+                        //10 - update moves
+                        $('#pokemonmovestable').empty();
+                        newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Moves: </p></td></tr>'
+                        $('#pokemonmovestable').append(newRow);
+                        for(var i = 0; i < info[10].length; i++){
+                            console.log(info[10][i])
+                            newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[10][i][0] + ' ' + info[10][i][1] + '</p></td><td><img id="pokemontype2image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/' + info[10][i][2] + '.png" alt="???"></td><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[10][i][3] + '</p></td><td><img id="pokemontype2image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/' + info[10][i][4] + '.png" alt="???"></td></tr>'
+                            $('#pokemonmovestable').append(newRow);
+                        }
+                        
+                        //11 - update items
+                        $('#pokemonitemstable').empty();
+                        newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Items: </p></td></tr>'
+                        $('#pokemonitemstable').append(newRow);
+                        for(var i = 0; i < info[11].length; i++){
+                            newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[11][i][0] + ' ' + info[11][i][1] + '</p></td></tr>'
+                            $('#pokemonitemstable').append(newRow);
+                        }
+
+                        //12 - update teammates
+                        $('#pokemonteammatestable').empty();
+                        newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Teammates: </p></td></tr>'
+                        $('#pokemonteammatestable').append(newRow);
+                        for(var i = 0; i < info[12].length; i++){
+                            newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[12][i][0] + ' ' + info[12][i][1] + '</p></td></tr>'
+                            $('#pokemonteammatestable').append(newRow);
                         }
 
                         //13 - update image
@@ -218,6 +252,30 @@
                     shiny = true;
                 }
                 updatePokemonSprite()
+            }
+
+            function barColor(stat){
+
+                colorCodes = ["#bd0404", "#d17600", "#d1b900", "#80eb34", "#009e08", "#009e9b"]
+                colorCodesBorder = ["#a80202", "#b56600", "#bda702", "#49ab03", "#017507", "#018582"]
+
+                if(stat >= 150){
+                    return [colorCodes[5], colorCodesBorder[5]];
+                }else if(stat >= 120){
+                    return [colorCodes[4], colorCodesBorder[4]];
+                }else if(stat >= 90){
+                    return [colorCodes[3], colorCodesBorder[3]];
+                }else if(stat >= 60){
+                    return [colorCodes[2], colorCodesBorder[2]];
+                }else if(stat >= 30){
+                    return [colorCodes[1], colorCodesBorder[1]];
+                }else{
+                    return [colorCodes[0], colorCodesBorder[0]];
+                }
+            }
+
+            function barLength(stat){
+                return stat * 1.4;
             }
 
         </script>
@@ -263,6 +321,14 @@
 
             .tooltip:hover::after {
                 display: block; /* Show the tooltip when hovering over the element */
+            }
+
+            .rectangle {
+                width: 200px; /* Width of the rectangle */
+                height: 10px; /* Height of the rectangle */
+                background-color: #3498db; /* Background color of the rectangle */
+                border: 2px solid #2980b9; /* Border style of the rectangle */
+                border-radius: 5px; /* Border radius to give rounded corners (optional) */
             }
 
         </style>
@@ -385,37 +451,44 @@
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="hplabel">HP:</p></td>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonhp">HP</p></td>
+                            <td><div id="hpbar" style="background-color: #c5c5c5; border: 2px solid #a4a4a4;" class="rectangle"></div></td>
                         </tr>
 
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="atklabel">ATK:</p></td>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonatk">ATK</p></td>
+                            <td><div id="atkbar" style="background-color: #c5c5c5; border: 2px solid #a4a4a4;" class="rectangle"></div></td>
                         </tr>
 
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="deflabel">DEF:</p></td>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemondef">DEF</p></td>
+                            <td><div id="defbar" style="background-color: #c5c5c5; border: 2px solid #a4a4a4;" class="rectangle"></div></td>
                         </tr>
 
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="spatklabel">SPATK:</p></td>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspatk">SPATK</p></td>
+                            <td><div id="spatkbar" style="background-color: #c5c5c5; border: 2px solid #a4a4a4;" class="rectangle"></div></td>
                         </tr>
 
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="spdeflabel">SPDEF:</p></td>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspdef">SPDEF</p></td>
+                            <td><div id="spdefbar" style="background-color: #c5c5c5; border: 2px solid #a4a4a4;" class="rectangle"></div></td>
                         </tr>
 
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="spdlabel">SPD:</p></td>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspd">SPD</p></td>
+                            <td><div id="spdbar" style="background-color: #c5c5c5; border: 2px solid #a4a4a4;" class="rectangle"></div></td>
                         </tr>
 
                     </table>
 
                 </tr>
 
+                <!-- spreads -->
                 <tr id="pokemonspreadsrow">
 
                     <table id="pokemonspreadstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
@@ -427,19 +500,54 @@
                     </table>
                 </tr>
 
+                <!-- moves -->
+                <tr id="pokemonmovesrow">
+
+                    <table id="pokemonmovestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Moves: </p></td>
+                        </tr>
+                    
+                    </table>
+                </tr>
+
+                <!-- items -->
+                <tr id="pokemonitemsrow">
+
+                    <table id="pokemonitemstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Items: </p></td>
+                        </tr>
+                    
+                    </table>
+                </tr>
+
+                <!-- teammates -->
+                <tr id="pokemonteammatesrow">
+
+                    <table id="pokemonteammatestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Teammates: </p></td>
+                        </tr>
+                    
+                    </table>
+                </tr>
+
                 <!-- search -->
                 <tr id="pokemonsearchrow">
 
-                    <input id="searchpokemonfield" name="searchpokemonfield" value="raging bolt"/>
-                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="searchPokemon();" id="searchPokemonButton">Search Pokemon</button>
+                    <td><input id="searchpokemonfield" name="searchpokemonfield" value="raging bolt"/>
+                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="searchPokemon();" id="searchPokemonButton">Search Pokemon</button></td>
 
                 </tr>
 
                 <!-- shiny -->
                 <tr id="pokemonshiny">
 
-                    <br>
-                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="toggleShiny();" id="toggleShinyButton">Toggle Shiny</button>
+                    <td><button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="toggleShiny();" id="toggleShinyButton">Toggle Shiny</button></td>
 
                 </tr>
 

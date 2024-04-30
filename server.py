@@ -209,7 +209,9 @@ class MyHandler( BaseHTTPRequestHandler ):
 
                         if str(desc[0]) != 'Other':
                             #usage, name, type, power, cat, desc
-                            movesContent.append([move[-1], moveName, desc[1], desc[2], desc[3], desc[0]])
+                            if(desc[2] == ''):
+                                desc[2] = "—"
+                            movesContent.append([move[-1], moveName, desc[1].capitalize(), desc[2], desc[3].capitalize(), desc[0]])
 
                 content.append(movesContent)
 
