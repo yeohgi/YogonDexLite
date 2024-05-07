@@ -5,6 +5,8 @@ import json
 
 import smogon
 import dex
+import time
+import typeMatrix
 
 # web server parts
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -40,6 +42,17 @@ class MyHandler( BaseHTTPRequestHandler ):
             format = parsed.path[:-7].strip('/')
 
             content = smogon.validFormat(format)
+
+            if(content):
+                if not smogon.checkForLatest(format):
+                    smogon.grabOneFormat(format)
+                    time.sleep(0.3)
+                    smogon.processPrepro()
+                    smogon.createSmogonDB()
+
+                if not smogon.checkPokemon():
+                    smogon.createPokemonDB()
+    
             content = str(content)
 
             print(content, format)
@@ -187,6 +200,7 @@ class MyHandler( BaseHTTPRequestHandler ):
                         spreads[i] = spreads[i].replace(":", " ")
                         spreads[i] = spreads[i].split(" ")
                         spreads[i] = list(filter(None, spreads[i]))
+                        spreads[i][0] = [spreads[i][0], pkdex.getNaturePlusMinus(spreads[i][0])]
                     content.append(spreads)
                 else:
                     content.append([])
@@ -231,6 +245,9 @@ class MyHandler( BaseHTTPRequestHandler ):
 
                         desc = pkdex.itemFetch(itemName)
 
+                        if desc is not None:
+                            desc = desc.strip('"')
+
                         item[-1] = item[-1].strip('"')
 
                         if itemName != 'Other':
@@ -252,7 +269,7 @@ class MyHandler( BaseHTTPRequestHandler ):
                             teammateName += ' ' + part
                         teammateName = teammateName.strip(' ').strip('"')
 
-                        teammatesContent.append([teammate[-1], teammateName])
+                        teammatesContent.append([teammate[-1], teammateName, smogon.grabImage(teammateName.lower())])
 
                 content.append(teammatesContent)
 
@@ -261,11 +278,51 @@ class MyHandler( BaseHTTPRequestHandler ):
                 savedAs = smogon.grabImage(pokemon.lower())
                 content.append([savedAs])
 
+                # #14 - tera type defensively
+                teraContent = []
+                teraContent.append(pkdex.teraGuess(content[5][0], content[5][1]))
+                content.append(teraContent)
+
+                # #14 - type defensively
+                # typesDefContent = []
+                # for type in typeMatrix.types:
+                #     typesDefContent.append([type, pkdex.slashWeak(type, 'None')])
+                # content.append(typesDefContent)
+
+                # #15 - type offensively
+                # typesStrongContent = []
+                # for type in typeMatrix.types:
+                #     typesStrongContent.append([type, pkdex.slashStrong(type, 'None')])
+                # content.append(typesStrongContent)
+
+
             print("CONTENT INFO BELOW", format)
 
             for i, item in enumerate(content):
                 print("")
                 print(i, item)
+
+            content = json.dumps(content)
+
+            self.send_response( 200 )
+            self.send_header( "Content-type", "application/json" )
+            self.send_header( "Content-length", len(content.encode('utf-8')) )
+            self.end_headers()
+
+            self.wfile.write( bytes(content, "utf-8") )
+
+        #get a pokemon img name
+        elif parsed.path.endswith(".pkimg"):
+
+            pokemon = parsed.path[:-6].strip('/')
+
+            pokemon = pokemon.lower()
+
+            pokemon = unquote(pokemon)
+
+            print(pokemon, 8000)
+
+            content = smogon.grabImage(pokemon)
 
             content = json.dumps(content)
 

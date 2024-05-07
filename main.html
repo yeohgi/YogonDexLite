@@ -1,7 +1,8 @@
 <html>
 
     <head>
-        
+        <title>YogonDexLite (WIP)</title>
+        <link rel="icon" type="image/png" href="https://www.pokencyclopedia.info/sprites/misc/spr_substitute/art__substitute.png">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
         <script>
 
@@ -136,13 +137,13 @@
 
                                 if(info[7].length < i + 1){
                                     $(ablIds[i]).text("");
-                                    $(ablIds[i]).attr("title", "");
+                                    $(ablIds[i]).attr("desc", "");
                                 }else if(info[7][i].length == 3){
                                     $(ablIds[i]).text(info[7][i][1]);
-                                    $(ablIds[i]).attr("title", info[7][i][2]);
+                                    $(ablIds[i]).attr("desc", info[7][i][2]);
                                 }else{
                                     $(ablIds[i]).text("");
-                                    $(ablIds[i]).attr("title", "");
+                                    $(ablIds[i]).attr("desc", "");
                                 }
                             }
 
@@ -177,7 +178,7 @@
                         $('#pokemonspreadstable').append(newRow);
                         for(var i = 0; i < info[9].length; i++){
                             if(info[9][i].length > 2){
-                                newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12;">'+ info[9][i][2] + '% ' + info[9][i][1] + ' ' + info[9][i][0] + '</p></td></tr>'
+                                newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12;">'+ info[9][i][2] + '% ' + info[9][i][1] + ' Nature: ' + info[9][i][0][0] + '(+' + info[9][i][0][1][0] + ', -' + info[9][i][0][1][1] +')</p></td></tr>'
                                 $('#pokemonspreadstable').append(newRow);
                             }else{
                                 newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12;">'+ info[9][i][1] + '% ' + info[9][i][0] + '</p></td></tr>'
@@ -191,8 +192,9 @@
                         $('#pokemonmovestable').append(newRow);
                         for(var i = 0; i < info[10].length; i++){
                             console.log(info[10][i])
-                            newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[10][i][0] + ' ' + info[10][i][1] + '</p></td><td><img id="pokemontype2image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/' + info[10][i][2] + '.png" alt="???"></td><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[10][i][3] + '</p></td><td><img id="pokemontype2image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/' + info[10][i][4] + '.png" alt="???"></td></tr>'
+                            newRow = '<tr class="ttitemmove" desc=""><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[10][i][0] + '% ' + info[10][i][1] + '</p></td><td><img style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/' + info[10][i][2] + '.png" alt="???"></td><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[10][i][3] + '</p></td><td><img style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/' + info[10][i][4] + '.png" alt="???"></td></tr>'
                             $('#pokemonmovestable').append(newRow);
+                            $('#pokemonmovestable tr:last').attr('desc', info[10][i][5]);
                         }
                         
                         //11 - update items
@@ -200,8 +202,10 @@
                         newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Items: </p></td></tr>'
                         $('#pokemonitemstable').append(newRow);
                         for(var i = 0; i < info[11].length; i++){
-                            newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[11][i][0] + ' ' + info[11][i][1] + '</p></td></tr>'
+                            serachName = info[11][i][1].replace(/ /g, '').toLowerCase();
+                            newRow = '<tr class="ttitemmove" desc=""><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[11][i][0] + '% ' + info[11][i][1] + '</p></td><td><img class= "itemimg" style="display:inline; vertical-align:middle;" src="https://www.serebii.net/itemdex/sprites/sv/' + serachName + '.png" alt="???"></td></tr>'
                             $('#pokemonitemstable').append(newRow);
+                            $('#pokemonitemstable tr:last').attr('desc', info[11][i][2]);
                         }
 
                         //12 - update teammates
@@ -209,13 +213,28 @@
                         newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Teammates: </p></td></tr>'
                         $('#pokemonteammatestable').append(newRow);
                         for(var i = 0; i < info[12].length; i++){
-                            newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[12][i][0] + ' ' + info[12][i][1] + '</p></td></tr>'
+                            newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[12][i][0] + '% ' + info[12][i][1] + '</p></td> <td><img class="teammatesimg" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/gen5/' + info[12][i][2] + '.png" alt="???" onmousedown="searchTeammate(&quot;' + info[12][i][1] + '&quot;);"></td></tr>'
                             $('#pokemonteammatestable').append(newRow);
                         }
 
                         //13 - update image
                         showing = info[13]
                         updatePokemonSprite()
+
+                        //end - warnings?
+                        $('#pokemonwarnings').attr("desc", "")
+                        $('#havemail').hide();
+                        $('#pokemonwarningimage').hide();
+                        for(var i = 0; i < info[10].length; i++){
+                            if (info[10][i][1] == "Fake Out"){
+                                warnings = $('#pokemonwarnings').attr("desc")
+                                warnings = warnings + "This Pokemon can use Fake Out, if this pokemon has just switched in consider the following:&#10 -Protect or Double Protect&#10 -Switch to a Pokemon with the ability Psychic Surge or Armor Tail&#10";
+                                $('#pokemonwarnings').attr("desc", warnings)
+                                $('#havemail').show();
+                                $('#pokemonwarningimage').show();
+                            }
+                            
+                        }
                         
                         //update
                     }else{
@@ -232,6 +251,29 @@
                 console.log(params)
 
                 $.get(url, params, function(data) {
+                    callback(data);
+                });
+            }
+
+            function searchTeammate(pokemon){
+                console.log(pokemon)
+                $('#searchpokemonfield').val(pokemon)
+                searchPokemon();
+            }
+
+            function pokemonImgName(pokemon, callback){
+
+                getPokemonImgName(function(pokemonImageName){
+                    console.log(pokemonImageName)
+                    callback(pokemonImageName)
+                }, pokemon);
+            }
+
+            function getPokemonImgName(callback, pokemon) {
+
+                var url = pokemon + ".pkimg";
+
+                $.get(url, function(data) {
                     callback(data);
                 });
             }
@@ -287,10 +329,9 @@
             margin-bottom: 100vh;
             padding: 0;
             text-align: center;
-            /* background-image: url("background.png");
-            background-repeat: no-repeat;
-            background-size: 100%;
-            background-color:rgb(24, 18, 8); */
+            color: white;
+            font-family: Arial, sans-serif;
+            background: #424B54;
             }
 
             #getelobody{
@@ -300,35 +341,38 @@
                 display: none;
             }
 
-            .tooltip {
-                position: relative; /* Make sure the tooltip is positioned relative */
-            }
-
-            .tooltip::after {
-                content: attr(title); /* Set the content of the tooltip */
-                display: none; /* Hide the tooltip by default */
-                position: absolute; /* Position the tooltip absolutely */
-                top: 100%; /* Position the tooltip below the element */
-                left: 50%; /* Align the tooltip with the center of the element */
-                transform: translateX(-50%); /* Center the tooltip horizontally */
-                background-color: rgba(0, 0, 0, 0.9); /* Tooltip background color */
-                color: #fff; /* Tooltip text color */
-                padding: 5px; /* Add padding to the tooltip */
-                border-radius: 5px; /* Add border radius to the tooltip */
-                white-space: nowrap; /* Prevent line breaks in the tooltip */
-                z-index: 1; /* Ensure the tooltip appears above other elements */
-            }
-
-            .tooltip:hover::after {
-                display: block; /* Show the tooltip when hovering over the element */
-            }
-
             .rectangle {
-                width: 200px; /* Width of the rectangle */
-                height: 10px; /* Height of the rectangle */
-                background-color: #3498db; /* Background color of the rectangle */
-                border: 2px solid #2980b9; /* Border style of the rectangle */
-                border-radius: 5px; /* Border radius to give rounded corners (optional) */
+                width: 200px;
+                height: 10px;
+                background-color: #3498db;
+                border: 2px solid #2980b9;
+                border-radius: 5px;
+            }
+
+            .graybg {
+                background-color: #2b3036;
+                border-width: 2px;
+                border-color: #dfdfdf;
+                border-style: solid;
+                border-radius: 3px;
+            }
+
+            .bluebg {
+                background-color: #69aaf8;
+                border-width: 2px;
+                border-color: #dfdfdf;
+                border-style: solid;
+                border-radius: 3px;
+            }
+
+            .itemimg{
+                width: 24px;
+                height: auto;
+            }
+
+            .teammatesimg{
+                width: 48px;
+                height: auto;
             }
 
         </style>
@@ -353,7 +397,7 @@
 
             <h2>YogonDexLite</h2>
 
-            <img id="pokemonImage" src="https://play.pokemonshowdown.com/sprites/substitutes/gen5/substitute.png" alt="INPUT A POKEMON TO SEE IT!!!">
+            <img class="bluebg" id="pokemonImage" src="https://play.pokemonshowdown.com/sprites/substitutes/gen5/substitute.png" alt="INPUT A POKEMON TO SEE IT!!!">
 
             <!-- huge table -->
             <table style="margin-left:auto; margin-right:auto; vertical-align:middle;">
@@ -364,12 +408,14 @@
                 <!-- usage -->
                 <tr id="pokemonnamerow">
 
-                    <table id="pokemonnametable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                    <table class="graybg" id="pokemonnametable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
                         <tr>
                             <td id="pokemonnames"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Name: </p>            <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonname">A Pokemon</p></td>
                             <td id="pokemondexnumbers"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Dex Number: </p> <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemondexnumber">A Number</p></td>
                             <td id="pokemonranks"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Rank: </p>            <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonrank">A Rank</p></td>
                             <td id="pokemonusages"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Usage: </p>          <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonusage">A Usage</p></td>
+                            <td id="pokemonwarnings" class="ttabl" desc="Warning"><img id="pokemonwarningimage" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/itemicons/reply-mail.png" alt="???"></td>
+                            <td id="checkmail"><p style="display:inline; vertical-align:middle; font-size: 12;" id="havemail">CHECK MAIL!</p></td>
                         </tr>
                     </table>
 
@@ -378,7 +424,7 @@
                 <!-- type -->
                 <tr id="pokemontypesrow">
 
-                    <table id="pokemontypestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                    <table class="graybg" id="pokemontypestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
 
                         <tr>
                             <td><img id="pokemontype1image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/%3f%3f%3f.png" alt="???"></td>
@@ -392,13 +438,13 @@
                 <!-- abl -->
                 <tr id="pokemonabilitiesrow">
 
-                    <table id="pokemonabilitiestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                    <table class="graybg" id="pokemonabilitiestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
 
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="pokemonabls">Abilities: </p></td>
-                            <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl1" title="DESCRIPTION 1">Abl 1</p></td>
-                            <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl2" title="DESCRIPTION 2">Abl 2</p></td>
-                            <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonablhidden" title="DESCRIPTION HIDDEN">Abl Hidden</p></td>
+                            <td><p class="ttabl" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl1" desc="DESCRIPTION 1">Abl 1</p></td>
+                            <td><p class="ttabl" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl2" desc="DESCRIPTION 2">Abl 2</p></td>
+                            <td><p class="ttabl" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonablhidden" desc="DESCRIPTION HIDDEN">Abl Hidden</p></td>
                         </tr>
         
                     </table>
@@ -408,7 +454,7 @@
                 <!-- def matchups -->
                 <tr id="pokemondefmatchupsrow">
 
-                    <table id="pokemondefmatchupstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                    <table class="graybg" id="pokemondefmatchupstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
                         <tr id="pokemon0xmu">
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">0x: </p></td>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12;">0x</p></td>
@@ -446,7 +492,7 @@
                 <!-- stats -->
                 <tr id="pokemonstatsrow">      
 
-                    <table id="pokemonstatstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                    <table class="graybg" id="pokemonstatstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
 
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="hplabel">HP:</p></td>
@@ -491,7 +537,7 @@
                 <!-- spreads -->
                 <tr id="pokemonspreadsrow">
 
-                    <table id="pokemonspreadstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                    <table class="graybg" id="pokemonspreadstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
 
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Spreads: </p></td>
@@ -503,7 +549,7 @@
                 <!-- moves -->
                 <tr id="pokemonmovesrow">
 
-                    <table id="pokemonmovestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                    <table class="graybg" id="pokemonmovestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
 
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Moves: </p></td>
@@ -515,7 +561,7 @@
                 <!-- items -->
                 <tr id="pokemonitemsrow">
 
-                    <table id="pokemonitemstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                    <table class="graybg" id="pokemonitemstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
 
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Items: </p></td>
@@ -527,7 +573,7 @@
                 <!-- teammates -->
                 <tr id="pokemonteammatesrow">
 
-                    <table id="pokemonteammatestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                    <table class="graybg" id="pokemonteammatestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
 
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Teammates: </p></td>

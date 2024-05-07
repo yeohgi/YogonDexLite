@@ -478,6 +478,8 @@ class dex:
                 else:
                     print(f"    {type[1]:>10}:      Provides a net {abs(type[0])} resistances to previously threating types (Dual type calculations factor in 4x weaknesses)")
 
+        return typeScore
+
                 
 
     def getFormat(self):
@@ -686,6 +688,8 @@ class dex:
         neutral = sorted(neutral)
         resistances = sorted(resistances)
 
+        return [immunities, weaknesses, neutral, resistances]
+
         print(f"Offensive Matchups For {type1.title()}: ")
         # immunities = []
         if len(immunities) != 0:
@@ -770,8 +774,6 @@ class dex:
                     for type in dualtype:
                         print(type, end=' ')
                     print("")
-
-
 
     def pokemonInFormat(self, pokemon):
 
@@ -876,7 +878,16 @@ class dex:
                     for index, stat in enumerate(stats):
                         bar = self.printStatBar(int(stat))
                         print(f"{pk.stats[index]:>10}: {stat:>5}", end=bar + '\n')
-            
+
+    def getNaturePlusMinus(self, aNature):
+
+        aNature = aNature.title()
+
+        for i, nature in enumerate(pk.natures):
+            if aNature == nature[0]:
+                return [nature[1], nature[2]]
+
+        return []
 
     # tostring
     def __repr__(self):
