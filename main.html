@@ -7,20 +7,24 @@
         <script>
 
             format = "";
+            userFormat = "";
             elo = -1;
             shiny = false;
             showing = ""
+            inmenu = false;
 
             //FORMAT
             function setFormat(){
 
-                format = $('#getformat').val()
-                console.log(format)
+                userFormat = $('#getformat').val()
+                console.log(userFormat)
 
                 checkFormat(function(valid){
 
                     if(valid){
                         showElo()
+                        format = userFormat;
+                        $('#currentformat').text(format)
                     }else{
                         console.log("no no no, bad format")
                     }
@@ -30,7 +34,7 @@
 
             function checkFormat(callback) {
 
-                var url = format + ".format";
+                var url = userFormat + ".format";
 
                 $.get(url, function(data) {
                     validFormatString = data;
@@ -48,6 +52,7 @@
             //ELO
             function setElo(){
                 elo = $('#getelo').val()
+                $('#currentelo').text(elo)
                 console.log(elo)
 
                 if(elo >= 1000){
@@ -59,18 +64,23 @@
             }
 
             function showElo(){
-                $('#getformatbody').css('display', 'none');
-                $('#getelobody').css('display', 'block');
-                $('#mainbody').css('display', 'none');
-                $('#getformatbody').remove();
+                if(!inmenu){
+                    $('#getformatbody').css('display', 'none');
+                    $('#getelobody').css('display', 'block');
+                    $('#mainbody').css('display', 'none');
+                    $('#getformatbody').remove();
+                }
             }
 
             //MAIN
             function showMain(){
-                $('#getformatbody').css('display', 'none');
-                $('#getelobody').css('display', 'none');
-                $('#mainbody').css('display', 'block');
-                $('#getelobody').remove();
+                if(!inmenu){
+                    $('#getformatbody').css('display', 'none');
+                    $('#getelobody').css('display', 'none');
+                    $('#mainbody').css('display', 'block');
+                    $('#getelobody').remove();
+                }
+                inmenu = true;
             }
 
             function searchPokemon(){
@@ -177,6 +187,11 @@
                         newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Spreads: </p></td></tr>'
                         $('#pokemonspreadstable').append(newRow);
                         for(var i = 0; i < info[9].length; i++){
+
+                            if(info[9][i][2] < 20){
+                                break
+                            }
+
                             if(info[9][i].length > 2){
                                 newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12;">'+ info[9][i][2] + '% ' + info[9][i][1] + ' Nature: ' + info[9][i][0][0] + '(+' + info[9][i][0][1][0] + ', -' + info[9][i][0][1][1] +')</p></td></tr>'
                                 $('#pokemonspreadstable').append(newRow);
@@ -191,8 +206,12 @@
                         newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Moves: </p></td></tr>'
                         $('#pokemonmovestable').append(newRow);
                         for(var i = 0; i < info[10].length; i++){
-                            console.log(info[10][i])
-                            newRow = '<tr class="ttitemmove" desc=""><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[10][i][0] + '% ' + info[10][i][1] + '</p></td><td><img style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/' + info[10][i][2] + '.png" alt="???"></td><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[10][i][3] + '</p></td><td><img style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/' + info[10][i][4] + '.png" alt="???"></td></tr>'
+
+                            if(info[10][i][0] < 15){
+                                break
+                            }
+
+                            newRow = '<tr class="tooltip" desc=""><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[10][i][0] + '% ' + info[10][i][1] + '</p></td><td><img style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/' + info[10][i][2] + '.png" alt="???"></td><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[10][i][3] + '</p></td><td><img style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/' + info[10][i][4] + '.png" alt="???"></td></tr>'
                             $('#pokemonmovestable').append(newRow);
                             $('#pokemonmovestable tr:last').attr('desc', info[10][i][5]);
                         }
@@ -202,8 +221,13 @@
                         newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Items: </p></td></tr>'
                         $('#pokemonitemstable').append(newRow);
                         for(var i = 0; i < info[11].length; i++){
+
+                            if(info[11][i][0] < 15){
+                                break
+                            }
+
                             serachName = info[11][i][1].replace(/ /g, '').toLowerCase();
-                            newRow = '<tr class="ttitemmove" desc=""><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[11][i][0] + '% ' + info[11][i][1] + '</p></td><td><img class= "itemimg" style="display:inline; vertical-align:middle;" src="https://www.serebii.net/itemdex/sprites/sv/' + serachName + '.png" alt="???"></td></tr>'
+                            newRow = '<tr class="tooltip" desc=""><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[11][i][0] + '% ' + info[11][i][1] + '</p></td><td><img class= "itemimg" style="display:inline; vertical-align:middle;" src="https://www.serebii.net/itemdex/sprites/sv/' + serachName + '.png" alt="???"></td></tr>'
                             $('#pokemonitemstable').append(newRow);
                             $('#pokemonitemstable tr:last').attr('desc', info[11][i][2]);
                         }
@@ -213,7 +237,12 @@
                         newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Teammates: </p></td></tr>'
                         $('#pokemonteammatestable').append(newRow);
                         for(var i = 0; i < info[12].length; i++){
-                            newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[12][i][0] + '% ' + info[12][i][1] + '</p></td> <td><img class="teammatesimg" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/gen5/' + info[12][i][2] + '.png" alt="???" onmousedown="searchTeammate(&quot;' + info[12][i][1] + '&quot;);"></td></tr>'
+
+                            if(info[12][i][0] < 15){
+                                break
+                            }
+
+                            newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[12][i][0] + '% ' + info[12][i][1] + '</p></td> <td><a href="javascript:"><img class="teammatesimg" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/gen5/' + info[12][i][2] + '.png" alt="???" onmousedown="searchTeammate(&quot;' + info[12][i][1] + '&quot;);"></a></td></tr>'
                             $('#pokemonteammatestable').append(newRow);
                         }
 
@@ -235,10 +264,23 @@
                             }
                             
                         }
+
+                        //successful so remove did you mean
+                        $('#didyoumeantable').empty();
+                        newRow = '<td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Did You Mean? </p></td>'
+                        $('#didyoumeantable').append(newRow);
                         
                         //update
                     }else{
                         //must be -1, return error/invalid
+                        $('#didyoumeantable').empty();
+                        newRow = '<td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Did You Mean? </p></td>'
+                        $('#didyoumeantable').append(newRow);
+
+                        for(var i = 0; i < info[1].length; i++){
+                            newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[1][i][0] + '</p></td> <td><a href="javascript:"><img class="teammatesimg" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/gen5/' + info[1][i][1] + '.png" alt="???" onmousedown="searchTeammate(&quot;' + info[1][i][0] + '&quot;);"></a></td></tr>'
+                            $('#didyoumeantable').append(newRow);
+                        }
                     }
                 }, pokemon);
             }
@@ -325,18 +367,19 @@
         <style>
             
             body{
-            margin: 0;
-            margin-bottom: 100vh;
-            padding: 0;
-            text-align: center;
-            color: white;
-            font-family: Arial, sans-serif;
-            background: #424B54;
+                margin-bottom: 100vh;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+                color: white;
+                font-family: Arial, sans-serif;
+                background: #424B54;
             }
 
             #getelobody{
                 display: none;
             }
+
             #mainbody {
                 display: none;
             }
@@ -365,14 +408,81 @@
                 border-radius: 3px;
             }
 
+            .imagebg {
+                background-color: #000000;
+                border-width: 2px;
+                border-color: #dfdfdf;
+                border-style: solid;
+                border-radius: 3px;
+                background-image: url("pkbg.png");
+                background-repeat: no-repeat;
+                background-size: 100%;
+            }
+
             .itemimg{
                 width: 24px;
                 height: auto;
+                filter: drop-shadow(1px 1px 0 white) 
+                        drop-shadow(-1px -1px 0 white)
+                        drop-shadow(1px -1px 0 white)
+                        drop-shadow(-1px 1px 0 white);
             }
 
             .teammatesimg{
                 width: 48px;
                 height: auto;
+                filter: drop-shadow(1px 1px 0 white) 
+                        drop-shadow(-1px -1px 0 white)
+                        drop-shadow(1px -1px 0 white)
+                        drop-shadow(-1px 1px 0 white);
+            }
+
+            .tooltip::after {
+                content: attr(desc);
+                display: none;
+                position: absolute;
+                padding: 5px;
+                background-color: rgba(0, 0, 0, 1);
+                color: #fff;
+                border-radius: 5px;
+                white-space: nowrap;
+                pointer-events: none;
+            }
+
+            .tooltip:hover::after {
+                display: block;
+            }
+
+            nav ul{
+                display: inline;
+                list-style-type: none;
+                overflow: auto;
+                margin: 0;
+                padding: 0;
+            }
+
+            nav button{
+                display: inline;
+                
+            }
+
+            nav h2{
+                display: inline;
+            }
+                
+
+            nav li{
+                display: inline;
+                margin: 0;
+                padding: 0;
+            }
+
+            .imgwhiteborder{
+                
+                filter: drop-shadow(1px 1px 0 white) 
+                        drop-shadow(-1px -1px 0 white)
+                        drop-shadow(1px -1px 0 white)
+                        drop-shadow(-1px 1px 0 white);
             }
 
         </style>
@@ -395,9 +505,27 @@
         <!-- mainpage -->
         <div id="mainbody">
 
+            <nav style="position:absolute; left: 10px; top: 10px;"><ul>
+                <li>
+                    <input id="getformat" name="getformat" value="gen9doublesou" />
+                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="setFormat();" id="setFormatButton">Set Format</button>
+                    <p style="display:inline; vertical-align:middle; font-size: 12;" id="currentformat"></p>
+                </li>
+                <li>
+                    <input id="getelo" name="getelo" value="1000" />
+                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="setElo();" id="setEloButton">Set Elo</button>
+                    <p style="display:inline; vertical-align:middle; font-size: 12;" id="currentelo"></p>
+                </li>
+            </ul></nav>
+
             <h2>YogonDexLite</h2>
 
-            <img class="bluebg" id="pokemonImage" src="https://play.pokemonshowdown.com/sprites/substitutes/gen5/substitute.png" alt="INPUT A POKEMON TO SEE IT!!!">
+            <div class="graybg"></div>
+
+            <!-- pokemon image -->
+            <table class="imagebg" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+                <tr><td><img class="imgwhiteborder" id="pokemonImage" src="https://play.pokemonshowdown.com/sprites/substitutes/gen5/substitute.png" alt="INPUT A POKEMON TO SEE IT!!!"></td></tr>
+            </table>
 
             <!-- huge table -->
             <table style="margin-left:auto; margin-right:auto; vertical-align:middle;">
@@ -414,7 +542,7 @@
                             <td id="pokemondexnumbers"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Dex Number: </p> <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemondexnumber">A Number</p></td>
                             <td id="pokemonranks"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Rank: </p>            <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonrank">A Rank</p></td>
                             <td id="pokemonusages"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Usage: </p>          <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonusage">A Usage</p></td>
-                            <td id="pokemonwarnings" class="ttabl" desc="Warning"><img id="pokemonwarningimage" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/itemicons/reply-mail.png" alt="???"></td>
+                            <td id="pokemonwarnings" class="tooltip" desc="Warning"><img id="pokemonwarningimage" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/itemicons/reply-mail.png" alt="???"></td>
                             <td id="checkmail"><p style="display:inline; vertical-align:middle; font-size: 12;" id="havemail">CHECK MAIL!</p></td>
                         </tr>
                     </table>
@@ -427,6 +555,7 @@
                     <table class="graybg" id="pokemontypestable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
 
                         <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Type: </p>
                             <td><img id="pokemontype1image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/%3f%3f%3f.png" alt="???"></td>
                             <td><img id="pokemontype2image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/%3f%3f%3f.png" alt="???"></td>
                         </tr>
@@ -442,9 +571,9 @@
 
                         <tr>
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="pokemonabls">Abilities: </p></td>
-                            <td><p class="ttabl" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl1" desc="DESCRIPTION 1">Abl 1</p></td>
-                            <td><p class="ttabl" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl2" desc="DESCRIPTION 2">Abl 2</p></td>
-                            <td><p class="ttabl" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonablhidden" desc="DESCRIPTION HIDDEN">Abl Hidden</p></td>
+                            <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl1" desc="DESCRIPTION 1">Abl 1</p></td>
+                            <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl2" desc="DESCRIPTION 2">Abl 2</p></td>
+                            <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonablhidden" desc="DESCRIPTION HIDDEN">Abl Hidden</p></td>
                         </tr>
         
                     </table>
@@ -584,7 +713,7 @@
 
                 <!-- search -->
                 <tr id="pokemonsearchrow">
-
+                    <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Search Pokemon: </p></td>
                     <td><input id="searchpokemonfield" name="searchpokemonfield" value="raging bolt"/>
                     <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="searchPokemon();" id="searchPokemonButton">Search Pokemon</button></td>
 
@@ -594,6 +723,19 @@
                 <tr id="pokemonshiny">
 
                     <td><button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="toggleShiny();" id="toggleShinyButton">Toggle Shiny</button></td>
+
+                </tr>
+
+                <!-- did you mean? -->
+                <tr id="didyoumeanrow">
+
+                    <table class="graybg" id="didyoumeantable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
+
+                        <tr>
+                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Did You Mean? </p></td>
+                        </tr>
+                    
+                    </table>
 
                 </tr>
 

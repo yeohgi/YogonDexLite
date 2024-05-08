@@ -154,6 +154,9 @@ class MyHandler( BaseHTTPRequestHandler ):
 
                         desc = pkdex.ablFetch(abilityName)
 
+                        if(desc is not None):
+                            desc = desc.strip('"')
+
                         for i, abl in enumerate(ablContent):
                             if '"' in abl:
                                 ablContent[i] = ablContent[i].strip('"')
@@ -225,6 +228,9 @@ class MyHandler( BaseHTTPRequestHandler ):
                             #usage, name, type, power, cat, desc
                             if(desc[2] == ''):
                                 desc[2] = "—"
+                            print([desc[0]], [''])
+                            if(desc[0] == ''):
+                                desc[0] = "No Effect"
                             movesContent.append([move[-1], moveName, desc[1].capitalize(), desc[2], desc[3].capitalize(), desc[0]])
 
                 content.append(movesContent)
@@ -294,7 +300,12 @@ class MyHandler( BaseHTTPRequestHandler ):
                 # for type in typeMatrix.types:
                 #     typesStrongContent.append([type, pkdex.slashStrong(type, 'None')])
                 # content.append(typesStrongContent)
+            
+            else:
 
+                content.append(returnStatus)
+
+                content.append(pkdex.similarNameTo(pokemon))
 
             print("CONTENT INFO BELOW", format)
 
@@ -334,7 +345,7 @@ class MyHandler( BaseHTTPRequestHandler ):
             self.wfile.write( bytes(content, "utf-8") )
 
         #return a background if need be
-        elif parsed.path in [ '/background.png' ]:
+        elif parsed.path in [ '/pkbg.png' ]:
 
             fp = open('.' + self.path, 'rb')
             content = fp.read()

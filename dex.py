@@ -6,6 +6,8 @@ import dask
 dask.config.set({'dataframe.query-planning': True})
 import dask.dataframe as dd
 import typeMatrix as pk
+from fuzzywuzzy import fuzz
+import smogon
 
 class dex:
     
@@ -888,6 +890,28 @@ class dex:
                 return [nature[1], nature[2]]
 
         return []
+    
+    def similarNameTo(self, wrongPokemon):
+
+        similarPokemon = []
+
+        if os.path.exists('pokemon.db'):
+
+            conn = sqlite3.connect('pokemon.db')
+            cursor = conn.cursor()
+            command = f'SELECT pokemon FROM pokemon'
+            cursor.execute(command)
+            rows = cursor.fetchall()
+
+            for row in rows:
+                pokemon = row[0]
+                score = fuzz.WRatio(pokemon, wrongPokemon)
+                if score > 70:
+                    similarPokemon.append([pokemon, smogon.grabImage(pokemon.lower())])
+                    print(score, pokemon, wrongPokemon)
+
+        return similarPokemon
+                
 
     # tostring
     def __repr__(self):
