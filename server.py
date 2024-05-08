@@ -41,7 +41,13 @@ class MyHandler( BaseHTTPRequestHandler ):
 
             format = parsed.path[:-7].strip('/')
 
-            content = smogon.validFormat(format)
+            validFormatReturn = smogon.validFormat(format)
+
+            content = validFormatReturn[0]
+
+            if(validFormatReturn[1] is not None):
+                format = validFormatReturn[1][0].split('-')[0]
+                print(format, "THIS IS THE FORMAT WE WILL USE", validFormatReturn[1])
 
             if(content):
                 if not smogon.checkForLatest(format):
@@ -52,14 +58,18 @@ class MyHandler( BaseHTTPRequestHandler ):
 
                 if not smogon.checkPokemon():
                     smogon.createPokemonDB()
-    
-            content = str(content)
 
-            print(content, format)
+                content = [str(content), format]
+            else:
+                formats = smogon.similarFormatTo(format)
+                content = [str(content), formats]
+                print(content)
+    
+            content = json.dumps(content)
 
             self.send_response( 200 )
-            self.send_header( "Content-type", "text/plain" )
-            self.send_header( "Content-length", len( content ) )
+            self.send_header( "Content-type", "application/json" )
+            self.send_header( "Content-length", len(content.encode('utf-8')) )
             self.end_headers()
 
             self.wfile.write( bytes(content, "utf-8") )
@@ -93,7 +103,7 @@ class MyHandler( BaseHTTPRequestHandler ):
             
             if validPokemon:
                 returnStatus = 1
-                inFormat = pkdex.pokemonInFormat(pokemon)
+                inFormat = pkdex.pokemonInFormat(pokemon, format)
                 if inFormat:
                     returnStatus = 0
 

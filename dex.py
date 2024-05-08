@@ -777,7 +777,7 @@ class dex:
                         print(type, end=' ')
                     print("")
 
-    def pokemonInFormat(self, pokemon):
+    def pokemonInFormat(self, pokemon, format):
 
         db = 'moveset.db'
 
@@ -800,13 +800,15 @@ class dex:
                 if "'" in name:
                     name = name.capitalize()
 
-                sqlCommand = f'SELECT Pokemon FROM moveset WHERE Pokemon == "{name}"'
+                sqlCommand = f'SELECT Pokemon FROM moveset WHERE Pokemon == "{name}" AND Format LIKE "%{format}%"'
 
                 cursor.execute(sqlCommand)
 
                 rows = cursor.fetchall()
 
                 if len(rows) >= 1:
+                    for row in rows:
+                        print(row)
                     return True
             
             return False

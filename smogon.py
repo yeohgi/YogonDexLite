@@ -7,6 +7,8 @@ import processAll
 import createSmogon
 import createPokemon
 
+from fuzzywuzzy import fuzz
+
 specialFolders = ["leads","metagame","moveset"]
 
 def grabOneFormat(format):
@@ -262,7 +264,18 @@ def assignElo(format, elo):
     for format in formats:
         eloBounds.append(int(format.split('-')[1].split('.')[0]))
 
-    for i, eloBound in enumerate(eloBounds):
+    print(eloBounds)
+
+    eloBoundsNoZero = []
+    for anElo in eloBounds:
+        if anElo == 0:
+            eloBoundsNoZero.append(1000)
+        else:
+            eloBoundsNoZero.append(anElo)
+
+    print(eloBoundsNoZero)
+
+    for i, eloBound in enumerate(eloBoundsNoZero):
         if i == 0:
             useIndex = i
             difference = abs(elo - eloBound)
@@ -311,11 +324,13 @@ def validFormat(format):
         return
     
     if len(formats) == 0:
-        return False
+        return [False, None]
     
-    return True
+    return [True, formats]
 
 def grabImage(pokemon):
+
+    
 
     if "'" in pokemon:
         pokemon = pokemon.replace("'", "")
@@ -324,6 +339,11 @@ def grabImage(pokemon):
         pokemon = pokemon.replace('. ', '')
         pokemon = pokemon.replace('.', '')
 
+    pokemon = pokemon.replace(' ', '-')
+    if len(pokemon.split('-')) > 1:
+        parts = pokemon.split('-', 1)
+        if len(parts) > 1:
+            pokemon = parts[0] + '-' + parts[1].replace('-', '')
 
     tryPokemon = []
     if ' ' not in pokemon:
@@ -354,5 +374,59 @@ def grabImage(pokemon):
             break
 
     return savedAs
+
+def similarFormatTo(wrongFormat):
+
+    #get the latest folder
+    subprocess.Popen("php grabDate.php", shell = True, stdout = subprocess.PIPE)
+
+    time.sleep(0.3)
+
+    if os.path.exists('temp0.txt'):
+        with open("temp0.txt", "r") as pk1:
+            for line in pk1:
+                if '"' in line:
+                    lastLine = line
+    else:
+        print("Date could not be accessed")
+        return
+
+    formatDate = lastLine.split('"')[1].strip('/')
+
+    #got the date
+    #clean up
+    subprocess.run(["rm", 'temp0.txt'])
+    
+    #get format names
+    subprocess.Popen(f"php grabFormatCodes.php {formatDate}", shell = True, stdout = subprocess.PIPE)
+
+    time.sleep(0.5)
+
+    if os.path.exists('temp1.txt'):
+        formats = []
+        with open("temp1.txt", "r") as pk1:
+            for line in pk1:
+                if '"' in line:
+                    formats.append(line.split('"')[1].split("-")[0])
+    else:
+        print("Folder could not be accessed")
+        return ["Folder could not be accessed"]
+    
+    #got the format names
+    #clean up
+    subprocess.run(["rm", 'temp1.txt'])
+
+    similarFormats = []
+    for format in formats:
+        score = fuzz.WRatio(format, wrongFormat)
+        if score > 85:
+            similarFormats.append(format)
+            print(score, format, wrongFormat)
+
+    similarFormats = list(set(similarFormats))
+
+    print(similarFormats)
+
+    return similarFormats
 
 

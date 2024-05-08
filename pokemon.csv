@@ -168,9 +168,9 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 127,Pinsir,Bug,,65,125,100,55,70,85,Hyper Cutter,Mold Breaker,Moxie
 127,Pinsir-Mega,Bug,Flying,65,155,120,65,90,105,Aerilate,,
 128,Tauros,Normal,,75,100,95,40,70,110,Intimidate,Anger Point,Sheer Force
-128,Tauros-Paldean-Combat,Fighting,,75,110,105,30,70,100,Intimidate,Anger Point,Cud Chew
-128,Tauros-Paldean-Blaze,Fighting,Fire,75,110,105,30,70,100,Intimidate,Anger Point,Cud Chew
-128,Tauros-Paldean-Aqua,Fighting,Water,75,110,105,30,70,100,Intimidate,Anger Point,Cud Chew
+128,Tauros-Paldea-Combat,Fighting,,75,110,105,30,70,100,Intimidate,Anger Point,Cud Chew
+128,Tauros-Paldea-Blaze,Fighting,Fire,75,110,105,30,70,100,Intimidate,Anger Point,Cud Chew
+128,Tauros-Paldea-Aqua,Fighting,Water,75,110,105,30,70,100,Intimidate,Anger Point,Cud Chew
 129,Magikarp,Water,,20,10,55,15,20,80,Swift Swim,,Rattled
 130,Gyarados,Water,Flying,95,125,79,60,100,81,Intimidate,,Moxie
 130,Gyarados-Mega,Water,Dark,95,155,109,70,130,81,Mold Breaker,,
@@ -683,7 +683,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 549,Lilligant-Hisui,Grass,Fighting,70,105,75,50,75,105,Chlorophyll,Hustle,Leaf Guard
 550,Basculin-Red-Striped,Water,,70,92,65,80,55,98,Reckless,Adaptability,Mold Breaker
 550,Basculin-Blue-Striped,Water,,70,92,65,80,55,98,Rock Head,Adaptability,Mold Breaker
-550,Basculin-Hisui,Water,,70,92,65,80,55,98,Rattled,Adaptability,Mold Breaker
+550,Basculin-White-Striped,Water,,70,92,65,80,55,98,Rattled,Adaptability,Mold Breaker
 551,Sandile,Ground,Dark,50,72,35,35,35,65,Intimidate,Moxie,Anger Point
 552,Krokorok,Ground,Dark,60,82,45,45,45,74,Intimidate,Moxie,Anger Point
 553,Krookodile,Ground,Dark,95,117,80,65,70,92,Intimidate,Moxie,Anger Point
@@ -885,7 +885,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 718,Zygarde-Complete,Dragon,Ground,216,100,121,81,95,95,Power Construct,,
 719,Diancie,Rock,Fairy,50,100,150,100,150,50,Clear Body,,
 719,Diancie-Mega,Rock,Fairy,50,160,110,160,110,110,Magic Bounce,,
-720,Hoopa-Confined,Psychic,Ghost,80,110,60,150,130,70,Magician,,
+720,Hoopa,Psychic,Ghost,80,110,60,150,130,70,Magician,,
 720,Hoopa-Unbound,Psychic,Dark,80,160,60,170,130,80,Magician,,
 721,Volcanion,Fire,Water,80,110,120,130,90,70,Water Absorb,,
 722,Rowlet,Grass,Flying,68,55,55,50,50,42,Overgrow ,,Long Reach
@@ -908,7 +908,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 738,Vikavolt,Bug,Electric,77,70,90,145,75,43,Levitate,,
 739,Crabrawler,Fighting,,47,82,57,42,47,63,Hyper Cutter ,Iron Fist ,Anger Point
 740,Crabominable,Fighting,Ice,97,132,77,62,67,43,Hyper Cutter ,Iron Fist ,Anger Point
-741,Oricorio-Baile,Fire,Flying,75,70,70,98,70,93,Dancer,,
+741,Oricorio,Fire,Flying,75,70,70,98,70,93,Dancer,,
 741,Oricorio-Pa'u,Psychic,Flying,75,70,70,98,70,93,Dancer,,
 741,Oricorio-Pom-Pom,Electric,Flying,75,70,70,98,70,93,Dancer,,
 741,Oricorio-Sensu,Ghost,Flying,75,70,70,98,70,93,Dancer,,
@@ -982,8 +982,8 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 798,Kartana,Grass,Steel,59,181,131,59,31,109,Beast Boost,,
 799,Guzzlord,Dark,Dragon,223,101,53,97,53,43,Beast Boost,,
 800,Necrozma,Psychic,,97,107,101,127,89,79,Prism Armor,,
-800,Necrozma-Dusk Mane,Psychic,Steel,97,157,127,113,109,77,Prism Armor,,
-800,Necrozma-Dawn Wings,Psychic,Ghost,97,113,109,157,127,77,Prism Armor,,
+800,Necrozma-Dusk-Mane,Psychic,Steel,97,157,127,113,109,77,Prism Armor,,
+800,Necrozma-Dawn-Wings,Psychic,Ghost,97,113,109,157,127,77,Prism Armor,,
 800,Necrozma-Ultra,Psychic,Dragon,97,167,97,167,97,129,Neuroforce,,
 801,Magearna,Steel,Fairy,80,95,115,130,115,65,Soul-Heart,,
 802,Marshadow,Fighting,Ghost,90,125,80,90,90,125,Technician,,
@@ -1165,7 +1165,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 961,Wugtrio,Water,,35,100,50,50,70,120,Gooey,Rattled,Sand Veil
 962,Bombirdier,Flying,Dark,70,103,85,60,85,82,Big Pecks,Keen Eye,Rocky Payload
 963,Finizen,Water,,70,45,40,45,40,75,Water Veil,,
-964,Palafin-Zero,Water,,100,70,72,53,62,100,Zero to Hero,,
+964,Palafin,Water,,100,70,72,53,62,100,Zero to Hero,,
 964,Palafin-Hero,Water,,100,160,97,106,87,100,Zero to Hero,,
 965,Varoom,Steel,Poison,45,70,63,30,45,47,Overcoat,,Slow Start
 966,Revavroom,Steel,Poison,80,119,90,54,67,90,Overcoat,,Filter
@@ -1186,8 +1186,8 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 979,Annihilape,Fighting,Ghost,110,115,80,50,90,90,Vital Spirit,Inner Focus,Defiant
 980,Clodsire,Poison,Ground,130,75,60,45,100,20,Poison Point,Water Absorb,Unaware
 981,Farigiraf,Normal,Psychic,120,90,70,110,70,60,Cud Chew,Armor Tail,Sap Sipper
-982,Dudunsparce-Two-Segment,Normal,,125,100,80,85,75,55,Serene Grace,Run Away,Rattled
-982,Dudunsparce-Three Segment,Normal,,125,100,80,85,75,55,Serene Grace,Run Away,Rattled
+982,Dudunsparce,Normal,,125,100,80,85,75,55,Serene Grace,Run Away,Rattled
+982,Dudunsparce-Three-Segment,Normal,,125,100,80,85,75,55,Serene Grace,Run Away,Rattled
 983,Kingambit,Dark,Steel,100,135,120,60,85,50,Defiant,Supreme Overlord,Pressure
 984,Great Tusk,Ground,Fighting,115,131,131,53,53,87,Protosynthesis,,
 985,Scream Tail,Fairy,Psychic,115,65,99,65,115,111,Protosynthesis,,
