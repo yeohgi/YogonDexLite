@@ -5,4 +5,5 @@ typechart!?!
 nav bar!
 add defenseive matcjup label!
 add tooltips for spreads, moves, abilties, basic explaitions for each table
-fuzzywuzzy for formats
+fuzzywuzzy for formats (DONE)
+loading!?

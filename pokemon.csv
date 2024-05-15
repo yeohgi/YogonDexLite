@@ -31,8 +31,8 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 22,Fearow,Normal,Flying,65,90,65,61,61,100,Keen Eye,,Sniper
 23,Ekans,Poison,,30,60,44,40,54,55,Intimidate,Shed Skin,Unnerve
 24,Arbok,Poison,,60,95,69,65,79,80,Intimidate,Shed Skin,Unnerve
-25,Pikachu,Electric,,35,55,40,50,50,90,Static,,Lightningrod
-26,Raichu,Electric,,60,90,55,90,80,110,Static,,Lightningrod
+25,Pikachu,Electric,,35,55,40,50,50,90,Static,,Lightning Rod
+26,Raichu,Electric,,60,90,55,90,80,110,Static,,Lightning Rod
 26,Raichu-Alola,Electric,Psychic,60,85,50,95,85,110,Surge Surfer,,
 27,Sandshrew,Ground,,50,75,85,20,30,40,Sand Veil,,Sand Rush
 27,Sandshrew-Alola,Ice,Steel,50,75,90,10,35,40,Snow Cloak,,Slush Rush
@@ -138,25 +138,25 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 102,Exeggcute,Grass,Psychic,60,40,80,60,45,40,Chlorophyll,,Harvest
 103,Exeggutor,Grass,Psychic,95,95,85,125,75,55,Chlorophyll,,Harvest
 103,Exeggutor-Alola,Grass,Dragon,95,105,85,125,75,45,Frisk,,Harvest
-104,Cubone,Ground,,50,50,95,40,50,35,Rock Head,Lightningrod,Battle Armor
-105,Marowak,Ground,,60,80,110,50,80,45,Rock Head,Lightningrod,Battle Armor
-105,Marowak-Alola,Fire,Ghost,60,80,110,50,80,45,Cursed Body,Lightningrod,Rock Head
+104,Cubone,Ground,,50,50,95,40,50,35,Rock Head,Lightning Rod,Battle Armor
+105,Marowak,Ground,,60,80,110,50,80,45,Rock Head,Lightning Rod,Battle Armor
+105,Marowak-Alola,Fire,Ghost,60,80,110,50,80,45,Cursed Body,Lightning Rod,Rock Head
 106,Hitmonlee,Fighting,,50,120,53,35,110,87,Limber,Reckless,Unburden
 107,Hitmonchan,Fighting,,50,105,79,35,110,76,Keen Eye,Iron Fist,Inner Focus
 108,Lickitung,Normal,,90,55,75,60,75,30,Own Tempo,Oblivious,Cloud Nine
 109,Koffing,Poison,,40,65,95,60,45,35,Levitate,Neutralizing Gas,Stench
 110,Weezing,Poison,,65,90,120,85,70,60,Levitate,Neutralizing Gas,Stench
 110,Weezing-Galar,Poison,Fairy,65,90,120,85,70,60,Levitate,Neutralizing Gas,Misty Surge
-111,Rhyhorn,Ground,Rock,80,85,95,30,30,25,Lightningrod,Rock Head,Reckless
-112,Rhydon,Ground,Rock,105,130,120,45,45,40,Lightningrod,Rock Head,Reckless
+111,Rhyhorn,Ground,Rock,80,85,95,30,30,25,Lightning Rod,Rock Head,Reckless
+112,Rhydon,Ground,Rock,105,130,120,45,45,40,Lightning Rod,Rock Head,Reckless
 113,Chansey,Normal,,250,5,5,35,105,50,Natural Cure,Serene Grace,Healer
 114,Tangela,Grass,,65,55,115,100,40,60,Chlorophyll,Leaf Guard,Regenerator
 115,Kangaskhan,Normal,,105,95,80,40,80,90,Early Bird,Scrappy,Inner Focus
 115,Kangaskhan-Mega,Normal,,105,125,100,60,100,100,Parental Bond,,
 116,Horsea,Water,,30,40,70,70,25,60,Swift Swim,Sniper,Damp
 117,Seadra,Water,,55,65,95,95,45,85,Poison Point,Sniper,Damp
-118,Goldeen,Water,,45,67,60,35,50,63,Swift Swim,Water Veil,Lightningrod
-119,Seaking,Water,,80,92,65,65,80,68,Swift Swim,Water Veil,Lightningrod
+118,Goldeen,Water,,45,67,60,35,50,63,Swift Swim,Water Veil,Lightning Rod
+119,Seaking,Water,,80,92,65,65,80,68,Swift Swim,Water Veil,Lightning Rod
 120,Staryu,Water,,30,45,55,70,55,85,Illuminate,Natural Cure,Analytic
 121,Starmie,Water,Psychic,60,75,85,100,85,115,Illuminate,Natural Cure,Analytic
 122,Mr. Mime,Psychic,Fairy,40,45,65,100,120,90,Soundproof,Filter,Technician
@@ -222,7 +222,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 169,Crobat,Poison,Flying,85,90,80,70,80,130,Inner Focus,,Infiltrator
 170,Chinchou,Water,Electric,75,38,38,56,56,67,Volt Absorb,Illuminate,Water Absorb
 171,Lanturn,Water,Electric,125,58,58,76,76,67,Volt Absorb,Illuminate,Water Absorb
-172,Pichu,Electric,,20,40,15,35,35,60,Static,,Lightningrod
+172,Pichu,Electric,,20,40,15,35,35,60,Static,,Lightning Rod
 173,Cleffa,Fairy,,50,25,28,45,55,15,Cute Charm,Magic Guard,Friend Guard
 174,Igglybuff,Normal,Fairy,90,30,15,40,20,15,Cute Charm,,Friend Guard
 175,Togepi,Fairy,,35,20,65,40,65,20,Hustle,Serene Grace,Super Luck
@@ -316,7 +316,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 252,Treecko,Grass,,40,45,35,65,55,70,Overgrow,,Unburden
 253,Grovyle,Grass,,50,65,45,85,65,95,Overgrow,,Unburden
 254,Sceptile,Grass,,70,85,65,105,85,120,Overgrow,,Unburden
-254,Sceptile-Mega,Grass,Dragon,70,110,75,145,85,145,Lightningrod,,
+254,Sceptile-Mega,Grass,Dragon,70,110,75,145,85,145,Lightning Rod,,
 255,Torchic,Fire,,45,60,40,70,50,45,Blaze,,Speed Boost
 256,Combusken,Fire,Fighting,60,85,60,85,60,55,Blaze,,Speed Boost
 257,Blaziken,Fire,Fighting,80,120,70,110,70,80,Blaze,,Speed Boost
@@ -380,8 +380,8 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 307,Meditite,Fighting,Psychic,30,40,55,40,55,60,Pure Power,,Telepathy
 308,Medicham,Fighting,Psychic,60,60,75,60,75,80,Pure Power,,Telepathy
 308,Medicham-Mega,Fighting,Psychic,60,100,85,80,85,100,Pure Power,,
-309,Electrike,Electric,,40,45,40,65,40,65,Static,Lightningrod,Minus
-310,Manectric,Electric,,70,75,60,105,60,105,Static,Lightningrod,Minus
+309,Electrike,Electric,,40,45,40,65,40,65,Static,Lightning Rod,Minus
+310,Manectric,Electric,,70,75,60,105,60,105,Static,Lightning Rod,Minus
 310,Manetric-Mega,Electric,,70,75,80,135,80,135,Intimidate,,
 311,Plusle,Electric,,60,50,40,85,75,95,Plus,,
 312,Minun,Electric,,60,40,50,75,85,95,Minus,,
@@ -565,7 +565,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 461,Weavile,Dark,Ice,70,120,65,45,85,125,Pressure,,Pickpocket
 462,Magnezone,Electric,Steel,70,70,115,130,90,60,Magnet Pull,Sturdy,Analytic
 463,Lickilicky,Normal,,110,85,95,80,95,50,Own Tempo,Oblivious,Cloud Nine
-464,Rhyperior,Ground,Rock,115,140,130,55,55,40,Lightningrod,Solid Rock,Reckless
+464,Rhyperior,Ground,Rock,115,140,130,55,55,40,Lightning Rod,Solid Rock,Reckless
 465,Tangrowth,Grass,,100,100,125,110,50,50,Chlorophyll,Leaf Guard,Regenerator
 466,Electivire,Electric,,75,123,67,95,85,95,Motor Drive,,Vital Spirit
 467,Magmortar,Fire,,75,95,67,125,95,83,Flame Body,,Vital Spirit
@@ -651,8 +651,8 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 519,Pidove,Normal,Flying,50,55,50,36,30,43,Big Pecks,Super Luck,Rivalry
 520,Tranquill,Normal,Flying,62,77,62,50,42,65,Big Pecks,Super Luck,Rivalry
 521,Unfezant,Normal,Flying,80,115,80,65,55,93,Big Pecks,Super Luck,Rivalry
-522,Blitzle,Electric,,45,60,32,50,32,76,Lightningrod,Motor Drive,Sap Sipper
-523,Zebstrika,Electric,,75,100,63,80,63,116,Lightningrod,Motor Drive,Sap Sipper
+522,Blitzle,Electric,,45,60,32,50,32,76,Lightning Rod,Motor Drive,Sap Sipper
+523,Zebstrika,Electric,,75,100,63,80,63,116,Lightning Rod,Motor Drive,Sap Sipper
 524,Roggenrola,Rock,,55,75,85,25,25,15,Sturdy,Weak Armor,Sand Force
 525,Boldore,Rock,,70,105,105,50,40,20,Sturdy,Weak Armor,Sand Force
 526,Gigalith,Rock,,85,135,130,60,80,25,Sturdy,Sand Stream,Sand Force
@@ -958,7 +958,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 774,Minior-Violet Core,Rock,Flying,60,100,60,100,60,120,Shields Down,,
 775,Komala,Normal,,65,115,65,75,95,65,Comatose,,
 776,Turtonator,Fire,Dragon,60,78,135,91,85,36,Shell Armor,,
-777,Togedemaru,Electric,Steel,65,98,63,40,73,96,Iron Barbs ,Lightningrod,Sturdy
+777,Togedemaru,Electric,Steel,65,98,63,40,73,96,Iron Barbs ,Lightning Rod,Sturdy
 778,Mimikyu,Ghost,Fairy,55,90,80,50,105,96,Disguise,,
 779,Bruxish,Water,Psychic,68,105,70,70,70,92,Dazzling ,Strong Jaw ,Wonder Skin
 780,Drampa,Normal,Dragon,78,60,85,135,91,36,Berserk ,Sap Sipper ,Cloud Nine
@@ -1056,7 +1056,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 868,Milcery,Fairy,,45,40,40,50,61,34,Sweet Veil,,Aroma Veil
 869,Alcremie,Fairy,,65,60,75,110,121,64,Sweet Veil,,Aroma Veil
 870,Falinks,Fighting,,65,100,100,70,60,75,Battle Armor,,Defiant
-871,Pincurchin,Electric,,48,101,95,91,85,15,Lightningrod,,Electric Surge
+871,Pincurchin,Electric,,48,101,95,91,85,15,Lightning Rod,,Electric Surge
 872,Snom,Ice,Bug,30,25,35,45,30,20,Shield Dust,,Ice Scales
 873,Frosmoth,Ice,Bug,70,65,60,125,90,65,Shield Dust,,Ice Scales
 874,Stonjourner,Rock,,100,125,135,20,20,70,Power Spot,,

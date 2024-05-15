@@ -909,11 +909,14 @@ class dex:
                 pokemon = row[0]
                 score = fuzz.WRatio(pokemon, wrongPokemon)
                 if score > 70:
-                    similarPokemon.append([pokemon, smogon.grabImage(pokemon.lower())])
+                    similarPokemon.append([pokemon, smogon.grabImage(pokemon.lower()), score])
                     print(score, pokemon, wrongPokemon)
 
+        similarPokemon = sorted(similarPokemon, key=lambda x: x[-1], reverse=True)
+
+        print(similarPokemon)
+
         return similarPokemon
-                
 
     # tostring
     def __repr__(self):

@@ -330,8 +330,6 @@ def validFormat(format):
 
 def grabImage(pokemon):
 
-    
-
     if "'" in pokemon:
         pokemon = pokemon.replace("'", "")
 
@@ -419,7 +417,7 @@ def similarFormatTo(wrongFormat):
     similarFormats = []
     for format in formats:
         score = fuzz.WRatio(format, wrongFormat)
-        if score > 85:
+        if score > 60:
             similarFormats.append(format)
             print(score, format, wrongFormat)
 

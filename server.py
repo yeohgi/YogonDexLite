@@ -154,6 +154,14 @@ class MyHandler( BaseHTTPRequestHandler ):
                     ablContent.append(pkdex.dexFetch('pokemon', pokemon, 'Ability2'))
                     ablContent.append(pkdex.dexFetch('pokemon', pokemon, 'Hidden'))
 
+                    print(ablContent, "EBFORE")
+
+                    for i, abl in enumerate(ablContent):
+                        if abl is not None:
+                            ablContent[i] = ablContent[i].strip(' ')
+
+                    print(ablContent, "AFGTER")
+
                     for ability in abilitiesAndUsages:
 
                         abilityName = ''
@@ -167,15 +175,20 @@ class MyHandler( BaseHTTPRequestHandler ):
                         if(desc is not None):
                             desc = desc.strip('"')
 
+                        print(700, desc)
+
+                        print(6000, ablContent)
                         for i, abl in enumerate(ablContent):
                             if '"' in abl:
                                 ablContent[i] = ablContent[i].strip('"')
 
                         for i, abl in enumerate(ablContent):
+                            print(400, [abilityName, abl])
                             if abl in [ability[-1], abilityName, desc]:
                                 ablContent[i] = [ability[-1], abilityName, desc]
                             elif len(abl) < 3:
                                 ablContent[i] = ['','','']
+
                 elif returnStatus == 1:
 
                     ablContent.append(pkdex.dexFetch('pokemon', pokemon, 'Ability1'))
@@ -356,6 +369,34 @@ class MyHandler( BaseHTTPRequestHandler ):
 
         #return a background if need be
         elif parsed.path in [ '/pkbg.png' ]:
+
+            fp = open('.' + self.path, 'rb')
+            content = fp.read()
+
+            self.send_response( 200 )
+            self.send_header( "Content-type", "image/png" )
+            self.send_header( "Content-length", len( content ) )
+            self.end_headers()
+
+            self.wfile.write( bytes(content) )
+            fp.close()
+
+        #return a background if need be
+        elif parsed.path in [ '/tctable.png' ]:
+
+            fp = open('.' + self.path, 'rb')
+            content = fp.read()
+
+            self.send_response( 200 )
+            self.send_header( "Content-type", "image/png" )
+            self.send_header( "Content-length", len( content ) )
+            self.end_headers()
+
+            self.wfile.write( bytes(content) )
+            fp.close()
+
+        #return a background if need be
+        elif parsed.path in [ '/esprite.png' ]:
 
             fp = open('.' + self.path, 'rb')
             content = fp.read()

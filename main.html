@@ -12,6 +12,8 @@
             shiny = false;
             showing = ""
             inmenu = false;
+            typeChart = false;
+            helpTable = false;
 
             //FORMAT
             function setFormat(){
@@ -132,7 +134,7 @@
                         for(var i = 0; i < 6; i++){
                             $(defRowIds[i]).empty();
                             if(info[6][i].length > 0){
-                                rowData = '<td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + defRowMUs[i] + '</p></td>'
+                                rowData = '<td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold; text-align: right;">' + defRowMUs[i] + '</p></td>'
                                 $(defRowIds[i]).append(rowData);
                             }
                             for(var j = 0; j < info[6][i].length; j++){
@@ -144,18 +146,20 @@
 
                         //7 - update ablities
                         ablIds = ['#pokemonabl1', '#pokemonabl2', '#pokemonablhidden']
+                        ablRowIds = ['#pokemonabl1row', '#pokemonabl2row', '#pokemonablhiddenrow']
                         if(info[0] == 0){
 
                             for(var i = 0; i < 3; i++){
 
                                 if(info[7].length < i + 1){
-                                    $(ablIds[i]).text("");
+                                    $(ablRowIds[i]).hide();
                                     $(ablIds[i]).attr("desc", "");
-                                }else if(info[7][i].length == 3){
-                                    $(ablIds[i]).text(info[7][i][1]);
+                                }else if(info[7][i].length == 3 && info[7][i][0] != ''){
+                                    $(ablRowIds[i]).show();
+                                    $(ablIds[i]).text(info[7][i][0] +  "% " + info[7][i][1]);
                                     $(ablIds[i]).attr("desc", info[7][i][2]);
                                 }else{
-                                    $(ablIds[i]).text("");
+                                    $(ablRowIds[i]).hide();
                                     $(ablIds[i]).attr("desc", "");
                                 }
                             }
@@ -164,11 +168,15 @@
                             for(var i = 0; i < 3; i++){
 
                                 if(info[7].length < i + 1){
-                                    $(ablIds[i]).text("");
-                                }else if(info[7][i].length == 2){
+                                    $(ablRowIds[i]).hide();
+                                    $(ablIds[i]).attr("desc", "");
+                                }else if(info[7][i].length == 2 && info[7][i][0] != ''){
+                                    $(ablRowIds[i]).show();
                                     $(ablIds[i]).text(info[7][i][0]);
+                                    $(ablIds[i]).attr("desc", info[7][i][1]);
                                 }else{
-                                    $(ablIds[i]).text("");
+                                    $(ablRowIds[i]).hide();
+                                    $(ablIds[i]).attr("desc", "");
                                 }
                             }
                         }
@@ -187,7 +195,7 @@
 
                         //9 - update spreads
                         $('#pokemonspreadstable').empty();
-                        newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Spreads: </p></td></tr>'
+                        newRow = '<tr><td><p class="tooltip" desc="Spreads are how players invest extra stat points into thier Pokemon, for more info visit the top right corner." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Spreads: </p></td></tr>'
                         $('#pokemonspreadstable').append(newRow);
                         for(var i = 0; i < info[9].length; i++){
 
@@ -206,7 +214,7 @@
 
                         //10 - update moves
                         $('#pokemonmovestable').empty();
-                        newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Moves: </p></td></tr>'
+                        newRow = '<tr><td><p class="tooltip" desc="Players can select 4 moves for each of their Pokemon. Here are some common move choices. For more info on moves visit the top right corner." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Moves: </p></td></tr>'
                         $('#pokemonmovestable').append(newRow);
                         for(var i = 0; i < info[10].length; i++){
 
@@ -221,7 +229,7 @@
                         
                         //11 - update items
                         $('#pokemonitemstable').empty();
-                        newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Items: </p></td></tr>'
+                        newRow = '<tr><td><p class="tooltip" desc="Each Pokemon can hold a single item. Here are some items commonly held on this Pokemon." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Items: </p></td></tr>'
                         $('#pokemonitemstable').append(newRow);
                         for(var i = 0; i < info[11].length; i++){
 
@@ -237,7 +245,7 @@
 
                         //12 - update teammates
                         $('#pokemonteammatestable').empty();
-                        newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Teammates: </p></td></tr>'
+                        newRow = '<tr><td><p class="tooltip" desc="Some Pokemon synergize well with one another. Here are some common teammates. What could the reason be?" style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Teammates: </p></td></tr>'
                         $('#pokemonteammatestable').append(newRow);
                         for(var i = 0; i < info[12].length; i++){
 
@@ -253,21 +261,135 @@
                         showing = info[13]
                         updatePokemonSprite()
 
+                        $('#pokemonwarningsdiv').empty();
+                        newRow = '<p style="text-align: center; font-weight: bold; font-size: 12px;"><img style="vertical-align: middle; width: 24px; height: auto; margin-right: 2px" src="esprite.png" alt="!">Warnings:</p>'
+                        $('#pokemonwarningsdiv').append(newRow);
+                        $('#pokemonwarningsrow').hide();
+
                         //end - warnings?
-                        $('#pokemonwarnings').attr("desc", "")
-                        $('#havemail').hide();
-                        $('#pokemonwarningimage').hide();
                         for(var i = 0; i < info[10].length; i++){
-                            if (info[10][i][1] == "Fake Out"){
-                                warnings = $('#pokemonwarnings').attr("desc")
-                                warnings = warnings + "This Pokemon can use Fake Out, if this pokemon has just switched in consider the following:&#10 -Protect or Double Protect&#10 -Switch to a Pokemon with the ability Psychic Surge or Armor Tail&#10";
-                                $('#pokemonwarnings').attr("desc", warnings)
-                                $('#havemail').show();
-                                $('#pokemonwarningimage').show();
+
+                            newRow = ''
+
+                            //moves
+                            switch(info[10][i][1]){
+
+                                case "Fake Out":
+                                    newRow = '<p><abbr>Fake Out</abbr>: Fake Out is a move with +3 priority that flinches its target. It is only successful on the first turn the Pokemon is in battle, but reset each time the Pokemon switches out and back in. Consider protecting one or both of your Pokemon to ensure the Pokemon will not be able to use it next turn. If you have a Pokemon with abilities Psychic Surge or Armor Tail consider switching those Pokemon in to protect aganist moves with increased priority.</p>';
+                                    break;
+
+                                case "Extreme Speed":
+                                    newRow = '<p><abbr>Extreme Speed</abbr>: Extreme Speed is a move with +2 priority. If you have a Pokemon with abilities Psychic Surge or Armor Tail consider switching those Pokemon in to protect aganist moves with increased priority. Redirection is also possible with moves such as Follow Me and Rage Powder if the user is faster than the Extreme Speed user.</p>';
+                                    break;
+
+                                case "Spore":
+                                    newRow = '<p><abbr>Spore</abbr>: Spore is a powerful move with a 100% chance to put the foe to sleep. Spore is considered a powder move. Since Generation 6, <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Grass.png" alt="GRASS"> type Pokemon are unaffected by powder moves. Pokemon with the Safety Goggles item are also not affected by powder moves.</p>';
+                                    break;
+
+                                case "Grassy Glide":
+                                    newRow = '<p><abbr>Grassy Glide</abbr>: Grassy Glide is a move with +1 priority in Grassy Terrain. Many Pokemon have recently been given access to this move and can catch players off guard.</p>';
+                                    break;
+
+                                case "Thunderclap":
+                                    newRow = '<p><abbr>Thunderclap</abbr>: Thunderclap is a strong move with +1 priority but will fail if the target does not select an attacking move (<img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Physical.png" alt="Physical Symbol"> or <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Special.png" alt="Special Symbol">). If you have a Pokemon with abilities Psychic Surge or Armor Tail consider switching those Pokemon in to protect aganist moves with increased priority. Consider switching in a <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Ground.png" alt="GROUND"> type Pokemon immune to <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Electric.png" alt="ELECTRIC"> type attacks. Currently only seen on Raging Bolt who likes to use Calm Mind to boost SPATK and SPDEF and attempt to sweep.</p>';
+                                    break;
+
+                                case "Sucker Punch":
+                                    newRow = '<p><abbr>Sucker Punch</abbr>: Sucker Punch is a strong move with +1 priority but will fail if the target does not select an attacking move (<img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Physical.png" alt="Physical Symbol"> or <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Special.png" alt="Special Symbol">). If you have a Pokemon with abilities Psychic Surge or Armor Tail consider switching those Pokemon in to protect aganist moves with increased priority.</p>';
+                                    break;
+
+                                case "Quiver Dance":
+                                    newRow = '<p><abbr>Quiver Dance</abbr>: Quiver Dance is a powerful set up move that boosts the users SPATK, SPDEF, and SPD by one stage. Commonly used on Pokemon such Volcarona who attempt to power up and sweep. Moves such as Haze to reset all stage changes on the field and Taunt to force the opponent to attack can be effective at stopping such a set up.</p>';
+                                    break;
+
+                                case "Beat Up":
+                                    newRow = '<p><abbr>Beat Up</abbr>: Beat Up has one purpose, to activate a partners Pokemons Justified ability. The Beat Up user will attack their own Justified Pokemon to increase their attack by up to 4x. Consider focusing one of the two Pokemon and eliminating them before a set up is possible. Redirection is also a powerful option to stop such setups, moves like Follow Me and Rage Powder can redirect attacks to the user and stop Beat Up from ever touching the Justified Pokemon. Beat Up is also sometimes used to activate a Pokemons Rattled ability.</p>';
+                                    break;
+
+                                case "Tailwind":
+                                    newRow = '<p><abbr>Tailwind</abbr>: Tailwind is a powerful setup move where for 4 turns, the user and its party members have their SPD doubled. Commonly run on Pokemon with the Prankster ability who can set up the Tailwind with +1 priority. Setting up a Tailwind of your own or using Trick Room to invert the SPD of all Pokemon are both effective responses to anticipating Tailwind.</p>';
+                                    break;
+
+                                case "Trick Room":
+                                    newRow = '<p><abbr>Trick Room</abbr>: Trick Room is a setup move with -7 priority that for 5 turns lets slower Pokemon move first. Effectively inverting the SPD of all Pokemon on the battlefield. If you would not like Trick Room to be up, consider using Trick Room yourself to cancel it out. Using moves such as Taunt to stop a Pokemon from using Trick Room can be effective. Simply focusing a Trick Room setter is also often times acceptable. Keep in mind many Trick Room setters will be accompanied by Pokemon with redirection to protect them.</p>';
+                                    break;
+
+                                case "Wide Guard":
+                                    newRow = '<p><abbr>Wide Guard</abbr>: Wide Guard is a +3 priority move used to protect aganist spread moves (attacking moves that target multiple Pokemon). Unlike Protect which has a 1/X chance of being successful where X is the number of subsequent successes, Wide Guard does not have a chance to fail but still modifies the same 1/X chance that Protect uses. This means that Protect has a chance to fail after using Wide Guard.</p>';
+                                    break;
+
+                                case "Aurora Veil":
+                                    newRow = '<p><abbr>Aurora Veil</abbr>: Aurora Veil is a setup move where for 5 turns the user and its party members take 0.5x damage in Single Battles and 0.66x damge in Double Battles. This move will fail unless the weather is Snow. This move does not stack with Reflect or Light Screen. The easiest way to stop a Pokemon from setting up Aurora Veil is to change the weather, this could be by switching in a Pokemon you have with an ability that summons Weather. Screens/Veils can also be broken with the moves Brick Break and Psychic Fangs.</p>';
+                                    break;
+                            }
+
+                            if(newRow != ''){
+                                $('#pokemonwarningsdiv').append(newRow);
+                                $('#pokemonwarningsdiv').show();
                             }
                             
                         }
 
+                        if(info[0] == 0){
+
+                            for(var i = 0; i < info[7].length; i++){
+
+                                newRow = ''
+
+                                switch(info[7][i][1]){
+                                    case "Drizzle":
+                                        newRow = '<p><abbr>Drizzle</abbr>: Drizzle</p>';
+                                        break;
+                                }
+
+                                if(newRow != ''){
+                                    $('#pokemonwarningsdiv').append(newRow);
+                                    $('#pokemonwarningsdiv').show();
+                                }
+                            }
+                        }
+                            //fakeout
+                            //espeed
+                            //spore
+                            //grassy glide
+                            //thunder clap
+                            //sucker punch
+                            //quiver dance
+                            
+                            //drought
+                            //drizzle
+                            //snow warning
+                            //sandstorm
+
+                            //flashfire
+                            //water absorb
+                            //storm drain
+                            //lighting rod
+                            //volt absorb
+                            //sap sipper
+                            //levitate
+                            //motordrive
+                            //sound proof
+
+                            //grassy terrain
+                            //psychic terrain
+                            //armor tail
+
+                            //prankster
+                            //wind rider
+                            //tailwind
+                            //trickroom
+
+                            //justified
+
+                            //wide guard
+                            //aurora veil
+
+                            //armagrogue + iron bundle
+                            //dragonite + chein pao
+                            //torkoal + lilligant hisui
+                            //indeedee-f + expanding force
+                            
                         //successful so remove did you mean
                         $('#didyoumeantable').empty();
                         newRow = '<td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Did You Mean? </p></td>'
@@ -341,6 +463,26 @@
                 updatePokemonSprite()
             }
 
+            function toggleTypeChart(){
+                if(typeChart){
+                    $("#typecharttable").hide()
+                    typeChart = false;
+                }else{
+                    $("#typecharttable").show()
+                    typeChart = true;
+                }
+            }
+
+            function toggleHelpTable(){
+                if(helpTable){
+                    $("#helptable").hide()
+                    helpTable = false;
+                }else{
+                    $("#helptable").show()
+                    helpTable = true;
+                }
+            }
+
             function barColor(stat){
 
                 colorCodes = ["#bd0404", "#d17600", "#d1b900", "#80eb34", "#009e08", "#009e9b"]
@@ -367,13 +509,13 @@
 
             function updateDidYouMeanFormats(formats){
                 //must be -1, return error/invalid
-                $('#didyoumeantable').empty();
+                $('#didyoumeanformatstable').empty();
                 newRow = '<td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Did You Mean? </p></td>'
-                $('#didyoumeantable').append(newRow);
+                $('#didyoumeanformatstable').append(newRow);
 
                 for(var i = 0; i < formats.length; i++){
                     newRow = '<tr><td><a href="javascript:"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" onmousedown="setDidYouMeanFormat(&quot;'+ formats[i] +'&quot;);">' + formats[i] + '</p></a></td></tr>'
-                    $('#didyoumeantable').append(newRow);
+                    $('#didyoumeanformatstable').append(newRow);
                 }
             }
 
@@ -435,6 +577,17 @@
                 border-style: solid;
                 border-radius: 3px;
                 background-image: url("pkbg.png");
+                background-repeat: no-repeat;
+                background-size: 100%;
+            }
+
+            .tcbg {
+                background-color: #000000;
+                border-width: 2px;
+                border-color: #dfdfdf;
+                border-style: solid;
+                border-radius: 3px;
+                background-image: url("tctable.png");
                 background-repeat: no-repeat;
                 background-size: 100%;
             }
@@ -509,6 +662,11 @@
                 color: rgb(207, 236, 255);
             }
 
+            abbr {
+                font-style: italic;
+                color: #FAA10C;
+            }
+
         </style>
 
     </head>
@@ -546,9 +704,94 @@
                 </li>
             </ul></nav>
 
+            <nav style="position:absolute; right: 10px; top: 10px;"><ul>
+                <li>
+                    <p style="display:inline; vertical-align:middle; font-size: 12;">Type Chart: </p>
+                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="toggleTypeChart();" id="typechartbutton">Type Chart</button>
+                </li>
+                <li>
+                    <p style="display:inline; vertical-align:middle; font-size: 12;">Help: </p>
+                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="toggleHelpTable();" id="helpbutton">?</button>
+                </li>
+            </ul></nav>
+
             <h2 style="margin-top:5px;">YogonDexLite</h2>
 
             <div class="graybg"></div>
+
+            <!-- did you mean formats -->
+            <table class="graybg" id="didyoumeanformatstable" style="position:absolute; left: 10px; top: 60px;">
+
+                <tr>
+                    <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Did You Mean? </p></td>
+                </tr>
+                
+            </table>
+
+            <!-- typechart -->
+            <table class="tcbg" id="typecharttable" style="position:absolute; right: 10px; top: 60px; display: none;">
+                <tr>
+                    <td><div style="width: 600px; height: 600px;"></div></td>
+                </tr>
+            </table>
+
+            <!-- help table -->
+            <table class="graybg" id="helptable" style="position:absolute; right: 10px; top: 60px; display: none;">
+                <tr>
+                    <td>
+                        <div style="width: 600px; height: 800px; overflow: auto; font-size: 12px;">
+
+                            <p style="text-align: center; font-weight: bold; font-size: 16px;">Help Menu</p>
+
+                            <p style="font-weight: bold; font-size: 16px;">Types:</p>
+                            <p style="margin-left: 12px;">Each Pokemon can have 1-2 types. Each type has their own unique offensive and defensive profile which can be observed on the Type Chart. Defensively, if a Pokemon has two types the properties of both types will combine for the better or worse. Suppose we have a <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Ground.png" alt="GROUND"> and <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Flying.png" alt="FLYING"> Pokemon, as a <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Flying.png" alt="FLYING"> type we are weak to <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Electric.png" alt="ELECTRIC">, but this is not a problem because <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Ground.png" alt="GROUND"> is immune to <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Electric.png" alt="ELECTRIC"> type attacks and we lose the weakness. A downside of this combonation is that we are now 4x weak to <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Ice.png" alt="ICE"> which hits both of our types for 2x super-effective damage.</p>
+                                
+                            <p style="font-weight: bold; font-size: 16px;">Abilities:</p>
+                            <p style="margin-left: 12px;">Each Pokemon can have 1-3 abilities to select from which provide unique effects. You can only select one per Pokemon. Abilities are extremely important to a Pokemons viablity and should be observed closely.</p>
+                                
+                              
+                            <p style="font-weight: bold; font-size: 16px;">Defensive Matchups:</p>
+                            <p style="margin-left: 12px;">Defensive Matchups are straightforward once the concept of types are understood. The table is for the convinience of those who do not have the type chart memorized.</p>
+
+                            <p style="font-weight: bold; font-size: 16px;">Base Stats:</p>
+                            <p style="margin-left: 12px;">Each Pokemon has their own <abbr>Base Stat Spread</abbr> which are not to be confused with <abbr>EV Spreads</abbr> which are referred to as <abbr>Spreads</abbr> and are covered later. Below is an overview of the significance of each <abbr>Base Stat.</abbr></p>
+                            <p style="margin-left: 24px;"><abbr>HP</abbr> (Hit Points) can be understood as the number of Hit Points a Pokemon can have.</p>
+                            <p style="margin-left: 24px;"><abbr>ATK</abbr> (Attack) can be understood as the stat that dictates how much damage the Pokemons physical attacks will do. Moves which are physical are denoted with a <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Physical.png" alt="Physical Symbol">.</p>
+                            <p style="margin-left: 24px;"><abbr>DEF</abbr> (Defense) can be understood as the stat that dictates how much damage your Pokemon will take from others phyical attacks.</p>
+                            <p style="margin-left: 24px;"><abbr>SPATK</abbr> (Special Attack) can be understood as the stat that dictates how much damage the Pokemons special attacks will do. Moves which are special are denoted with a <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Special.png" alt="Special Symbol"></p>
+                            <p style="margin-left: 24px;"><abbr>SPDEF</abbr> (Special defense) can be understood as the stat that dictates how much damage your Pokemon will take from others special attacks.</p>
+                            <p style="margin-left: 24px;"><abbr>SPD</abbr> (Speed) can be understood as the stat that dictates the order that Pokemon will move during each turn with faster Pokemon moving first within their priority bracket.</p>
+                            
+                                
+                            <p style="font-weight: bold; font-size: 16px;">Spreads:</p>
+                            <p style="font-weight: bold; font-size: 12px; margin-left: 12px;">EV Spreads:</p>
+                            <p style="margin-left: 24px;"><abbr>Effort Value Spreads</abbr> AKA <abbr>EV Spreads</abbr> allow players to invest 508 <abbr>EVs</abbr> into any of a Pokemons stats with each stat allowing for a maximum of 252 EVs. EVs make all the difference, Pokemon interactions can completely change based on what stats are invested into. For example, Pokemon who are invested into offensively may be able to threaten <abbr>OHKOs</abbr> (One Hit Knock Outs) previously unattainable. Or, Pokemon who are invested into defensively may be able to just barely survive attacks that would previously knock them out, allowing for another turns worth of value.</p>
+                            <p style="font-weight: bold; font-size: 12px; margin-left: 12px;">Natures:</p>
+                            <p style="margin-left: 24px;">Each Pokemon can have one of many <abbr>Natures</abbr>, each nature raising and lowering one of the Pokemons stats. For example, we may find it valueable to lose ATK (Attack) for a raise in SPATK (Special Attack) on a Pokemon that only uses utilizes its SPATK (Special Attack) through special moves.</p>
+
+
+
+                            <p style="font-weight: bold; font-size: 16px;">Moves:</p>
+                            <p style="margin-left: 12px;">There are 3 different types of moves, <abbr>Physical Moves</abbr>, <abbr>Special Moves</abbr>, and <abbr>Status Moves</abbr>.</p>
+                            <p style="margin-left: 24px;">Physical Moves are attacking moves that rely on the users ATK stat and recievers DEF stat to calculate damage. Denoted by <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Physical.png" alt="Physical Symbol">.</p>
+                            <p style="margin-left: 24px;">Special Moves are attacking moves that rely on the users SPATK stat and recievers SPDEF stat to calculate damage. Denoted by <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Special.png" alt="Special Symbol">.</p>
+                            <p style="margin-left: 24px;">Status Moves are generally non-damaging moves that can inflict some effect on another Pokemon or in some cases the entire battle field. Denoted by <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Status.png" alt="Status Symbol">.</p>
+
+                            <p style="font-weight: bold; font-size: 12px; margin-left: 12px;">STAB (Same Type Attack Bonus): </p>
+                            <p style="margin-left: 24px;">Each move is assigned a type. An important note concerning physical and special moves is a mechanic known as <abbr>STAB</abbr> (Same Type Attack Bonus). If a Pokemon uses a move with the same type as itself that moves power will be increased by 1.5x.</p>
+                            
+                            <p style="font-weight: bold; font-size: 12px; margin-left: 12px;">Priority:</p>
+                            <p style="margin-left: 24px;">Sometimes you may find moves are assigned a <abbr>Priority Level</abbr> denoted by <abbr>(priority +X)</abbr>. In Pokemon, when players lock in their moves the order in which each Pokemon moves is determined first by the priority of the moves placing each Pokemon in a priority bracket from -7 to +7, then in each priority bracket speed is used determine which Pokemon will move.</p>
+                            
+                            <p style="font-weight: bold; font-size: 16px;">Items:</p>
+                            <p style="margin-left: 12px;">Items are easy peasy, each Pokemon can hold one item with its own unique effect.</p>
+                            
+                            <p style="font-weight: bold; font-size: 16px;">Teammates:</p>
+                            <p style="margin-left: 12px;">Sometimes Pokemon synergize well with one another. If you see a Pokemon that is almost always paired with another, try to think about why.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
             <!-- pokemon image -->
             <table class="imagebg" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
@@ -570,11 +813,24 @@
                             <td id="pokemondexnumbers"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Dex Number: </p> <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemondexnumber">A Number</p></td>
                             <td id="pokemonranks"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Rank: </p>            <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonrank">A Rank</p></td>
                             <td id="pokemonusages"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Usage: </p>          <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonusage">A Usage</p></td>
-                            <td id="pokemonwarnings" class="tooltip" desc="Warning"><img id="pokemonwarningimage" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/itemicons/reply-mail.png" alt="???"></td>
-                            <td id="checkmail"><p style="display:inline; vertical-align:middle; font-size: 12;" id="havemail">CHECK MAIL!</p></td>
                         </tr>
                     </table>
 
+                </tr>
+
+                <!-- warnings -->
+                <tr id="pokemonwarningsrow">
+                    <td>
+                        <table class="graybg" id="pokemonwarningsdiv" style="margin-left:auto; margin-right:auto; overflow: auto; font-size: 12px; width: 400px; height:auto; display: none;">
+                            <tr>
+                                <td>
+                                    <div>
+                                        <p style="text-align: center; font-weight: bold; font-size: 12px;"><img style="vertical-align: middle; width: 24px; height: auto; margin-right: 2px" src="esprite.png" alt="!">Warnings:</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
 
                 <!-- type -->
@@ -598,12 +854,21 @@
                     <table class="graybg" id="pokemonabilitiestable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
 
                         <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="pokemonabls">Abilities: </p></td>
+                            <td><p class="tooltip" desc="Possible abilities this Pokemon can use. Only one can be selected." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="pokemonabls">Abilities: </p></td>
+                        </tr>
+
+                        <tr id="pokemonabl1row">
                             <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl1" desc="DESCRIPTION 1">Abl 1</p></td>
+                        </tr>
+
+                        <tr id="pokemonabl2row">
                             <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl2" desc="DESCRIPTION 2">Abl 2</p></td>
+                        </tr>
+
+                        <tr id="pokemonablhiddenrow">
                             <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonablhidden" desc="DESCRIPTION HIDDEN">Abl Hidden</p></td>
                         </tr>
-        
+
                     </table>
 
                 </tr>
@@ -611,11 +876,11 @@
                 <!-- def matchups -->
                 <tr id="pokemondefmatchupsrow">
 
-                    <table class="graybg" id="pokemondefmatchupstable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
+                    <div class="graybg" style="display: inline-block; padding: 2px; margin-top:5px;">
 
-                        <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Defensive Matchups: </p></td>
-                        </tr>
+                    <p class="tooltip" desc="A Pokemons defensive matchups. The higher the multiplier the more effective the attack." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Defensive Matchups: </p>
+
+                    <table id="pokemondefmatchupstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
 
                         <tr id="pokemon0xmu">
                             <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">0x: </p></td>
@@ -648,6 +913,8 @@
                         </tr>
 
                     </table>
+
+                    </div>
 
                 </tr>
 
@@ -702,7 +969,7 @@
                     <table class="graybg" id="pokemonspreadstable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
 
                         <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Spreads: </p></td>
+                            <td><p class="tooltip" desc="Spreads are how players invest extra stat points into thier Pokemon, for more info visit the top right corner." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Spreads: </p></td>
                         </tr>
                     
                     </table>
@@ -714,7 +981,7 @@
                     <table class="graybg" id="pokemonmovestable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
 
                         <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Moves: </p></td>
+                            <td><p class="tooltip" desc="Players can select 4 moves for each of their Pokemon. Here are some common move choices. For more info on moves visit the top right corner." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Moves: </p></td>
                         </tr>
                     
                     </table>
@@ -726,7 +993,7 @@
                     <table class="graybg" id="pokemonitemstable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
 
                         <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Items: </p></td>
+                            <td><p class="tooltip" desc="Each Pokemon can hold a single item. Here are some items commonly held on this Pokemon." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Items: </p></td>
                         </tr>
                     
                     </table>
@@ -738,7 +1005,7 @@
                     <table class="graybg" id="pokemonteammatestable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
 
                         <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Teammates: </p></td>
+                            <td><p class="tooltip" desc="Some Pokemon synergize well with one another. Here are some common teammates. What could the reason be?" style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Teammates: </p></td>
                         </tr>
                     
                     </table>
