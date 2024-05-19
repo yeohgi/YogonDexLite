@@ -48,8 +48,8 @@ Project Link: https://github.com/yeohgi/YogonDexLite
 
 # Acknowledgements
 I would like to express my gratitude to the following resources, libraries, contributors, and inspirations that have made this project possible:
-    -Pokémon Showdown: For providing the usage data and being an invaluable resource for competitive Pokémon battling.
-    -Smogon University: For their extensive database of strategies, movesets, and competitive analysis.
+1. Pokémon Showdown: For providing the usage data and being an invaluable resource for competitive Pokémon battling.
+2. Smogon University: For their extensive database of strategies, movesets, and competitive analysis.
 
 
 
