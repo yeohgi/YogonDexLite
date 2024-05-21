@@ -327,7 +327,7 @@ class dex:
             conn = sqlite3.connect(db)
             cursor = conn.cursor()
 
-            sqlCommand = f"SELECT Effect, Type, Power, Category FROM moves WHERE Move == '{move}'"
+            sqlCommand = f"SELECT Effect, Type, Power, Category, Accuracy FROM moves WHERE Move == '{move}'"
 
             cursor.execute(sqlCommand)
 

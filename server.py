@@ -36,6 +36,20 @@ class MyHandler( BaseHTTPRequestHandler ):
             self.wfile.write( bytes( content, "utf-8" ) )
             fp.close()
 
+        # give main
+        if parsed.path in [ '/newmain.html' ]:
+
+            fp = open( '.'+self.path )
+            content = fp.read()
+
+            self.send_response( 200 )
+            self.send_header( "Content-type", "text/html" )
+            self.send_header( "Content-length", len( content ) )
+            self.end_headers()
+
+            self.wfile.write( bytes( content, "utf-8" ) )
+            fp.close()
+
         # check for valid format
         elif parsed.path.endswith(".format"):
 
@@ -198,6 +212,9 @@ class MyHandler( BaseHTTPRequestHandler ):
                     for i, abl in enumerate(ablContent):
                         desc = pkdex.ablFetch(abl)
 
+                        if(desc is not None):
+                            desc = desc.strip('"')
+
                         if desc is None:
                             desc = ''
 
@@ -226,7 +243,7 @@ class MyHandler( BaseHTTPRequestHandler ):
                         spreads[i] = spreads[i].replace(":", " ")
                         spreads[i] = spreads[i].split(" ")
                         spreads[i] = list(filter(None, spreads[i]))
-                        spreads[i][0] = [spreads[i][0], pkdex.getNaturePlusMinus(spreads[i][0])]
+                        spreads[i][0] = [spreads[i][0].title(), pkdex.getNaturePlusMinus(spreads[i][0])]
                     content.append(spreads)
                 else:
                     content.append([])
@@ -248,13 +265,15 @@ class MyHandler( BaseHTTPRequestHandler ):
                         desc = pkdex.moveFetch(moveName)
 
                         if str(desc[0]) != 'Other':
-                            #usage, name, type, power, cat, desc
+                            #usage, name, type, power, cat, desc, acc
                             if(desc[2] == ''):
                                 desc[2] = "—"
                             print([desc[0]], [''])
                             if(desc[0] == ''):
                                 desc[0] = "No Effect"
-                            movesContent.append([move[-1], moveName, desc[1].capitalize(), desc[2], desc[3].capitalize(), desc[0]])
+                            if(desc[4] is None or desc[4] == ''):
+                                desc[4] = "—"
+                            movesContent.append([move[-1], moveName, desc[1].capitalize(), desc[2], desc[3].capitalize(), desc[0], desc[4]])
 
                 content.append(movesContent)
 
@@ -403,6 +422,34 @@ class MyHandler( BaseHTTPRequestHandler ):
 
             self.send_response( 200 )
             self.send_header( "Content-type", "image/png" )
+            self.send_header( "Content-length", len( content ) )
+            self.end_headers()
+
+            self.wfile.write( bytes(content) )
+            fp.close()
+
+        #return a background if need be
+        elif parsed.path in [ '/star.png' ]:
+
+            fp = open('.' + self.path, 'rb')
+            content = fp.read()
+
+            self.send_response( 200 )
+            self.send_header( "Content-type", "image/png" )
+            self.send_header( "Content-length", len( content ) )
+            self.end_headers()
+
+            self.wfile.write( bytes(content) )
+            fp.close()
+
+        #return a background if need be
+        elif parsed.path in [ '/loading.gif' ]:
+
+            fp = open('.' + self.path, 'rb')
+            content = fp.read()
+
+            self.send_response( 200 )
+            self.send_header( "Content-type", "image/gif" )
             self.send_header( "Content-length", len( content ) )
             self.end_headers()
 

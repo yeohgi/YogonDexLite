@@ -1,34 +1,33 @@
-<html>
-
+<html lang="en">
     <head>
         <title>YogonDexLite (WIP)</title>
         <link rel="icon" type="image/png" href="https://www.pokencyclopedia.info/sprites/misc/spr_substitute/art__substitute.png">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
         <script>
 
-            format = "";
-            userFormat = "";
-            elo = -1;
+            format = "gen9doublesou";
+            userFormat = "gen9doublesou";
+            pokemonlevel = 100;
+            elo = 1000;
             shiny = false;
-            showing = ""
-            inmenu = false;
             typeChart = false;
             helpTable = false;
 
-            //FORMAT
+            // format
             function setFormat(){
 
+                $('#loadingformat').show()
                 userFormat = $('#getformat').val()
-                console.log(userFormat)
 
                 checkFormat(function(valid){
 
                     if(valid){
-                        showElo()
-                        $('#currentformat').text(format)
+                        $('#currentformat').text("Current Format: " + format)
                     }else{
                         console.log("no no no, bad format")
                     }
+
+                    $('#loadingformat').hide()
 
                 });
             }
@@ -44,54 +43,47 @@
                     if(validFormatString === "True"){
                         validFormat = true
                         format = data[1]
+                        $('#didyoumeanformat').hide()
                     }else{
                         validFormat = false
                         updateDidYouMeanFormats(data[1])
-                        console.log(data[1])
+                        $('#didyoumeanformat').show()
                     }
 
                     callback(validFormat);
                 });
             }
 
-            //ELO
+            function updateDidYouMeanFormats(formats){
+                $('#didyoumeanformattable').empty();
+                for(var i = 0; i < formats.length; i++){
+                    newRow =    '<tr>\
+                                    <td><a href="javascript:"><p onmousedown="setDidYouMeanFormat(&quot;'+ formats[i][0] +'&quot;);">' + formats[i][0] + '</p></a></td>\
+                                </tr>'
+                    $('#didyoumeanformattable').append(newRow);
+                }
+            }
+
+            function setDidYouMeanFormat(format){
+                $('#getformat').val(format)
+                setFormat();
+            }
+
             function setElo(){
+
                 elo = $('#getelo').val()
-                $('#currentelo').text(elo)
-                console.log(elo)
-
-                if(elo >= 1000){
-                    showMain()
-                }else{
-                    console.log("no no no, bad elo")
-                }
                 
-            }
-
-            function showElo(){
-                if(!inmenu){
-                    $('#getformatbody').css('display', 'none');
-                    $('#getelobody').css('display', 'block');
-                    $('#mainbody').css('display', 'none');
-                    $('#getformatbody').remove();
+                if(elo < 1000){
+                    elo = 1000;
                 }
-            }
 
-            //MAIN
-            function showMain(){
-                if(!inmenu){
-                    $('#getformatbody').css('display', 'none');
-                    $('#getelobody').css('display', 'none');
-                    $('#mainbody').css('display', 'block');
-                    $('#getelobody').remove();
-                }
-                inmenu = true;
+                $('#currentelo').text("Current Elo: " + elo)
             }
 
             function searchPokemon(){
 
                 pokemon = $('#searchpokemonfield').val()
-                console.log(pokemon)
+                $('#loadingpokemon').show()
 
                 getPokemonInfo(function(info){
                     console.log(info)
@@ -101,82 +93,87 @@
                         //handle in format case
 
                         //1 - update name
-                        $('#pokemonname').text(info[1]);
+                        $("#pokemonname").text(info[1])
 
                         //2 - update dex number
-                        $('#pokemondexnumber').text(info[2]);
 
-                        //3 - update rank
+                        //3, 4 - update rank
+                        percent = Math.round(info[4] * 10)/10;
                         if(info[0] == 0){
-                            $('#pokemonrank').text(info[3]);
+                            $("#pokemonrank").text("Rank #" + info[3] + " (" + percent + "%)")
                         }else{
-                            $('#pokemonrank').text("N/A");
+                            $("#pokemonrank").text("Rank: N/A")
                         }
                         
-                        //4 - update usage
+                        //update legality
                         if(info[0] == 0){
-                            $('#pokemonusage').text(info[4]);
+                            $("#pokemonlegal").text("Legal")
+                            $("#pokemonlegal").attr("desc", "Legal to use in selected format.")
                         }else{
-                            $('#pokemonusage').text("N/A");
+                            $("#pokemonlegal").text("Illegal")
+                            $("#pokemonlegal").attr("desc", "Illegal to use in selected format.")
                         }
 
                         //5 - update type
-                        $("#pokemontype1image").attr("src", "https://play.pokemonshowdown.com/sprites/types/" + info[5][0] + ".png");
+                        $("#pokemontypes").empty()
                         if(info[5][1].length > 1){
-                            $("#pokemontype2image").attr("src", "https://play.pokemonshowdown.com/sprites/types/" + info[5][1] + ".png");
+                            $("#pokemontypes").append('<img class="typeimg" style="margin-right: 6px" src="https://play.pokemonshowdown.com/sprites/types/' + info[5][0] + '.png" alt="???">')
+                            $("#pokemontypes").append('<img class="typeimg" src="https://play.pokemonshowdown.com/sprites/types/' + info[5][1] + '.png" alt="???">')
                         }else{
-                            $("#pokemontype2image").attr("src", "https://play.pokemonshowdown.com/sprites/types/%3f%3f%3f.png");
+                            $("#pokemontypes").append('<img class="typeimg" src="https://play.pokemonshowdown.com/sprites/types/' + info[5][0] + '.png" alt="???">')
                         }
 
                         //6 - defensive matchups
-                        defRowIds = ['#pokemon0xmu', '#pokemon4xmu', '#pokemon2xmu', '#pokemon1xmu', '#pokemon1d2xmu', '#pokemon1d4xmu']
-                        defRowMUs = ['0x: ', '4x: ', '2x: ', '1x: ', '1/2x: ', '1/4x: ']
+                        $('#pokemonmatchupstable tr:not(:first)').remove();
+                        defRowMUs = ['0x:', '4x:', '2x:', '1x:', '1/2x:', '1/4x:']
                         for(var i = 0; i < 6; i++){
-                            $(defRowIds[i]).empty();
-                            if(info[6][i].length > 0){
-                                rowData = '<td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold; text-align: right;">' + defRowMUs[i] + '</p></td>'
-                                $(defRowIds[i]).append(rowData);
-                            }
-                            for(var j = 0; j < info[6][i].length; j++){
-                                imageData = '<td><img id="pokemontype2image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/' + info[6][i][j] + '.png" alt="???"></td>'
-                                $(defRowIds[i]).append(imageData)
-                            }
-                        }
 
+                            if(info[6][i].length > 0){
+                                newRowPart1 =   '<tr>\
+                                                <td>'+ defRowMUs[i] +'</td>\
+                                                <td>'
+
+                                newRowPart2=''
+
+                                for(var j = 0; j < info[6][i].length; j++){
+                                    newRowPart2 += '<img class="typeimg" style="margin-left: 5px" src="https://play.pokemonshowdown.com/sprites/types/' + info[6][i][j] + '.png" alt="???">'
+                                }
+
+                                newRowPart2 += '</td></tr>'
+
+                                newRow = newRowPart1 + newRowPart2
+                            
+                                $("#pokemonmatchupstable").append(newRow)
+                            }
+
+                        }
 
                         //7 - update ablities
                         ablIds = ['#pokemonabl1', '#pokemonabl2', '#pokemonablhidden']
-                        ablRowIds = ['#pokemonabl1row', '#pokemonabl2row', '#pokemonablhiddenrow']
                         if(info[0] == 0){
-
                             for(var i = 0; i < 3; i++){
-
                                 if(info[7].length < i + 1){
-                                    $(ablRowIds[i]).hide();
-                                    $(ablIds[i]).attr("desc", "");
+                                    $(ablIds[i]).text("N/A")
+                                    $(ablIds[i]).attr("desc", "N/A")
                                 }else if(info[7][i].length == 3 && info[7][i][0] != ''){
-                                    $(ablRowIds[i]).show();
-                                    $(ablIds[i]).text(info[7][i][0] +  "% " + info[7][i][1]);
-                                    $(ablIds[i]).attr("desc", info[7][i][2]);
+                                    $(ablIds[i]).text(info[7][i][1] + " (" + info[7][i][0] + "%)");
+                                    $(ablIds[i]).attr("desc", info[7][i][2])
                                 }else{
-                                    $(ablRowIds[i]).hide();
-                                    $(ablIds[i]).attr("desc", "");
+                                    $(ablIds[i]).text("N/A")
+                                    $(ablIds[i]).attr("desc", "N/A")
                                 }
                             }
-
                         }else if(info[0] == 1){
                             for(var i = 0; i < 3; i++){
-
                                 if(info[7].length < i + 1){
-                                    $(ablRowIds[i]).hide();
-                                    $(ablIds[i]).attr("desc", "");
+                                    $(ablIds[i]).text("N/A")
+                                    $(ablIds[i]).attr("desc", "N/A")
                                 }else if(info[7][i].length == 2 && info[7][i][0] != ''){
-                                    $(ablRowIds[i]).show();
-                                    $(ablIds[i]).text(info[7][i][0]);
-                                    $(ablIds[i]).attr("desc", info[7][i][1]);
+                                    $(ablIds[i]).text(info[7][i][0] + " (N/A)");
+                                    $(ablIds[i]).attr("desc", info[7][i][1])
                                 }else{
-                                    $(ablRowIds[i]).hide();
-                                    $(ablIds[i]).attr("desc", "");
+                                    $(ablIds[i]).text("N/A")
+                                    $(ablIds[i]).attr("desc", "N/A")
                                 }
                             }
                         }
@@ -184,229 +181,147 @@
                         //8 - update stats
                         stats = ['#pokemonhp', '#pokemonatk', '#pokemondef', '#pokemonspatk', '#pokemonspdef', '#pokemonspd']
                         bars = ['#hpbar', '#atkbar', '#defbar', '#spatkbar', '#spdefbar', '#spdbar']
+                        total = 0;
                         for(var i = 0; i < 6; i++){
                             $(stats[i]).text(info[8][i]);
-                            $(bars[i]).css("width", barLength(info[8][i]) + "px");
+                            total += Number(info[8][i]);
+
+                            $(bars[i]).css("width", barLength(info[8][i]) + "vw");
+
                             colors = barColor(info[8][i])
-                            console.log(colors)
                             $(bars[i]).css("background-color", colors[0]);
                             $(bars[i]).css("border", "2px solid "+ colors[1]);
                         }
+                        $('#pokemonbst').text(total)
+                        
+                        updateMinMinMaxMax()
 
                         //9 - update spreads
-                        $('#pokemonspreadstable').empty();
-                        newRow = '<tr><td><p class="tooltip" desc="Spreads are how players invest extra stat points into thier Pokemon, for more info visit the top right corner." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Spreads: </p></td></tr>'
-                        $('#pokemonspreadstable').append(newRow);
+                        $('#pokemonspreadstable tr:not(:first)').remove();
                         for(var i = 0; i < info[9].length; i++){
 
                             if(info[9][i][2] < 20){
+                                if(i == 0){
+                                    $('#pokemonspreadstable').append('<tr><td colspan="10">No spreads above 20% usage.</td></tr>')
+                                }
                                 break
                             }
 
-                            if(info[9][i].length > 2){
-                                newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12;">'+ info[9][i][2] + '% ' + info[9][i][1] + ' Nature: ' + info[9][i][0][0] + '(+' + info[9][i][0][1][0] + ', -' + info[9][i][0][1][1] +')</p></td></tr>'
-                                $('#pokemonspreadstable').append(newRow);
-                            }else{
-                                newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12;">'+ info[9][i][1] + '% ' + info[9][i][0] + '</p></td></tr>'
-                                $('#pokemonspreadstable').append(newRow);
-                            }
+                            evs = info[9][i][1].split('/')
+
+                            newSpread = '<tr onmouseenter="customSpreadOn(' + (i + 1) + ')" onmouseleave="customSpreadOff()">\
+                                            <td>' + info[9][i][2] + '%</td>\
+                                            <td>' + evs[0] + '</td>\
+                                            <td>' + evs[1] + '</td>\
+                                            <td>' + evs[2] + '</td>\
+                                            <td>' + evs[3] + '</td>\
+                                            <td>' + evs[4] + '</td>\
+                                            <td>' + evs[5] + '</td>\
+                                            <td>' + info[9][i][0][0] + '</td>\
+                                            <td>' + info[9][i][0][1][0] + '</td>\
+                                            <td>' + info[9][i][0][1][1] + '</td>\
+                                        </tr>'
+
+                            $('#pokemonspreadstable').append(newSpread);
+
                         }
 
                         //10 - update moves
-                        $('#pokemonmovestable').empty();
-                        newRow = '<tr><td><p class="tooltip" desc="Players can select 4 moves for each of their Pokemon. Here are some common move choices. For more info on moves visit the top right corner." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Moves: </p></td></tr>'
-                        $('#pokemonmovestable').append(newRow);
+                        $('#pokemonmovestable tr:not(:first)').remove();
                         for(var i = 0; i < info[10].length; i++){
 
                             if(info[10][i][0] < 15){
+                                if(i == 0){
+                                    $('#pokemonmovestable').append('<tr><td colspan="6">No moves above 15% usage.</td></tr>')
+                                }
                                 break
                             }
 
-                            newRow = '<tr class="tooltip" desc=""><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[10][i][0] + '% ' + info[10][i][1] + '</p></td><td><img style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/' + info[10][i][2] + '.png" alt="???"></td><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[10][i][3] + '</p></td><td><img style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/' + info[10][i][4] + '.png" alt="???"></td></tr>'
-                            $('#pokemonmovestable').append(newRow);
-                            $('#pokemonmovestable tr:last').attr('desc', info[10][i][5]);
+                            newMove =   '<tr class="tooltip" desc="' + info[10][i][5] + '">\
+                                            <td>' + info[10][i][0] + '%</td>\
+                                            <td class="name">' + info[10][i][1] + '</td>\
+                                            <td><img class="typeimg" src="https://play.pokemonshowdown.com/sprites/types/' + info[10][i][2] + '.png" alt="' + info[10][i][2] + '"></td>\
+                                            <td class="number">' + info[10][i][3] + '</td>\
+                                            <td><img class="typeimg" src="https://play.pokemonshowdown.com/sprites/categories/' + info[10][i][4] + '.png" alt="' + info[10][i][4] + '"></td>\
+                                            <td class="number">' + info[10][i][6] + '%</td>\
+                                        </tr>'
+
+                            console.log(newMove)
+
+                            $('#pokemonmovestable').append(newMove);
+                            // $('#pokemonmovestable tr:last').attr('desc', info[10][i][5]);
+
                         }
-                        
+
                         //11 - update items
-                        $('#pokemonitemstable').empty();
-                        newRow = '<tr><td><p class="tooltip" desc="Each Pokemon can hold a single item. Here are some items commonly held on this Pokemon." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Items: </p></td></tr>'
-                        $('#pokemonitemstable').append(newRow);
+                        $('#pokemonitemstable tr:not(:first)').remove();
                         for(var i = 0; i < info[11].length; i++){
 
                             if(info[11][i][0] < 15){
+                                if(i == 0){
+                                    $('#pokemonitemstable').append('<tr><td colspan="3">No items above 15% usage.</td></tr>')
+                                }
                                 break
                             }
 
-                            serachName = info[11][i][1].replace(/ /g, '').toLowerCase();
-                            newRow = '<tr class="tooltip" desc=""><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[11][i][0] + '% ' + info[11][i][1] + '</p></td><td><img class= "itemimg" style="display:inline; vertical-align:middle;" src="https://www.serebii.net/itemdex/sprites/sv/' + serachName + '.png" alt="???"></td></tr>'
-                            $('#pokemonitemstable').append(newRow);
-                            $('#pokemonitemstable tr:last').attr('desc', info[11][i][2]);
+                            searchName = info[11][i][1].replace(/ /g, '').toLowerCase();
+
+                            newItem =   '<tr class="tooltip" desc="' + info[11][i][2] + '">\
+                                            <td><img class="itemimg whiteimgoutline" src="https://www.serebii.net/itemdex/sprites/sv/' + searchName + '.png" alt="???"></td>\
+                                            <td class="name">' + info[11][i][1] + '</td>\
+                                            <td>' + info[11][i][0] + '%</td>\
+                                        </tr>'
+
+                            $('#pokemonitemstable').append(newItem);
+                            // $('#pokemonitemstable tr:last').attr('desc', info[11][i][2]);
                         }
 
                         //12 - update teammates
-                        $('#pokemonteammatestable').empty();
-                        newRow = '<tr><td><p class="tooltip" desc="Some Pokemon synergize well with one another. Here are some common teammates. What could the reason be?" style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Teammates: </p></td></tr>'
-                        $('#pokemonteammatestable').append(newRow);
+                        $('#pokemonteammatestable tr:not(:first)').remove();
                         for(var i = 0; i < info[12].length; i++){
 
                             if(info[12][i][0] < 15){
+                                if(i == 0){
+                                    $('#pokemonteammatestable').append('<tr><td colspan="3">No teammates above 15% usage.</td></tr>')
+                                }
                                 break
                             }
 
-                            newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[12][i][0] + '% ' + info[12][i][1] + '</p></td> <td><a href="javascript:"><img class="teammatesimg" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/gen5/' + info[12][i][2] + '.png" alt="???" onmousedown="searchTeammate(&quot;' + info[12][i][1] + '&quot;);"></a></td></tr>'
-                            $('#pokemonteammatestable').append(newRow);
+                            newTeammate =   '<tr>\
+                                                <td><a href="javascript:"><img class="itemimg whiteimgoutline" src="https://play.pokemonshowdown.com/sprites/gen5/' + info[12][i][2] + '.png" alt="' + info[12][i][1] + '" onmousedown="searchTeammate(&quot;' + info[12][i][1] + '&quot;);"></a></td>\
+                                                <td class="name">' + info[12][i][1] + '</td>\
+                                                <td>' + info[12][i][0] + '%</td>\
+                                            </tr>'
+
+                            $('#pokemonteammatestable').append(newTeammate);
+
                         }
 
                         //13 - update image
                         showing = info[13]
                         updatePokemonSprite()
-
-                        $('#pokemonwarningsdiv').empty();
-                        newRow = '<p style="text-align: center; font-weight: bold; font-size: 12px;"><img style="vertical-align: middle; width: 24px; height: auto; margin-right: 2px" src="esprite.png" alt="!">Warnings:</p>'
-                        $('#pokemonwarningsdiv').append(newRow);
-                        $('#pokemonwarningsrow').hide();
-
-                        //end - warnings?
-                        for(var i = 0; i < info[10].length; i++){
-
-                            newRow = ''
-
-                            //moves
-                            switch(info[10][i][1]){
-
-                                case "Fake Out":
-                                    newRow = '<p><abbr>Fake Out</abbr>: Fake Out is a move with +3 priority that flinches its target. It is only successful on the first turn the Pokemon is in battle, but reset each time the Pokemon switches out and back in. Consider protecting one or both of your Pokemon to ensure the Pokemon will not be able to use it next turn. If you have a Pokemon with abilities Psychic Surge or Armor Tail consider switching those Pokemon in to protect aganist moves with increased priority.</p>';
-                                    break;
-
-                                case "Extreme Speed":
-                                    newRow = '<p><abbr>Extreme Speed</abbr>: Extreme Speed is a move with +2 priority. If you have a Pokemon with abilities Psychic Surge or Armor Tail consider switching those Pokemon in to protect aganist moves with increased priority. Redirection is also possible with moves such as Follow Me and Rage Powder if the user is faster than the Extreme Speed user.</p>';
-                                    break;
-
-                                case "Spore":
-                                    newRow = '<p><abbr>Spore</abbr>: Spore is a powerful move with a 100% chance to put the foe to sleep. Spore is considered a powder move. Since Generation 6, <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Grass.png" alt="GRASS"> type Pokemon are unaffected by powder moves. Pokemon with the Safety Goggles item are also not affected by powder moves.</p>';
-                                    break;
-
-                                case "Grassy Glide":
-                                    newRow = '<p><abbr>Grassy Glide</abbr>: Grassy Glide is a move with +1 priority in Grassy Terrain. Many Pokemon have recently been given access to this move and can catch players off guard.</p>';
-                                    break;
-
-                                case "Thunderclap":
-                                    newRow = '<p><abbr>Thunderclap</abbr>: Thunderclap is a strong move with +1 priority but will fail if the target does not select an attacking move (<img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Physical.png" alt="Physical Symbol"> or <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Special.png" alt="Special Symbol">). If you have a Pokemon with abilities Psychic Surge or Armor Tail consider switching those Pokemon in to protect aganist moves with increased priority. Consider switching in a <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Ground.png" alt="GROUND"> type Pokemon immune to <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Electric.png" alt="ELECTRIC"> type attacks. Currently only seen on Raging Bolt who likes to use Calm Mind to boost SPATK and SPDEF and attempt to sweep.</p>';
-                                    break;
-
-                                case "Sucker Punch":
-                                    newRow = '<p><abbr>Sucker Punch</abbr>: Sucker Punch is a strong move with +1 priority but will fail if the target does not select an attacking move (<img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Physical.png" alt="Physical Symbol"> or <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Special.png" alt="Special Symbol">). If you have a Pokemon with abilities Psychic Surge or Armor Tail consider switching those Pokemon in to protect aganist moves with increased priority.</p>';
-                                    break;
-
-                                case "Quiver Dance":
-                                    newRow = '<p><abbr>Quiver Dance</abbr>: Quiver Dance is a powerful set up move that boosts the users SPATK, SPDEF, and SPD by one stage. Commonly used on Pokemon such Volcarona who attempt to power up and sweep. Moves such as Haze to reset all stage changes on the field and Taunt to force the opponent to attack can be effective at stopping such a set up.</p>';
-                                    break;
-
-                                case "Beat Up":
-                                    newRow = '<p><abbr>Beat Up</abbr>: Beat Up has one purpose, to activate a partners Pokemons Justified ability. The Beat Up user will attack their own Justified Pokemon to increase their attack by up to 4x. Consider focusing one of the two Pokemon and eliminating them before a set up is possible. Redirection is also a powerful option to stop such setups, moves like Follow Me and Rage Powder can redirect attacks to the user and stop Beat Up from ever touching the Justified Pokemon. Beat Up is also sometimes used to activate a Pokemons Rattled ability.</p>';
-                                    break;
-
-                                case "Tailwind":
-                                    newRow = '<p><abbr>Tailwind</abbr>: Tailwind is a powerful setup move where for 4 turns, the user and its party members have their SPD doubled. Commonly run on Pokemon with the Prankster ability who can set up the Tailwind with +1 priority. Setting up a Tailwind of your own or using Trick Room to invert the SPD of all Pokemon are both effective responses to anticipating Tailwind.</p>';
-                                    break;
-
-                                case "Trick Room":
-                                    newRow = '<p><abbr>Trick Room</abbr>: Trick Room is a setup move with -7 priority that for 5 turns lets slower Pokemon move first. Effectively inverting the SPD of all Pokemon on the battlefield. If you would not like Trick Room to be up, consider using Trick Room yourself to cancel it out. Using moves such as Taunt to stop a Pokemon from using Trick Room can be effective. Simply focusing a Trick Room setter is also often times acceptable. Keep in mind many Trick Room setters will be accompanied by Pokemon with redirection to protect them.</p>';
-                                    break;
-
-                                case "Wide Guard":
-                                    newRow = '<p><abbr>Wide Guard</abbr>: Wide Guard is a +3 priority move used to protect aganist spread moves (attacking moves that target multiple Pokemon). Unlike Protect which has a 1/X chance of being successful where X is the number of subsequent successes, Wide Guard does not have a chance to fail but still modifies the same 1/X chance that Protect uses. This means that Protect has a chance to fail after using Wide Guard.</p>';
-                                    break;
-
-                                case "Aurora Veil":
-                                    newRow = '<p><abbr>Aurora Veil</abbr>: Aurora Veil is a setup move where for 5 turns the user and its party members take 0.5x damage in Single Battles and 0.66x damge in Double Battles. This move will fail unless the weather is Snow. This move does not stack with Reflect or Light Screen. The easiest way to stop a Pokemon from setting up Aurora Veil is to change the weather, this could be by switching in a Pokemon you have with an ability that summons Weather. Screens/Veils can also be broken with the moves Brick Break and Psychic Fangs.</p>';
-                                    break;
-                            }
-
-                            if(newRow != ''){
-                                $('#pokemonwarningsdiv').append(newRow);
-                                $('#pokemonwarningsdiv').show();
-                            }
-                            
-                        }
-
-                        if(info[0] == 0){
-
-                            for(var i = 0; i < info[7].length; i++){
-
-                                newRow = ''
-
-                                switch(info[7][i][1]){
-                                    case "Drizzle":
-                                        newRow = '<p><abbr>Drizzle</abbr>: Drizzle</p>';
-                                        break;
-                                }
-
-                                if(newRow != ''){
-                                    $('#pokemonwarningsdiv').append(newRow);
-                                    $('#pokemonwarningsdiv').show();
-                                }
-                            }
-                        }
-                            //fakeout
-                            //espeed
-                            //spore
-                            //grassy glide
-                            //thunder clap
-                            //sucker punch
-                            //quiver dance
-                            
-                            //drought
-                            //drizzle
-                            //snow warning
-                            //sandstorm
-
-                            //flashfire
-                            //water absorb
-                            //storm drain
-                            //lighting rod
-                            //volt absorb
-                            //sap sipper
-                            //levitate
-                            //motordrive
-                            //sound proof
-
-                            //grassy terrain
-                            //psychic terrain
-                            //armor tail
-
-                            //prankster
-                            //wind rider
-                            //tailwind
-                            //trickroom
-
-                            //justified
-
-                            //wide guard
-                            //aurora veil
-
-                            //armagrogue + iron bundle
-                            //dragonite + chein pao
-                            //torkoal + lilligant hisui
-                            //indeedee-f + expanding force
                             
                         //successful so remove did you mean
-                        $('#didyoumeantable').empty();
-                        newRow = '<td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Did You Mean? </p></td>'
-                        $('#didyoumeantable').append(newRow);
-                        
+                        $('#didyoumeanpokemontable').empty();
+                        $('#didyoumeanpokemon').hide();
+
                         //update
                     }else{
                         //must be -1, return error/invalid
-                        $('#didyoumeantable').empty();
-                        newRow = '<td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Did You Mean? </p></td>'
-                        $('#didyoumeantable').append(newRow);
-
+                        $('#didyoumeanpokemontable').empty();
                         for(var i = 0; i < info[1].length; i++){
-                            newRow = '<tr><td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">' + info[1][i][0] + '</p></td> <td><a href="javascript:"><img class="teammatesimg" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/gen5/' + info[1][i][1] + '.png" alt="???" onmousedown="searchTeammate(&quot;' + info[1][i][0] + '&quot;);"></a></td></tr>'
-                            $('#didyoumeantable').append(newRow);
+
+                            newRow =    '<tr>\
+                                            <td>' + info[1][i][0] + '</td>\
+                                            <td><a href="javascript:"><img class="itemimg whiteimgoutline" src="https://play.pokemonshowdown.com/sprites/gen5/' + info[1][i][1] + '.png" alt="???" onmousedown="searchTeammate(&quot;' + info[1][i][0] + '&quot;);"></a></td>\
+                                        </tr>'
+
+                            $('#didyoumeanpokemontable').append(newRow);
                         }
+                        $('#didyoumeanpokemon').show();
                     }
+
+                    $('#loadingpokemon').hide()
                 }, pokemon);
             }
 
@@ -422,65 +337,136 @@
                 });
             }
 
+            function updatePokemonSprite(){
+                if(shiny){
+                    $("#pokemonimage").attr("src", "https://play.pokemonshowdown.com/sprites/gen5-shiny/" + showing + ".png")
+                }else{
+                    $("#pokemonimage").attr("src", "https://play.pokemonshowdown.com/sprites/gen5/" + showing + ".png")
+                }
+            }
+
             function searchTeammate(pokemon){
                 console.log(pokemon)
                 $('#searchpokemonfield').val(pokemon)
                 searchPokemon();
             }
 
-            function pokemonImgName(pokemon, callback){
-
-                getPokemonImgName(function(pokemonImageName){
-                    console.log(pokemonImageName)
-                    callback(pokemonImageName)
-                }, pokemon);
-            }
-
-            function getPokemonImgName(callback, pokemon) {
-
-                var url = pokemon + ".pkimg";
-
-                $.get(url, function(data) {
-                    callback(data);
-                });
-            }
-
-            function updatePokemonSprite(){
-                if(shiny){
-                    $("#pokemonImage").attr("src", "https://play.pokemonshowdown.com/sprites/gen5-shiny/" + showing + ".png")
-                }else{
-                    $("#pokemonImage").attr("src", "https://play.pokemonshowdown.com/sprites/gen5/" + showing + ".png")
+            $(document).ready(function(){
+                openTab($("#movetabbutton"), 'Moves');
+                $("#movetabbutton").addClass("active");
+                $('#searchpokemonfield').on('keydown', function(event) {
+                if (event.key === "Enter") {
+                    searchPokemon();
                 }
+            });
+            });
+
+            function openTab(evt, tabName) {
+                $(".tabcontent").hide();
+                $(".tablinks").removeClass("active");
+                $("#" + tabName).show();
+                $(evt.currentTarget).addClass("active");
+            }
+
+            function toggleWarnings(){
+                $("#Warnings").toggle();
+            }
+
+            function toggleMatchups(){
+                $("#Matchups").toggle();
+            }
+
+            function toggleStats(){
+                $("#Stats").toggle();
+            }
+
+            function updateMinMinMaxMax(){
+
+                level = $('#pokemonlevel').val()
+
+                if(isNaN(level)){
+                    level = 100;
+                }
+
+                if(level > 100 || level < 1){
+                    level = 100;
+                }
+
+                //hp
+                statsIds = ['#hpmin', '#hpmax']
+                stat = $("#pokemonhp").text()
+                calc1 = HPStatCalc(Number(stat), 31, 0, Number(level))
+                calc2 = HPStatCalc(Number(stat), 31, 252, Number(level))
+                $('#hpmin').text(calc1)
+                $('#hpmax').text(calc2)
+
+                //the rest
+                statsIds = ['#pokemonatk', '#pokemondef', '#pokemonspatk', '#pokemonspdef', '#pokemonspd']
+                stats = ['atk','def','spatk','spdef','spd']
+                configs = ['minm','min','max','maxm']
+                ivevnatures = [[0,0,0.9],[31,0,1],[31,252,1],[31,252,1.1]]
+
+                for(var i = 0; i < 5; i++){
+                    for(var j = 0; j < 4; j++){
+                        id = '#' + stats[i] + configs[j]
+                        stat = $(statsIds[i]).text()
+                        calc = notHPStatCalc(Number(stat), Number(ivevnatures[j][0]), Number(ivevnatures[j][1]), Number(level), Number(ivevnatures[j][2]))
+                        $(id).text(calc)
+                    }
+                }
+            }
+
+            function notHPStatCalc(stat, iv, ev, level, nature){
+                return Math.floor((Math.floor(((2 * stat + iv + Math.floor(ev / 4)) * level)/100) + 5) * nature)
+            }
+
+            function HPStatCalc(stat, iv, ev, level){
+                return Math.floor(((2 * stat + iv + Math.floor(ev / 4)) * level)/100) + level + 10
+            }
+
+            function customSpreadCalc(row){
+
+                level = $('#pokemonlevel').val()
+
+                if(isNaN(level)){
+                    level = 100;
+                }
+
+                if(level > 100 || level < 1){
+                    level = 100;
+                }
+
+                level = Number(level)
+
+                hp = Number($('#pokemonhp').text())
+                hpev = Number($('#pokemonspreadstable tr:eq(' + row + ') td:eq(1)').text())
+                calc = HPStatCalc(hp, 31, hpev, level)
+                $('#hpcus').text(calc)
                 
-            }
+                stats = ['atk','def','spatk','spdef','spd']
+                for(var i = 0; i < 5; i++){
+                    id = '#' + stats[i] + 'cus'
+                    statId = '#pokemon' + stats[i]
+                    statColumn = i + 2;
 
-            function toggleShiny(){
-                if(shiny){
-                    shiny = false;
-                }else{
-                    shiny = true;
-                }
-                updatePokemonSprite()
-            }
+                    stat = Number($(statId).text())
+                    statev = Number($('#pokemonspreadstable tr:eq(' + row + ') td:eq(' + statColumn + ')').text())
 
-            function toggleTypeChart(){
-                if(typeChart){
-                    $("#typecharttable").hide()
-                    typeChart = false;
-                }else{
-                    $("#typecharttable").show()
-                    typeChart = true;
-                }
-            }
+                    boon = $('#pokemonspreadstable tr:eq(' + row + ') td:eq(8)').text()
+                    bane = $('#pokemonspreadstable tr:eq(' + row + ') td:eq(9)').text()
 
-            function toggleHelpTable(){
-                if(helpTable){
-                    $("#helptable").hide()
-                    helpTable = false;
-                }else{
-                    $("#helptable").show()
-                    helpTable = true;
+                    nature = 1
+
+                    if(boon.toLowerCase() == stats[i]){
+                        nature = 1.1
+                    }else if(bane.toLowerCase() == stats[i]){
+                        nature = 0.9
+                    }
+
+                    calc = notHPStatCalc(stat, 31, statev, level, nature)
+                    $(id).text(calc)
                 }
+
             }
 
             function barColor(stat){
@@ -504,70 +490,152 @@
             }
 
             function barLength(stat){
-                return stat * 1.4;
+                return stat / 200 * 15;
             }
 
-            function updateDidYouMeanFormats(formats){
-                //must be -1, return error/invalid
-                $('#didyoumeanformatstable').empty();
-                newRow = '<td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Did You Mean? </p></td>'
-                $('#didyoumeanformatstable').append(newRow);
+            function customSpreadOn(row){
+                customSpreadCalc(row)
+                $(".customspread").show();
+            }
 
-                for(var i = 0; i < formats.length; i++){
-                    newRow = '<tr><td><a href="javascript:"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" onmousedown="setDidYouMeanFormat(&quot;'+ formats[i] +'&quot;);">' + formats[i] + '</p></a></td></tr>'
-                    $('#didyoumeanformatstable').append(newRow);
+            function customSpreadOff(){
+                $(".customspread").hide();
+            }
+
+            function toggleTypeChart(){
+                if(typeChart){
+                    $("#typecharttable").hide()
+                    typeChart = false;
+                }else{
+                    $("#typecharttable").show()
+                    typeChart = true;
                 }
             }
 
-            function setDidYouMeanFormat(format){
-                $('#getformat').val(format)
-                setFormat();
-            }
-
         </script>
-
         <style>
-            
             body{
-                margin-bottom: 100vh;
                 margin: 0;
-                padding: 0;
-                text-align: center;
+                margin-left: 35vw;
+                margin-right: 35vw;
                 color: white;
                 font-family: Arial, sans-serif;
+                font-size: 18px;
                 background: #424B54;
             }
 
-            #getelobody{
-                display: none;
+            .newsection{
+                margin-top: 10px
             }
 
-            #mainbody {
-                display: none;
+            nav{
+                margin-left: -35vw;
+                margin-right: -35vw;
+                align-items: center;
+                background: #2C2F33;
+                overflow: hidden;
+                font-size: 18px;
+                padding-bottom: 10px;
+                padding-left: 10px;
+                padding-right: 10px;
+                border-bottom: 2px solid white;
             }
 
-            .rectangle {
-                width: 200px;
-                height: 10px;
-                background-color: #3498db;
-                border: 2px solid #2980b9;
-                border-radius: 5px;
+            nav ul{
+                padding: 0;
+                margin: 0;
+                display: inline-block;
+                line-height: 1px;
+                list-style-type: none;
             }
 
-            .graybg {
-                background-color: #2b3036;
-                border-width: 2px;
-                border-color: #dfdfdf;
-                border-style: solid;
+            nav li{
+                display: inline;
+            }
+
+            nav div{
+                display: inline-block;
+            }
+
+            .badge{
+                margin: 0;
+                position: absolute;
+                top: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            div{
+                overflow: hidden;
+            }
+
+            .divl{
+                float: left;
+            }
+
+            .divr{
+                float: right;
+            }
+
+            .divc{
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+            }
+
+            .divc p{
+                margin: 0;
+            }
+
+            .divinline p{
+                display: inline;
+            }
+
+            .userinput {
+                font-size: 18;
+            }
+
+            .inputnumber {
+                width: 3vw;
+            }
+
+            .pokemonname {
+                font-size: 36;
+                font-weight: bold;
+            }
+
+            .pokemonrank {
+                font-size: 18;
+                font-weight: lighter;
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+            .legalbadge {
+                border: 2px solid white;
                 border-radius: 3px;
+                background: #2C2F33;
+                padding: 2px;
+                margin-bottom: 10px;
+                margin-top: 10px;
             }
 
-            .bluebg {
-                background-color: #69aaf8;
-                border-width: 2px;
-                border-color: #dfdfdf;
-                border-style: solid;
-                border-radius: 3px;
+            .typeimg {
+                width: 48px;
+                height: auto;
+            }
+
+            .itemimg {
+                width: 64px;
+                height: auto;
+            }
+
+            .whiteimgoutline {
+
+                filter: drop-shadow(1px 1px 0 white) 
+                        drop-shadow(-1px -1px 0 white)
+                        drop-shadow(1px -1px 0 white)
+                        drop-shadow(-1px 1px 0 white);
+
             }
 
             .imagebg {
@@ -581,33 +649,293 @@
                 background-size: 100%;
             }
 
-            .tcbg {
-                background-color: #000000;
+            .graybg {
+                background-color: #2b3036;
                 border-width: 2px;
                 border-color: #dfdfdf;
                 border-style: solid;
                 border-radius: 3px;
-                background-image: url("tctable.png");
-                background-repeat: no-repeat;
-                background-size: 100%;
             }
 
-            .itemimg{
-                width: 24px;
-                height: auto;
-                filter: drop-shadow(1px 1px 0 white) 
-                        drop-shadow(-1px -1px 0 white)
-                        drop-shadow(1px -1px 0 white)
-                        drop-shadow(-1px 1px 0 white);
+            .ulh {
+                padding: 0;
+                margin: 0;
+                display: inline-block;
+                list-style-type: none;
             }
 
-            .teammatesimg{
-                width: 48px;
-                height: auto;
-                filter: drop-shadow(1px 1px 0 white) 
-                        drop-shadow(-1px -1px 0 white)
-                        drop-shadow(1px -1px 0 white)
-                        drop-shadow(-1px 1px 0 white);
+            .ulh li{
+                display: inline;
+            }
+
+            .ulh div{
+                display: inline-block;
+            }
+
+            .ulv {
+                padding: 0;
+                margin: 0;
+                list-style-type: none;
+            }
+            
+            .ulv p{
+                margin: 4;
+            }
+
+            .height100 {
+                height: 100px;
+            }
+
+            .tab {
+                overflow: hidden;
+                border-width: 2px;
+                border-color: #ffffff;
+                border-style: solid;
+                border-radius: 6px;
+                background-color: #2b3036;
+            }
+
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                color: white;
+                padding: 14px 16px;
+                transition: 0.3s;
+                font-size: 18px;
+            }
+
+            .tab button:hover {
+                background-color: #424B54;
+            }
+
+            .tab button.active {
+                background-color: #424B54;
+            }
+
+            .tabcontent {
+                display: none;
+                border-width: 2px;
+                border-color: #aaaaaa;
+                border-style: solid;
+                border-radius: 6px;
+                border-top: none;
+                background-color: #2b3036;
+            }
+
+            .dropdown {
+                overflow: hidden;
+                border-width: 2px;
+                border-color: #ffffff;
+                border-style: solid;
+                border-radius: 6px;
+                background-color: #2b3036;
+            }
+
+            .dropdown button {
+                text-align: left;
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                color: white;
+                width: 100%;
+                padding: 14px 16px;
+                transition: 0.3s;
+                font-size: 18px;
+            }
+
+            .dropdown button:hover {
+                background-color: #424B54;
+            }
+
+            .dropdowncontent {
+                border-width: 2px;
+                border-color: #aaaaaa;
+                border-style: solid;
+                border-radius: 6px;
+                border-top: none;
+                background-color: #2b3036;
+            }
+
+            .stattable{
+                width: 100%;
+                display: table;
+                border-collapse: separate;
+                box-sizing: border-box;
+                text-indent: initial;
+                unicode-bidi: isolate;
+                border-spacing: 2px;
+                border-color: gray;
+            }
+
+            .stattable tr:hover{
+                background-color: #424B54;
+            }
+
+            .stattable th{
+                text-align: right;
+            }
+
+            .stattable abbr{
+                font-weight: bold;
+                text-decoration: underline;
+            }
+
+            .statbar {
+                width: 15vw;
+                height: 12px;
+                background-color: #c5c5c5;
+                border: 2px solid #a4a4a4;
+                border-radius: 5px;
+            }
+
+            .stat {
+                text-align: right;
+            }
+
+            .ministat {
+                text-align: center;
+            }
+
+            .movestable {
+                width: 100%;
+                display: table;
+                border-collapse: separate;
+                box-sizing: border-box;
+                text-indent: initial;
+                unicode-bidi: isolate;
+                border-spacing: 2px;
+                border-color: gray;
+            }
+
+            .movestable tr:hover{
+                background-color: #424B54;
+            }
+
+            .movestable th{
+                text-align: left;
+            }
+
+            .movestable td{
+                text-align: left;
+            }
+
+            .itemstable {
+                width: 100%;
+                display: table;
+                border-collapse: separate;
+                box-sizing: border-box;
+                text-indent: initial;
+                unicode-bidi: isolate;
+                border-spacing: 2px;
+                border-color: gray;
+            }
+
+            .itemstable tr:hover{
+                background-color: #424B54;
+            }
+
+            .itemstable th{
+                text-align: left;
+            }
+
+            .itemstable td{
+                text-align: left;
+            }
+
+            .teammatestable {
+                width: 100%;
+                display: table;
+                border-collapse: separate;
+                box-sizing: border-box;
+                text-indent: initial;
+                unicode-bidi: isolate;
+                border-spacing: 2px;
+                border-color: gray;
+            }
+
+            .teammatestable tr:hover{
+                background-color: #424B54;
+            }
+
+            .teammatestable th{
+                text-align: left;
+            }
+
+            .teammatestable td{
+                text-align: left;
+            }
+
+            .spreadstable {
+                width: 100%;
+                display: table;
+                border-collapse: separate;
+                box-sizing: border-box;
+                text-indent: initial;
+                unicode-bidi: isolate;
+                border-spacing: 2px;
+                border-color: gray;
+            }
+
+            .spreadstable tr:hover{
+                background-color: #424B54;
+            }
+
+            .spreadstable th{
+                text-align: left;
+            }
+
+            .spreadstable td{
+                text-align: left;
+            }
+
+            .customspread{
+                display: none;
+                color: orange;
+            }
+
+            .name {
+                font-weight: bold;
+            }
+
+            .usage {
+                width: 5vw;
+            }
+
+            .number {
+                width: 3vw;
+            }
+
+            .tableimg{
+                width: 3vw;
+            }
+
+            .label{
+                font-weight: bold;
+            }
+
+            .abl{
+                text-decoration: underline;
+                display: inline
+            }
+
+            .ev{
+                width: 2.25vw;
+            }
+
+            .natureIncDec{
+                width: 3vw;
+            }
+
+            .loading{
+                display: none;
+                height: 24px;
+                width: auto;
+                vertical-align: middle;
             }
 
             .tooltip::after {
@@ -626,45 +954,102 @@
                 display: block;
             }
 
-            nav ul{
-                display: inline;
-                list-style-type: none;
-                overflow: auto;
-                margin: 0;
-                padding: 0;
+            .matchupstable {
+                width: 100%;
+                display: table;
+                border-collapse: separate;
+                box-sizing: border-box;
+                text-indent: initial;
+                unicode-bidi: isolate;
+                border-spacing: 2px;
+                border-color: gray;
             }
 
-            nav button{
-                display: inline;
-                
+            .matchupstable tr:hover{
+                background-color: #424B54;
             }
 
-            nav h2{
-                display: inline;
-            }
-                
-
-            nav li{
-                display: inline;
-                margin: 0;
-                padding: 0;
+            .matchupstable th{
+                text-align: left;
             }
 
-            .imgwhiteborder{
-                
-                filter: drop-shadow(1px 1px 0 white) 
-                        drop-shadow(-1px -1px 0 white)
-                        drop-shadow(1px -1px 0 white)
-                        drop-shadow(-1px 1px 0 white);
+            .matchupstable td{
+                text-align: left;
+            }
+
+            .typechartdiv{
+                width: 30vw;
+                height: auto;
+                border: 2px solid #ffffff;
+                border-radius: 5px;
+                background-color:#2b3036;
+            }
+
+            .typechart{
+                width: 30vw;
+                height: auto;
+                border: 1px solid #c6c6c6;
+                border-radius: 5px;
+            }
+
+            .navmiddle{
+                margin-top: 20;
+            }
+
+            .dymdiv{
+                display: none;
+                width: 10vw;
+            }
+
+            .dymtable{
+                width: 100%;
+                display: table;
+                border-collapse: separate;
+                box-sizing: border-box;
+                text-indent: initial;
+                unicode-bidi: isolate;
+                border-spacing: 2px;
+                border-color: gray;
+            }
+
+            .dymtable tr:hover{
+                background-color: #424B54;
+            }
+
+            .dymtable td{
+                text-align: center;
+            }
+
+            .dymfdiv{
+                display: none;
+                position: absolute;
+                margin-left: -34.5vw;
+                margin-right: -34.5vw;
+                margin-top: 1vh;
+                width: 10vw;
+            }
+
+            .dymftable{
+                width: 100%;
+                display: table;
+                border-collapse: separate;
+                box-sizing: border-box;
+                text-indent: initial;
+                unicode-bidi: isolate;
+                border-spacing: 2px;
+                border-color: gray;
+            }
+
+            .dymftable tr:hover{
+                background-color: #424B54;
+            }
+
+            .dymftable td{
+                text-align: center;
             }
 
             a{
-                color: rgb(207, 236, 255);
-            }
-
-            abbr {
-                font-style: italic;
-                color: #FAA10C;
+                color: orange;
             }
 
         </style>
@@ -672,377 +1057,309 @@
     </head>
 
     <body>
-        <!-- get format -->
-        <div id="getformatbody">
-            <h2 style="margin-top:5px;">YogonDexLite</h2>
-            <p>Please Input A Format:</p>
-            <input id="getformat" name="getformat" value="gen9doublesou" />
-            <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="setFormat();" id="setFormatButton">Set Format</button>
-        </div>
 
-        <!-- get elo -->
-        <div id="getelobody">
-            <h2 style="margin-top:5px;">YogonDexLite</h2>
-            <p>Please Input Your Elo:</p>
-            <input id="getelo" name="getelo" value="1000" />
-            <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="setElo();" id="setEloButton">Set Elo</button>
-        </div>
+        <!-- nav bar -->
+        <nav>
+            <div class="divl">
+                <ul class="ulh">
+                    <li><p id="currentformat">Current Format: gen9doublesou</p></li>
+                    <li><input id="getformat" class="userinput" value="gen9doublesou"><button class="userinput" onclick="setFormat()">Set Format</button><img id="loadingformat" class="loading" src="loading.gif" alt="Loading..."></li>
+                </ul>
+                <ul class="ulh">
+                    <li><p id="currentelo">Current Elo: 1000</p></li>
+                    <li><input id="getelo" class="userinput inputnumber" value="1000"><button class="userinput" onclick="setElo()">Set Elo</button></li>
+                </ul>
+            </div>
 
-        <!-- mainpage -->
-        <div id="mainbody">
+            <h1 class="badge">YogonDexLite</h1>
 
-            <nav style="position:absolute; left: 10px; top: 10px;"><ul>
-                <li>
-                    <input id="getformat" name="getformat" value="gen9doublesou" />
-                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="setFormat();" id="setFormatButton">Set Format</button>
-                    <p style="display:inline; vertical-align:middle; font-size: 12;" id="currentformat"></p>
-                </li>
-                <li>
-                    <input id="getelo" name="getelo" value="1000" />
-                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="setElo();" id="setEloButton">Set Elo</button>
-                    <p style="display:inline; vertical-align:middle; font-size: 12;" id="currentelo"></p>
-                </li>
-            </ul></nav>
+            <div class="divr navmiddle">
+                <button class="userinput" onclick="toggleTypeChart()">Type Chart</button>
+                <button class="userinput">Help</button>
+            </div>
+        </nav>
 
-            <nav style="position:absolute; right: 10px; top: 10px;"><ul>
-                <li>
-                    <p style="display:inline; vertical-align:middle; font-size: 12;">Type Chart: </p>
-                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="toggleTypeChart();" id="typechartbutton">Type Chart</button>
-                </li>
-                <li>
-                    <p style="display:inline; vertical-align:middle; font-size: 12;">Help: </p>
-                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="toggleHelpTable();" id="helpbutton">?</button>
-                </li>
-            </ul></nav>
-
-            <h2 style="margin-top:5px;">YogonDexLite</h2>
-
-            <div class="graybg"></div>
-
-            <!-- did you mean formats -->
-            <table class="graybg" id="didyoumeanformatstable" style="position:absolute; left: 10px; top: 60px;">
-
+        <!-- did you mean this format?-->
+        <div id="didyoumeanformat" class="divc dymfdiv graybg">
+            <p>Did You Mean?</p>
+            <table id="didyoumeanformattable" class="dymftable">
                 <tr>
-                    <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Did You Mean? </p></td>
-                </tr>
-                
-            </table>
-
-            <!-- typechart -->
-            <table class="tcbg" id="typecharttable" style="position:absolute; right: 10px; top: 60px; display: none;">
-                <tr>
-                    <td><div style="width: 600px; height: 600px;"></div></td>
+                    <td>A Format</td>
                 </tr>
             </table>
+        </div>
 
-            <!-- help table -->
-            <table class="graybg" id="helptable" style="position:absolute; right: 10px; top: 60px; display: none;">
-                <tr>
-                    <td>
-                        <div style="width: 600px; height: 800px; overflow: auto; font-size: 12px;">
+        <!-- big div -->
+        <div>
 
-                            <p style="text-align: center; font-weight: bold; font-size: 16px;">Help Menu</p>
+            <!-- searching -->
+            <div class="divc divinline newsection">
+                <p>Search Pokemon: </p><input id="searchpokemonfield" class="userinput" value="Raging Bolt"><button class="userinput" onclick="searchPokemon()">Search</button>
+                <img id="loadingpokemon" class="loading" src="loading.gif" alt="Loading...">
+            </div>
 
-                            <p style="font-weight: bold; font-size: 16px;">Types:</p>
-                            <p style="margin-left: 12px;">Each Pokemon can have 1-2 types. Each type has their own unique offensive and defensive profile which can be observed on the Type Chart. Defensively, if a Pokemon has two types the properties of both types will combine for the better or worse. Suppose we have a <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Ground.png" alt="GROUND"> and <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Flying.png" alt="FLYING"> Pokemon, as a <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Flying.png" alt="FLYING"> type we are weak to <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Electric.png" alt="ELECTRIC">, but this is not a problem because <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Ground.png" alt="GROUND"> is immune to <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Electric.png" alt="ELECTRIC"> type attacks and we lose the weakness. A downside of this combonation is that we are now 4x weak to <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/Ice.png" alt="ICE"> which hits both of our types for 2x super-effective damage.</p>
-                                
-                            <p style="font-weight: bold; font-size: 16px;">Abilities:</p>
-                            <p style="margin-left: 12px;">Each Pokemon can have 1-3 abilities to select from which provide unique effects. You can only select one per Pokemon. Abilities are extremely important to a Pokemons viablity and should be observed closely.</p>
-                                
-                              
-                            <p style="font-weight: bold; font-size: 16px;">Defensive Matchups:</p>
-                            <p style="margin-left: 12px;">Defensive Matchups are straightforward once the concept of types are understood. The table is for the convinience of those who do not have the type chart memorized.</p>
+            <!-- did you mean this pokemon?-->
+            <div id="didyoumeanpokemon" class="divc dymdiv graybg">
+                <p>Did You Mean?</p>
+                <table id="didyoumeanpokemontable" class="dymtable">
+                    <tr>
+                        <th>Pokemon</th>
+                        <th class="tableimg">Image</th>
+                    </tr>
+                    <tr>
+                        <td>Pokemon</td>
+                        <td>Image</td>
+                    </tr>
+                </table>
+            </div>
 
-                            <p style="font-weight: bold; font-size: 16px;">Base Stats:</p>
-                            <p style="margin-left: 12px;">Each Pokemon has their own <abbr>Base Stat Spread</abbr> which are not to be confused with <abbr>EV Spreads</abbr> which are referred to as <abbr>Spreads</abbr> and are covered later. Below is an overview of the significance of each <abbr>Base Stat.</abbr></p>
-                            <p style="margin-left: 24px;"><abbr>HP</abbr> (Hit Points) can be understood as the number of Hit Points a Pokemon can have.</p>
-                            <p style="margin-left: 24px;"><abbr>ATK</abbr> (Attack) can be understood as the stat that dictates how much damage the Pokemons physical attacks will do. Moves which are physical are denoted with a <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Physical.png" alt="Physical Symbol">.</p>
-                            <p style="margin-left: 24px;"><abbr>DEF</abbr> (Defense) can be understood as the stat that dictates how much damage your Pokemon will take from others phyical attacks.</p>
-                            <p style="margin-left: 24px;"><abbr>SPATK</abbr> (Special Attack) can be understood as the stat that dictates how much damage the Pokemons special attacks will do. Moves which are special are denoted with a <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Special.png" alt="Special Symbol"></p>
-                            <p style="margin-left: 24px;"><abbr>SPDEF</abbr> (Special defense) can be understood as the stat that dictates how much damage your Pokemon will take from others special attacks.</p>
-                            <p style="margin-left: 24px;"><abbr>SPD</abbr> (Speed) can be understood as the stat that dictates the order that Pokemon will move during each turn with faster Pokemon moving first within their priority bracket.</p>
-                            
-                                
-                            <p style="font-weight: bold; font-size: 16px;">Spreads:</p>
-                            <p style="font-weight: bold; font-size: 12px; margin-left: 12px;">EV Spreads:</p>
-                            <p style="margin-left: 24px;"><abbr>Effort Value Spreads</abbr> AKA <abbr>EV Spreads</abbr> allow players to invest 508 <abbr>EVs</abbr> into any of a Pokemons stats with each stat allowing for a maximum of 252 EVs. EVs make all the difference, Pokemon interactions can completely change based on what stats are invested into. For example, Pokemon who are invested into offensively may be able to threaten <abbr>OHKOs</abbr> (One Hit Knock Outs) previously unattainable. Or, Pokemon who are invested into defensively may be able to just barely survive attacks that would previously knock them out, allowing for another turns worth of value.</p>
-                            <p style="font-weight: bold; font-size: 12px; margin-left: 12px;">Natures:</p>
-                            <p style="margin-left: 24px;">Each Pokemon can have one of many <abbr>Natures</abbr>, each nature raising and lowering one of the Pokemons stats. For example, we may find it valueable to lose ATK (Attack) for a raise in SPATK (Special Attack) on a Pokemon that only uses utilizes its SPATK (Special Attack) through special moves.</p>
+            <!-- pokemon name, number, legality -->
+            <div>
+                <div class="divinline">
+                    <p id="pokemonname" class="pokemonname">Pokemon</p>
+                    <p id="pokemonrank" class="pokemonrank">Rank #0 (X%)</p>
+                    <!-- <img src="star.png" alt="Pokemon"> -->
+                    <p id="pokemonlegal" class="divr legalbadge tooltip" desc="Legal to use in selected format.">Legal</p>
+                </div>
+            </div>
 
-
-
-                            <p style="font-weight: bold; font-size: 16px;">Moves:</p>
-                            <p style="margin-left: 12px;">There are 3 different types of moves, <abbr>Physical Moves</abbr>, <abbr>Special Moves</abbr>, and <abbr>Status Moves</abbr>.</p>
-                            <p style="margin-left: 24px;">Physical Moves are attacking moves that rely on the users ATK stat and recievers DEF stat to calculate damage. Denoted by <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Physical.png" alt="Physical Symbol">.</p>
-                            <p style="margin-left: 24px;">Special Moves are attacking moves that rely on the users SPATK stat and recievers SPDEF stat to calculate damage. Denoted by <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Special.png" alt="Special Symbol">.</p>
-                            <p style="margin-left: 24px;">Status Moves are generally non-damaging moves that can inflict some effect on another Pokemon or in some cases the entire battle field. Denoted by <img style="vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/categories/Status.png" alt="Status Symbol">.</p>
-
-                            <p style="font-weight: bold; font-size: 12px; margin-left: 12px;">STAB (Same Type Attack Bonus): </p>
-                            <p style="margin-left: 24px;">Each move is assigned a type. An important note concerning physical and special moves is a mechanic known as <abbr>STAB</abbr> (Same Type Attack Bonus). If a Pokemon uses a move with the same type as itself that moves power will be increased by 1.5x.</p>
-                            
-                            <p style="font-weight: bold; font-size: 12px; margin-left: 12px;">Priority:</p>
-                            <p style="margin-left: 24px;">Sometimes you may find moves are assigned a <abbr>Priority Level</abbr> denoted by <abbr>(priority +X)</abbr>. In Pokemon, when players lock in their moves the order in which each Pokemon moves is determined first by the priority of the moves placing each Pokemon in a priority bracket from -7 to +7, then in each priority bracket speed is used determine which Pokemon will move.</p>
-                            
-                            <p style="font-weight: bold; font-size: 16px;">Items:</p>
-                            <p style="margin-left: 12px;">Items are easy peasy, each Pokemon can hold one item with its own unique effect.</p>
-                            
-                            <p style="font-weight: bold; font-size: 16px;">Teammates:</p>
-                            <p style="margin-left: 12px;">Sometimes Pokemon synergize well with one another. If you see a Pokemon that is almost always paired with another, try to think about why.</p>
+            <!-- pokemon image, types, and abls box -->
+            <div>
+                <ul class="ulh">
+                    <!-- pokemon image -->
+                    <li>
+                        <div class="height100 imagebg">
+                            <img id="pokemonimage" class="whiteimgoutline" src="https://play.pokemonshowdown.com/sprites/substitutes/gen5/substitute.png" alt="Pokemon">
                         </div>
-                    </td>
-                </tr>
-            </table>
+                    </li>
 
-            <!-- pokemon image -->
-            <table class="imagebg" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
-                <tr><td><img class="imgwhiteborder" id="pokemonImage" src="https://play.pokemonshowdown.com/sprites/substitutes/gen5/substitute.png" alt="INPUT A POKEMON TO SEE IT!!!"></td></tr>
-            </table>
+                    <!-- types and abls -->
+                    <li>
+                        <div class="height100">
+                            <ul class="ulv">
+                                <li><p class="label">Type:</p></li>
+                                <li id="pokemontypes"><img class="typeimg" style="margin-right: 6px" src="https://play.pokemonshowdown.com/sprites/types/%3f%3f%3f.png" alt="???"><img class="typeimg" src="https://play.pokemonshowdown.com/sprites/types/%3f%3f%3f.png" alt="???"></li>
+                                <li><p class="label">Ablities:</p></li>
+                                <li id="pokemonabls">
+                                    <p class="abl tooltip" id="pokemonabl1" desc="Sample">Abl 1</p>
+                                    <p class="abl tooltip" id="pokemonabl2" desc="Sample">Abl 2</p>
+                                    <p class="abl tooltip" id="pokemonablhidden" desc="Sample"> Abl Hdn</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
 
-            <!-- huge table -->
-            <table style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
+            <!-- warnings toggle -->
+            <!-- <div class="newsection">
+                <div class="dropdown">
+                    <button class="tablinks" onclick="toggleWarnings(event, 'Warnings')">Warnings</button>
+                </div>
 
-                <!-- name -->
-                <!-- dex number -->
-                <!-- rank -->
-                <!-- usage -->
-                <tr id="pokemonnamerow">
+                <div id="Warnings" class="dropdowncontent">
 
-                    <table class="graybg" id="pokemonnametable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
+                </div>
+            </div> -->
+
+            <!-- def matchups toggle -->
+            <div class="newsection">
+                <div class="dropdown">
+                    <button class="tablinks" onclick="toggleMatchups(event, 'Matchups')">Defensive Matchups</button>
+                </div>
+
+                <div id="Matchups" class="dropdowncontent">
+                    <table id="pokemonmatchupstable" class="matchupstable">
                         <tr>
-                            <td id="pokemonnames"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Name: </p>            <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonname">A Pokemon</p></td>
-                            <td id="pokemondexnumbers"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Dex Number: </p> <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemondexnumber">A Number</p></td>
-                            <td id="pokemonranks"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Rank: </p>            <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonrank">A Rank</p></td>
-                            <td id="pokemonusages"><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Usage: </p>          <p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonusage">A Usage</p></td>
+                            <th class="usage">Effectiveness</th>
+                            <th>Types</th>
                         </tr>
                     </table>
+                </div>
 
-                </tr>
+            </div>
 
-                <!-- warnings -->
-                <tr id="pokemonwarningsrow">
-                    <td>
-                        <table class="graybg" id="pokemonwarningsdiv" style="margin-left:auto; margin-right:auto; overflow: auto; font-size: 12px; width: 400px; height:auto; display: none;">
+            <!-- stats toggle -->
+            <div class="newsection">
+                
+                <div class="dropdown">
+                    <button class="tablinks" onclick="toggleStats(event, 'Stats')">Stats</button>
+                </div>
+
+                <div id="Stats" class="dropdowncontent">
+                    <div>
+                        <table class="stattable">
+                            <!-- header -->
                             <tr>
-                                <td>
-                                    <div>
-                                        <p style="text-align: center; font-weight: bold; font-size: 12px;"><img style="vertical-align: middle; width: 24px; height: auto; margin-right: 2px" src="esprite.png" alt="!">Warnings:</p>
-                                    </div>
-                                </td>
+                                <th>Base Stats:</th>
+                                <td></td>
+                                <td><div style="width: 15vw;"></div></td>
+                                <th class="ministat"><abbr class="tooltip" desc="0 IVs, 0 EVs, Negative Nature(0.9x)">min-</abbr></th>
+                                <th class="ministat"><abbr class="tooltip" desc="31 IVs, 0 EVs, Neutral Nature(1x)">min</abbr></th>
+                                <th class="ministat"><abbr class="tooltip" desc="31 IVs, 252 EVs, Neutral Nature(1x)">max</abbr></th>
+                                <th class="ministat"><abbr class="tooltip" desc="31 IVs, 252 EVs, Positive Nature(1.1x)">max+</abbr></th>
+                                <th class="ministat customspread"><abbr>cus</abbr></th>
+                            </tr>
+                            <!-- hp -->
+                            <tr>
+                                <th>HP:</th>
+                                <td id="pokemonhp" class="stat">XX</td>
+                                <td><div id="hpbar" class="statbar"></div></td>
+                                <td class="ministat"><small></small></td>
+                                <td id="hpmin" class="ministat"><small>XXX</small></td>
+                                <td id="hpmax" class="ministat"><small>XXX</small></td>
+                                <td class="ministat"><small></small></td>
+                                <td id="hpcus" class="ministat customspread"><small>XXX</small></td>
+                                
+                            </tr>
+                            <!-- atk -->
+                            <tr>
+                                <th>ATK:</th>
+                                <td id="pokemonatk" class="stat">XX</td>
+                                <td><div id="atkbar" class="statbar"></div></td>
+                                <td id="atkminm" class="ministat"><small>XXX</small></td>
+                                <td id="atkmin" class="ministat"><small>XXX</small></td>
+                                <td id="atkmax" class="ministat"><small>XXX</small></td>
+                                <td id="atkmaxm" class="ministat"><small>XXX</small></td>
+                                <td id="atkcus" class="ministat customspread"><small>XXX</small></td>
+                            </tr>
+                            <!-- def -->
+                            <tr>
+                                <th>DEF:</th>
+                                <td id="pokemondef" class="stat">XX</td>
+                                <td><div id="defbar" class="statbar"></div></td>
+                                <td id="defminm" class="ministat"><small>XXX</small></td>
+                                <td id="defmin" class="ministat"><small>XXX</small></td>
+                                <td id="defmax" class="ministat"><small>XXX</small></td>
+                                <td id="defmaxm" class="ministat"><small>XXX</small></td>
+                                <td id="defcus" class="ministat customspread"><small>XXX</small></td>
+                            </tr>
+                            <!-- spatk -->
+                            <tr>
+                                <th>SPATK:</th>
+                                <td id="pokemonspatk" class="stat">XX</td>
+                                <td><div id="spatkbar" class="statbar"></div></td>
+                                <td id="spatkminm" class="ministat"><small>XXX</small></td>
+                                <td id="spatkmin" class="ministat"><small>XXX</small></td>
+                                <td id="spatkmax" class="ministat"><small>XXX</small></td>
+                                <td id="spatkmaxm" class="ministat"><small>XXX</small></td>
+                                <td id="spatkcus" class="ministat customspread"><small>XXX</small></td>
+                            </tr>
+                            <!-- spdef -->
+                            <tr>
+                                <th>SPDEF:</th>
+                                <td id="pokemonspdef" class="stat">XX</td>
+                                <td><div id="spdefbar" class="statbar"></div></td>
+                                <td id="spdefminm" class="ministat"><small>XXX</small></td>
+                                <td id="spdefmin" class="ministat"><small>XXX</small></td>
+                                <td id="spdefmax" class="ministat"><small>XXX</small></td>
+                                <td id="spdefmaxm" class="ministat"><small>XXX</small></td>
+                                <td id="spdefcus" class="ministat customspread"><small>XXX</small></td>
+                            </tr>
+                            <!-- spd -->
+                            <tr>
+                                <th>SPD:</th>
+                                <td id="pokemonspd" class="stat">XX</td>
+                                <td><div id="spdbar" class="statbar"></div></td>
+                                <td id="spdminm" class="ministat"><small>XXX</small></td>
+                                <td id="spdmin" class="ministat"><small>XXX</small></td>
+                                <td id="spdmax" class="ministat"><small>XXX</small></td>
+                                <td id="spdmaxm" class="ministat"><small>XXX</small></td>
+                                <td id="spdcus" class="ministat customspread"><small>XXX</small></td>
+                            </tr>
+                            <!-- total + at level 100 -->
+                            <tr>
+                                <th>Total:</th>
+                                <td id="pokemonbst" class="stat">XXX</td>
+                                <td><div style="width: 15vw;"></div></td>
+                                <td colspan="4">At Level <input id="pokemonlevel" class="userinput inputnumber" oninput="updateMinMinMaxMax()" value="100"></td>
                             </tr>
                         </table>
-                    </td>
-                </tr>
-
-                <!-- type -->
-                <tr id="pokemontypesrow">
-
-                    <table class="graybg" id="pokemontypestable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
-
-                        <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Type: </p>
-                            <td><img id="pokemontype1image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/%3f%3f%3f.png" alt="???"></td>
-                            <td><img id="pokemontype2image" style="display:inline; vertical-align:middle;" src="https://play.pokemonshowdown.com/sprites/types/%3f%3f%3f.png" alt="???"></td>
-                        </tr>
-
-                    </table>
-
-                </tr>
-
-                <!-- abl -->
-                <tr id="pokemonabilitiesrow">
-
-                    <table class="graybg" id="pokemonabilitiestable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
-
-                        <tr>
-                            <td><p class="tooltip" desc="Possible abilities this Pokemon can use. Only one can be selected." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="pokemonabls">Abilities: </p></td>
-                        </tr>
-
-                        <tr id="pokemonabl1row">
-                            <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl1" desc="DESCRIPTION 1">Abl 1</p></td>
-                        </tr>
-
-                        <tr id="pokemonabl2row">
-                            <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonabl2" desc="DESCRIPTION 2">Abl 2</p></td>
-                        </tr>
-
-                        <tr id="pokemonablhiddenrow">
-                            <td><p class="tooltip" style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonablhidden" desc="DESCRIPTION HIDDEN">Abl Hidden</p></td>
-                        </tr>
-
-                    </table>
-
-                </tr>
-
-                <!-- def matchups -->
-                <tr id="pokemondefmatchupsrow">
-
-                    <div class="graybg" style="display: inline-block; padding: 2px; margin-top:5px;">
-
-                    <p class="tooltip" desc="A Pokemons defensive matchups. The higher the multiplier the more effective the attack." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Defensive Matchups: </p>
-
-                    <table id="pokemondefmatchupstable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
-
-                        <tr id="pokemon0xmu">
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">0x: </p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;">0x</p></td>
-                        </tr>
-
-                        <tr id="pokemon4xmu">
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">4x: </p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;">4x</p></td>
-                        </tr>
-
-                        <tr id="pokemon2xmu">
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">2x :</p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;">2x</p></td>
-                        </tr>
-
-                        <tr id="pokemon1xmu">
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">1x: </p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;">1x</p></td>
-                        </tr>
-
-                        <tr id="pokemon1d2xmu">
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">1/2x: </p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;">1/2x</p></td>
-                        </tr>
-
-                        <tr id="pokemon1d4xmu">
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">1/4x: </p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;">1/4x</p></td>
-                        </tr>
-
-                    </table>
-
                     </div>
+                </div>
+            </div>
 
-                </tr>
+            <!-- tab menu -->
+            <div class="newsection">
 
-                <!-- stats -->
-                <tr id="pokemonstatsrow">      
+                <div class="tab">
+                    <button id="movetabbutton" class="tablinks" onclick="openTab(event, 'Moves')">Moves</button>
+                    <button id="itemstabbutton" class="tablinks" onclick="openTab(event, 'Items')">Items</button>
+                    <button id="teammatestabbutton" class="tablinks" onclick="openTab(event, 'Teammates')">Teammates</button>
+                    <button id="spreadstabbutton" class="tablinks" onclick="openTab(event, 'Spreads')">Spreads</button>
+                </div>
 
-                    <table class="graybg" id="pokemonstatstable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
+                <div id="Moves" class="tabcontent">
+                    <div>
+                        <table id="pokemonmovestable" class="movestable">
+                            <!-- header -->
+                            <tr>
+                                <th class="usage">Percent Usage</th>
+                                <th></th>
+                                <th>Type</th>
+                                <th>Power</th>
+                                <th>Cat</th>
+                                <th>Acc</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                  
+                <div id="Items" class="tabcontent">
+                    <div>
+                        <table id="pokemonitemstable" class="itemstable">
+                            <!-- header -->
+                            <tr>
+                                <th class="tableimg">Image</th>
+                                <th></th>
+                                <th class="usage">Percent Usage</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                  
+                <div id="Teammates" class="tabcontent">
+                    <div>
+                        <table id="pokemonteammatestable" class="teammatestable">
+                            <!-- header -->
+                            <tr>
+                                <th class="tableimg">Image</th>
+                                <th></th>
+                                <th class="usage">Percent Usage</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
 
-                        <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="hplabel">HP:</p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonhp">HP</p></td>
-                            <td><div id="hpbar" style="background-color: #c5c5c5; border: 2px solid #a4a4a4;" class="rectangle"></div></td>
-                        </tr>
+                <div id="Spreads" class="tabcontent">
+                    <div>
+                        <table id="pokemonspreadstable" class="spreadstable">
+                            <!-- header -->
+                            <tr>
+                                <th class="usage">Percent Usage</th>
+                                <th class="ev">HP EVs</th>
+                                <th class="ev">ATK EVs</th>
+                                <th class="ev">DEF EVs</th>
+                                <th class="ev">SPATK EVs</th>
+                                <th class="ev">SPDEF EVs</th>
+                                <th class="ev">SPD EVs</th>
+                                <th>Nature</th>
+                                <th class="natureIncDec">Nature Increases</th>
+                                <th class="natureIncDec">Nature Decreases</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
 
-                        <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="atklabel">ATK:</p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonatk">ATK</p></td>
-                            <td><div id="atkbar" style="background-color: #c5c5c5; border: 2px solid #a4a4a4;" class="rectangle"></div></td>
-                        </tr>
-
-                        <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="deflabel">DEF:</p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemondef">DEF</p></td>
-                            <td><div id="defbar" style="background-color: #c5c5c5; border: 2px solid #a4a4a4;" class="rectangle"></div></td>
-                        </tr>
-
-                        <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="spatklabel">SPATK:</p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspatk">SPATK</p></td>
-                            <td><div id="spatkbar" style="background-color: #c5c5c5; border: 2px solid #a4a4a4;" class="rectangle"></div></td>
-                        </tr>
-
-                        <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="spdeflabel">SPDEF:</p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspdef">SPDEF</p></td>
-                            <td><div id="spdefbar" style="background-color: #c5c5c5; border: 2px solid #a4a4a4;" class="rectangle"></div></td>
-                        </tr>
-
-                        <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;" id="spdlabel">SPD:</p></td>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12;" id="pokemonspd">SPD</p></td>
-                            <td><div id="spdbar" style="background-color: #c5c5c5; border: 2px solid #a4a4a4;" class="rectangle"></div></td>
-                        </tr>
-
-                    </table>
-
-                </tr>
-
-                <!-- spreads -->
-                <tr id="pokemonspreadsrow">
-
-                    <table class="graybg" id="pokemonspreadstable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
-
-                        <tr>
-                            <td><p class="tooltip" desc="Spreads are how players invest extra stat points into thier Pokemon, for more info visit the top right corner." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Spreads: </p></td>
-                        </tr>
-                    
-                    </table>
-                </tr>
-
-                <!-- moves -->
-                <tr id="pokemonmovesrow">
-
-                    <table class="graybg" id="pokemonmovestable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
-
-                        <tr>
-                            <td><p class="tooltip" desc="Players can select 4 moves for each of their Pokemon. Here are some common move choices. For more info on moves visit the top right corner." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Moves: </p></td>
-                        </tr>
-                    
-                    </table>
-                </tr>
-
-                <!-- items -->
-                <tr id="pokemonitemsrow">
-
-                    <table class="graybg" id="pokemonitemstable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
-
-                        <tr>
-                            <td><p class="tooltip" desc="Each Pokemon can hold a single item. Here are some items commonly held on this Pokemon." style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Items: </p></td>
-                        </tr>
-                    
-                    </table>
-                </tr>
-
-                <!-- teammates -->
-                <tr id="pokemonteammatesrow">
-
-                    <table class="graybg" id="pokemonteammatestable" style="margin-left:auto; margin-right:auto; vertical-align:middle; margin-top:5px;">
-
-                        <tr>
-                            <td><p class="tooltip" desc="Some Pokemon synergize well with one another. Here are some common teammates. What could the reason be?" style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Teammates: </p></td>
-                        </tr>
-                    
-                    </table>
-                </tr>
-
-                <!-- search -->
-                <tr id="pokemonsearchrow">
-                    <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Search Pokemon: </p></td>
-                    <td><input id="searchpokemonfield" name="searchpokemonfield" value="raging bolt"/>
-                    <button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="searchPokemon();" id="searchPokemonButton">Search Pokemon</button></td>
-
-                </tr>
-
-                <!-- shiny -->
-                <tr id="pokemonshiny">
-
-                    <td><button style="display:inline; vertical-align:middle; font-size: 12;" onmousedown="toggleShiny();" id="toggleShinyButton">Toggle Shiny</button></td>
-
-                </tr>
-
-                <!-- did you mean? -->
-                <tr id="didyoumeanrow">
-
-                    <table class="graybg" id="didyoumeantable" style="margin-left:auto; margin-right:auto; vertical-align:middle;">
-
-                        <tr>
-                            <td><p style="display:inline; vertical-align:middle; font-size: 12; font-weight: bold;">Did You Mean? </p></td>
-                        </tr>
-                    
-                    </table>
-
-                </tr>
-
-            </table>
+            </div>
         </div>
 
+        <!-- typechart -->
+        <div id="typecharttable" class="typechartdiv" style="position:absolute; right: 10px; top: 90px; display: none;">
+            <div class="divc"><p>Type Chart</p></div>
+            <img class="typechart" src="tctable.png">
+        </div>
+        
     </body>
 
-    
 </html>

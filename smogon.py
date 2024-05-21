@@ -418,10 +418,13 @@ def similarFormatTo(wrongFormat):
     for format in formats:
         score = fuzz.WRatio(format, wrongFormat)
         if score > 60:
-            similarFormats.append(format)
-            print(score, format, wrongFormat)
+            if [format, score] not in similarFormats:
+                similarFormats.append([format, score])
+                print(score, format, wrongFormat)
 
-    similarFormats = list(set(similarFormats))
+    similarFormats = sorted(similarFormats, key=lambda x: x[-1], reverse=True)
+
+    # similarFormats = set(similarFormats)
 
     print(similarFormats)
 
