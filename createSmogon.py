@@ -1,3 +1,6 @@
+#createSmogon.py is used to create pokemon related databases from .csv files generated from data obtained using php from https://www.smogon.com/stats/
+#Usage: import createSmogon and call createDB()
+
 import sqlite3
 import os
 import csv
@@ -7,6 +10,7 @@ import dask.dataframe as dd
 
 def createDB():
 
+  #delete existing db files
   if os.path.exists('leads.db'):
     os.remove('leads.db')
     print("leads.db deleted successfully")
@@ -30,7 +34,8 @@ def createDB():
     print("basic.db deleted successfully")
   else:
     print("basic.db does not exist")
-      
+  
+  #create table commands
   sql_create_lead_table = """ CREATE TABLE IF NOT EXISTS leads (
       Year INT,
       Month INT,
@@ -97,16 +102,19 @@ def createDB():
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   """
 
+  #create all connections
   leadsConn = sqlite3.connect('leads.db')
   metagameConn = sqlite3.connect('metagame.db')
   movesetConn = sqlite3.connect('moveset.db')
   basicConn = sqlite3.connect('basic.db')
 
+  #create all cursors
   leadsCursor = leadsConn.cursor()
   metagameCursor = metagameConn.cursor()
   movesetCursor = movesetConn.cursor()
   basicCursor = basicConn.cursor()
 
+  #execute table creation on all cursors
   leadsCursor.execute(sql_create_lead_table)
   metagameCursor.execute(sql_create_metagame_table)
   movesetCursor.execute(sql_create_moveset_table)

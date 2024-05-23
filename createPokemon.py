@@ -1,3 +1,6 @@
+#createPokemon.py is used to create pokemon related databases from static .csv files
+#Usage: import createPokemon and call createDB()
+
 import sqlite3
 import os
 import csv
@@ -5,7 +8,10 @@ import dask
 dask.config.set({'dataframe.query-planning': True})
 import dask.dataframe as dd
 
+#createDB deletes old db files and generates new ones based on pokemon.csv, moves.csv, abilities.csv, and items.csv
 def createDB():
+
+  #delete existing db files
   if os.path.exists('pokemon.db'):
     os.remove('pokemon.db')
     print("pokemon.db deleted successfully")
@@ -30,6 +36,7 @@ def createDB():
   else:
     print("items.db does not exist")
 
+  #create table commands
   sql_create_pokemon_table = """ CREATE TABLE IF NOT EXISTS pokemon (
       Number INT,
       Pokemon TEXT,
@@ -87,16 +94,19 @@ def createDB():
         VALUES (?, ?)
   """
 
+  #create all connections
   pokemonConn = sqlite3.connect('pokemon.db')
   abilitiesConn = sqlite3.connect('abilities.db')
   movesConn = sqlite3.connect('moves.db')
   itemsConn = sqlite3.connect('items.db')
 
+  #create cursors
   pokemonCursor = pokemonConn.cursor()
   abilitiesCursor = abilitiesConn.cursor()
   movesCursor = movesConn.cursor()
   itemsCursor = itemsConn.cursor()
 
+  #execute table creation on all cursors
   pokemonCursor.execute(sql_create_pokemon_table)
   abilitiesCursor.execute(sql_create_abilities_table)
   movesCursor.execute(sql_create_moves_table)

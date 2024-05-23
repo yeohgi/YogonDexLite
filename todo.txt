@@ -1,2 +1,9 @@
-add tooltips for spreads, moves, abilties, basic explaitions for each table
-fuzzywuzzy for formats (DONE)
+add shiny button
+add tera types tab
+add warnings
+add elastic load balencer and auto scaling group
+make a boot script, HAVENT TESTED
+polish code and remove not needed prints and blocks of code that are not longer important, DONEISH
+some comments
+make it say secure so i feel secure
+make preinstallformat, DONE

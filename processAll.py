@@ -1,13 +1,20 @@
+#processAll.py is used to process the prepro(preprocessed) folder of .txt files containing plain usage data to create the postpro(postprocessed) folder of .txt files in a .csv format
+
 import os
 import subprocess
 
+#processFolder() processes the prepro folder and creates the postpro folder
 def processFolder():
+
+  #for every folder in prepro (folders in prepro are organized by year-month containing data from their time)
   for folder in os.listdir('prepro'):
 
+    #make replica folder in postpro
     os.makedirs(f'postpro/{folder}', exist_ok=True)
 
     print("I'm working on " + folder)
 
+    #handle all .txt files as /leads, /metagame, and /moveset are done later
     for file in os.listdir(f'prepro/{folder}'):
 
       print(file)
@@ -50,6 +57,7 @@ def processFolder():
                 if '---' not in final:
                   pk2.write(final + '\n')
 
+    #handle all .txt files in leads
     os.makedirs(f'postpro/{folder}/leads/', exist_ok=True)
     for file in os.listdir(f'prepro/{folder}/leads/'):
 
@@ -85,6 +93,7 @@ def processFolder():
               if '---' not in final:
                 pk2.write(final + '\n')
 
+    #handle all .txt files in metagame
     os.makedirs(f'postpro/{folder}/metagame/', exist_ok=True)
     for file in os.listdir(f'prepro/{folder}/metagame/'):
 
@@ -119,6 +128,7 @@ def processFolder():
 
             pk2.write(final + "\n")
 
+    #handle all .txt files in moveset, long lists of moves, items, teammates, etc are seperated by a ; as a delimiter to be used for later
     os.makedirs(f'postpro/{folder}/moveset/', exist_ok=True)
     for file in os.listdir(f'prepro/{folder}/moveset/'):
 
@@ -137,6 +147,7 @@ def processFolder():
 
           if(len(megaSplit) <= 1):
             print("bad file")
+    
           else:
 
             indexPointer = 1
@@ -209,11 +220,6 @@ def processFolder():
               pk2.write(final + '\n')
               
               indexPointer = indexPointer + 9
-            
-            
-          # for part in megaSplit:
-
-          #   if ''
         
 
         

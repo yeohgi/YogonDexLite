@@ -690,9 +690,9 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 554,Darumaka,Fire,,70,90,45,15,45,50,Hustle,,Inner Focus
 554,Darumaka-Galar,Ice,,70,90,45,15,45,50,Hustle,,Inner Focus
 555,Darmanitan,Fire,,105,140,55,30,55,95,Sheer Force,,Zen Mode
-555,Darmanitan-Zen Mode,Fire,Psychic,105,30,105,140,105,55,,,Zen Mode
+555,Darmanitan-Zen,Fire,Psychic,105,30,105,140,105,55,,,Zen Mode
 555,Darmanitan-Galar,Ice,,105,140,55,30,55,95,Gorilla Tactics,,Zen Mode
-555,Darmanitan-Galar-Zen-Mode,Ice,Fire,105,160,55,30,55,135,Gorilla Tactics,,Zen Mode
+555,Darmanitan-Galar-Zen,Ice,Fire,105,160,55,30,55,135,Gorilla Tactics,,Zen Mode
 556,Maractus,Grass,,75,86,67,106,67,60,Water Absorb,Chlorophyll,Storm Drain
 557,Dwebble,Bug,Rock,50,65,85,35,35,55,Sturdy,Shell Armor,Weak Armor
 558,Crustle,Bug,Rock,70,105,125,65,75,45,Sturdy,Shell Armor,Weak Armor

@@ -1,15 +1,19 @@
 <?php
-$url = "https://play.pokemonshowdown.com/sprites/gen5/{$argv[1]}.png"; // URL of the image you want to grab
-// $localPath = "pksprites/{$argv[1]}.png"; // Local path where you want to save the image
+//grabImage.php is used to determine whether a pokemon image name is valid.
+$url = "https://play.pokemonshowdown.com/sprites/gen5/{$argv[1]}.png";
 
-// Get the image contents from the URL
+// $localPath = "pksprites/{$argv[1]}.png";
+
 $imageData = @file_get_contents($url);
 
 if ($imageData !== false) {
-    // Save the image contents to a local file
-    // $success = file_put_contents($localPath, $imageData);
+    //file_put_contents($localPath, $imageData);
     echo "0";
+    //valid image name
 } else {
-    echo "1"; // Failure signal
+    echo "1";
+    //not valid image name
 }
+//can uncomment commented code to be able to save the image
 ?>
+

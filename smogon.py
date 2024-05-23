@@ -264,16 +264,12 @@ def assignElo(format, elo):
     for format in formats:
         eloBounds.append(int(format.split('-')[1].split('.')[0]))
 
-    print(eloBounds)
-
     eloBoundsNoZero = []
     for anElo in eloBounds:
         if anElo == 0:
             eloBoundsNoZero.append(1000)
         else:
             eloBoundsNoZero.append(anElo)
-
-    print(eloBoundsNoZero)
 
     for i, eloBound in enumerate(eloBoundsNoZero):
         if i == 0:
@@ -330,6 +326,8 @@ def validFormat(format):
 
 def grabImage(pokemon):
 
+    #could improve later
+
     if "'" in pokemon:
         pokemon = pokemon.replace("'", "")
 
@@ -338,6 +336,7 @@ def grabImage(pokemon):
         pokemon = pokemon.replace('.', '')
 
     pokemon = pokemon.replace(' ', '-')
+
     if len(pokemon.split('-')) > 1:
         parts = pokemon.split('-', 1)
         if len(parts) > 1:
@@ -346,12 +345,7 @@ def grabImage(pokemon):
     tryPokemon = []
     if ' ' not in pokemon:
         tryPokemon.append(pokemon)
-    tryPokemon.append(pokemon.replace(' ', '-'))
-    tryPokemon.append(pokemon.replace(' ', ''))
-    tryPokemon.append(pokemon.replace('-', ' '))
     tryPokemon.append(pokemon.replace('-', ''))
-
-    print(tryPokemon)
 
     savedAs = ''
 
@@ -365,7 +359,7 @@ def grabImage(pokemon):
 
         returnValue = int(output)
 
-        print(tryName, returnValue)
+        # print(tryName, returnValue)
 
         if returnValue == 0:
             savedAs = tryName
@@ -420,13 +414,8 @@ def similarFormatTo(wrongFormat):
         if score > 60:
             if [format, score] not in similarFormats:
                 similarFormats.append([format, score])
-                print(score, format, wrongFormat)
 
     similarFormats = sorted(similarFormats, key=lambda x: x[-1], reverse=True)
-
-    # similarFormats = set(similarFormats)
-
-    print(similarFormats)
 
     return similarFormats
 

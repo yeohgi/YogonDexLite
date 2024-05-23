@@ -1,3 +1,6 @@
+#clean.py is to be used manually to clean temporary files that would otherwise be generated on first boot.
+#usage: python3 clean.py
+
 import os
 import subprocess
 
@@ -6,9 +9,6 @@ if os.path.exists('prepro'):
 
 if os.path.exists('postpro'):
     subprocess.run(["rm", "-r", "postpro"], check=True)
-
-if os.path.exists('pksprites'):
-    subprocess.run(["rm", "-r", "pksprites"], check=True)
 
 if os.path.exists('leads.csv'):
     os.remove('leads.csv')

@@ -1,3 +1,6 @@
+#dex.py is a class that serves information regarding specific pokemon and pokemon attributes.
+#dex takes a format as a parameter to be constructed to simplify how often it would otherwise need to be passed as a parameter.
+
 import sqlite3
 import os
 import csv
@@ -13,223 +16,24 @@ class dex:
     
     format = ''
 
-    # constructor
+    # __init__(self, format) initializes an instance of dex with the specified format.
+    # Args: format refers to the competitive format/ruleset to retrive data from.
     def __init__(self, format):
         self.setFormat(format)
-
-    def printStatBar(self, stat):
-        bar = ''
-        for i in range(0,stat//5):
-            bar += '|'
-        return bar
     
-    def explainSpreads(self):
-        print("Effort Value Spreads AKA EV Spreads allow players to invest 508 EVs into any of a Pokemons stats with each stat allowing for a maximum of 252 EVs.")
-        print("EVs make all the difference, Pokemon interactions can completely change based on what stats are invested into.")
-        print("For example, Pokemon who are invested into offensively may be able to threaten OHKOs previously unattainable.")
-        print("Or Pokemon who are invested into defensively may be able to just barely survive attacks that would previously knock them out, allowing for another turns worth of value.")
-
-    def printTypeChart(self):
-
-        print("                                                                                          Attacking ▼ Defending ►")
-
-        print("          ", end='')
-        for i, typei in enumerate(pk.types):
-            print(f"{pk.types[i]:>10}", end='')
-        print("")
-
-        for i, typei in enumerate(pk.types):
-            print("          ", end='')
-            for j in range(0,len(pk.types) * 10 + 1):
-                if j%10 == 0:
-                    print(f"\033[1m|\033[0m", end='')
-                else:
-                    print(f"\033[1m-\033[0m", end='')
-            print("")
-
-            print(f"{pk.types[i]:>10}", end='')
-
-            for j in range(0,len(pk.types) * 10 + 1):
-                if j%10 == 0:
-                    print(f"\033[1m|\033[0m", end='')
-                elif j%10 - 5 == 0:
-
-                    typej = j//10
-
-                    if pk.immunityMatrix[i][typej] == 1:
-                        print(f"\033[1m\033[35m0\033[0m", end='')
-                        print(f"\033[37m", end='')
-                    elif pk.universeMatrix[i][typej] == 1:
-                        print(f"\033[1m\033[32m2\033[0m", end='')
-                        print(f"\033[37m", end='')
-                    elif pk.universeMatrix[i][typej] == 0:
-                        print(f"1", end='')
-                    else:
-                        print(f"\033[1m\033[31m½\033[0m", end='')
-                        print(f"\033[37m", end='')
-                else:
-                    print(f" ", end='')
-            print("")
-        
-        print("          ", end='')
-        for j in range(0,len(pk.types) * 10 + 1):
-            if j%10 == 0:
-                print(f"\033[1m|\033[0m", end='')
-            else:
-                print(f"\033[1m-\033[0m", end='')
-        print("")
-        
-    def my_pokemon(self, pokemon):
-        print(f"{pokemon.title()}")
-
-        type1 = self.dexFetch('pokemon', pokemon, 'Type1').upper()
-        type2 = self.dexFetch('pokemon', pokemon, 'Type2').upper()
-
-        self.slashStrong(type1, type2)
-
-    def query_pokemon(self, pokemon):
-
-        #pokemon number + rank in format + usage in current format
-        number = self.dexFetch('pokemon', pokemon, 'Number')
-        rank = self.dexFetch('basic', pokemon, 'Rank')
-        usage = self.dexFetch('basic', pokemon, 'Usage')
-        print(f"{pokemon.title()} | Number: {number} Rank: {rank} Usage %: {usage}")
-       
-        #pokemon type(s)
-        type1 = self.dexFetch('pokemon', pokemon, 'Type1').upper()
-        type2 = self.dexFetch('pokemon', pokemon, 'Type2').upper()
-        print(f"Type: {type1} {type2}")
-
-        #type matchup defensive
-        self.slashWeak(type1, type2)
-        
-        #abilities + descs (ordered by usage)
-        print('Most Used Abilities: ')
-
-        abilities = self.dexFetch('moveset', pokemon, 'Abilities').split(';')
-        abilitiesAndUsages = [ability.split(' ') for ability in abilities]
-
-        for ability in abilitiesAndUsages:
-
-            abilityName = ''
-
-            for part in ability[:-1]:
-                abilityName += ' ' + part
-            abilityName = abilityName.strip(' ')
-
-            desc = self.ablFetch(abilityName)
-
-            print(f"    {ability[-1]:>10}% {abilityName} : {desc}")
-
-        #base stats + common spreads
-        print('Pokemons Base Stats: ')
-
-        stats = []
-        stats.append(self.dexFetch('pokemon', pokemon, 'HP').upper())
-        stats.append(self.dexFetch('pokemon', pokemon, 'ATK').upper())
-        stats.append(self.dexFetch('pokemon', pokemon, 'DEF').upper())
-        stats.append(self.dexFetch('pokemon', pokemon, 'SPATK').upper())
-        stats.append(self.dexFetch('pokemon', pokemon, 'SPDEF').upper())
-        stats.append(self.dexFetch('pokemon', pokemon, 'SPD').upper())
-
-        spreads = self.dexFetch('moveset', pokemon, 'Spreads').upper().split(';')
-
-        for index, stat in enumerate(stats):
-            bar = self.printStatBar(int(stat))
-            print(f"{pk.stats[index]:>10}: {stat:>5}", end=bar + '\n')
-
-        print("Most Used Spreads(For more info on EV Spreads '!EV'): ")
-        
-        for spread in spreads:
-            spreadSplit = spread.split(' ')
-            if (float(spreadSplit[-1]) > 20.00):
-                print(f"    {spreadSplit[-1]}%   {spreadSplit[0]}")
-
-        #moves sorted by usage
-        print('Most Used Moves: ')
-        moves = self.dexFetch('moveset', pokemon, 'Moves').split(';')
-        movesAndUsages = [move.split(' ') for move in moves]
-
-        for move in movesAndUsages:
-
-            moveName = ''
-
-            for part in move[:-1]:
-                moveName += ' ' + part
-            moveName = moveName.strip(' ')
-
-            desc = self.moveFetch(moveName)
-
-            if str(desc[0]) != 'Other':
-                # print(1,desc, len(desc)) #1,effect, 2,type, 3,power, 4,cat
-                for i, row in enumerate(desc):
-                    if row is None or len(str(row)) == 0:
-                        desc[i] = '-'
-
-            if (float(move[-1]) > 20.00):
-                if(moveName == 'Other'):
-                    print(f"    {move[-1]}% {'Other'}")
-                else:
-                    if(desc is not None and len(desc) != 0 and desc[0] != 'Other'):
-                        print(f"    {move[-1]:>10}% {moveName:>20}      Type: {desc[1]:>10}     Power: {desc[2]:>5}        Category: {desc[3]:>10}     Description: {desc[0]}")
-                    else:
-                        print(f"    {move[-1]:>10}% Other")
-                
-        #commonly held items + item desc
-        print('Most Used Items: ')
-        items = self.dexFetch('moveset', pokemon, 'Items').split(';')
-        itemsAndUsages = [item.split(' ') for item in items]
-
-        for item in itemsAndUsages:
-
-            itemName = ''
-
-            for part in item[:-1]:
-                itemName += ' ' + part
-            itemName = itemName.strip(' ').strip('"')
-
-            desc = self.itemFetch(itemName)
-
-            item[-1] = item[-1].strip('"')
-
-            if (float(item[-1]) > 12.00):
-                if(itemName == 'Other'):
-                    print(f"    {item[-1]}% {'Other'}")
-                else:
-                    if(desc is not None and len(desc) != 0):
-                        desc = desc.strip('"')
-                        print(f"    {item[-1]}% {itemName} : {desc}")
-
-        #common teammates + potenial synergys 
-        print('Most Common Teammates: ')
-        teammates = self.dexFetch('moveset', pokemon, 'Teammates').split(';')
-        teammatesAndUsages = [teammate.split(' ') for teammate in teammates]
-
-        for teammate in teammatesAndUsages:
-
-            teammateName = ''
-
-            for part in teammate[:-1]:
-                teammateName += ' ' + part
-            teammateName = teammateName.strip(' ').strip('"')
-
-            desc = self.itemFetch(teammateName)
-
-            if float(teammate[-1]) > 20:
-                if(teammateName == 'Other'):
-                    print(f"    {teammate[-1]}% {'Other'}")
-                else:
-                    print(f"    {teammate[-1]}% {teammateName}")
-    
-        #possible defensive tera types
-        self.teraGuess(type1, type2)
-    
+    # dexFetch() used to simlify queries regarding a Pokemon
+    # Args: table refers to the table/db to be read from.
+    #       pokemon refers to the pokemon to be queried.
+    #       column refers to which attribute to return from the specified table.
+    # Returns: Desired query as a string. Or None if N/A.
     def dexFetch(self, table, pokemon, column):
 
         table = table.lower()
 
         pokemon = pokemon.title()
 
+        #Nessacary for searching pokemon with ' in their name like sirfetch'd and farfetch'd as title() no longer serves its intended function.
+        #If a ' exists in the Pokemon name make adjacent letters to the right lowercase.
         if "'" in pokemon:
             newPokemon = ''
             skip = False
@@ -247,22 +51,26 @@ class dex:
 
         column = column.capitalize()
 
+        #check if db exists
         if os.path.exists(table + '.db'):
 
             conn = sqlite3.connect(table + '.db')
             cursor = conn.cursor()
 
+            #if a space or - exists in the pokemon check multiple Pokemon names to forgive the user for providing an incorrect but almost correct Pokemon name.
             if ' ' in pokemon or '-' in pokemon:
 
+                #add alternate spellings to tryNames
                 tryNames = []
-
                 tryNames.append(pokemon.replace(' ','-'))
                 tryNames.append(pokemon.replace('-',' '))
 
+                #Need to be forgiving if a user enters an inproper spelling for Pokemon names containing spaces and .'s. For example, Mr. Mime.
                 if "." in pokemon:
                     for i, name in enumerate(tryNames):
                         tryNames[i] = tryNames[i].replace('.-', '. ')
 
+                #Try each name and see which one works, take the most recent information that is most applicable to the current day user.
                 for name in tryNames:
                     if(self.columnExists(table, "Year") and self.columnExists(table, "Month")):
                         sqlCommand = f'SELECT {column} FROM {table} WHERE Pokemon == "{name}" AND Format == "{self.format}" ORDER BY Year DESC, Month DESC LIMIT 1'
@@ -275,6 +83,7 @@ class dex:
                 
                 return None
 
+            #if there is no space or - in the Pokemon name we can simply search it as it will be spelt correctly.
             else:
                 if(self.columnExists(table, "Year") and self.columnExists(table, "Month")):
                     sqlCommand = f'SELECT {column} FROM {table} WHERE Pokemon == "{pokemon}" AND Format == "{self.format}" ORDER BY Year DESC, Month DESC LIMIT 1'
@@ -287,10 +96,14 @@ class dex:
                 else:
                     return None
         
+        #if table does not exist.
         else:
             print("TABLE DNE")
             return None
-        
+    
+    # ablFetch(self, ability) used to simlify queries regarding an ability, it only returns a description
+    # Args: ability refers to the ability to return the description of.
+    # Returns: An ability description, or None if N/A.
     def ablFetch(self, ability):
 
         db = 'abilities.db'
@@ -317,7 +130,10 @@ class dex:
         else:
             print("TABLE DNE")
             return None
-        
+    
+    # moveFetch(self, move) used to simlify queries regarding a move.
+    # Args: move refers to the move to return the effect/description, type, power, category, and accuracy of.
+    # Returns: The effect/description, type, power, category, and accuracy of a move as a list, or None if N/A.
     def moveFetch(self, move):
 
         db = 'moves.db'
@@ -350,7 +166,10 @@ class dex:
         else:
             print("TABLE DNE")
             return None
-        
+    
+    # itemFetch(self, item) used to simlify queries regarding a item.
+    # Args: item refers to the item to return the description of.
+    # Returns: An item description, or None if N/A.
     def itemFetch(self, item):
 
         db = 'items.db'
@@ -374,25 +193,34 @@ class dex:
         else:
             print("TABLE DNE")
             return None
-        
+    
+    #teraGuess(self, type1, type2) is not used in current implementation of YogonDexLite
+    #teraGuess(self, type1, type2) is used to guess the tera type of a Pokemon based on its typing. Uses a scoring system from -32 to 32 to determine what type provides the most net resistances to previously threating types.
+    # Args: type1 refers to the primary type of a pokemon to guess the tera type for.
+    #     : type2 refers to the secondary type of a pokemon to guess the tera type for.
+    # Returns: A list of all types along with and sorted by their scores from most optimal to least optimal to terastalize into.
+
     def teraGuess(self, type1, type2):
 
-        pass
-
+        #all types have a corresponding type number on a "universeMatrix" from typeMatrix.py containing all type relationships.
+        #set t1 and t2 to the sentinal value -1.
         t1 = -1
         t2 = -1
 
+        #assign the correct type values to t1 and t2 based on strings type1 and type2
         for i, type in enumerate(pk.types):
             if type.lower() == type1.lower():
                 t1 = i
             if type.lower() == type2.lower():
                 t2 = i
 
+        #it is possible for a pokemon to have 1-2 types. Handle the case where the pokemon only has one type.
         if t2 == -1:
 
             typeScore = []
             weaknesses = []
 
+            #make a list of all threatening types (types that deal neutral damage or more to our pokemon type)
             for i, typei in enumerate(pk.universeMatrix):
 
                 if pk.immunityMatrix[i][t1] == 1:
@@ -402,10 +230,7 @@ class dex:
                     #if we are weak let us consider a defenseive tera
                     weaknesses.append(i)
 
-            # print(weaknesses)
-            # for i in weaknesses:
-            #     print(pk.types[i])
-
+            #provide each type with a score based on our weaknesses list containing types we want to matchup better aganist
             for i, typei in enumerate(pk.universeMatrix):
                 typeScore.append(0) 
                 for j in weaknesses:
@@ -415,12 +240,12 @@ class dex:
                     else:
                         typeScore[i] += pk.universeMatrix[j][i]
 
-            # print(typeScore)
+            #this is a long and complicated function that isnt even being used rn im gonna stop commenting ill do it later :P
+            #it needs to be edited a bit anyways
             for i, type in enumerate(typeScore):
                 typeScore[i] = (typeScore[i], pk.types[i])
 
             typeScore = sorted(typeScore, key=lambda x: x[0], reverse=False)
-            # print(typeScore)
 
             print("Guessed Defensive Tera Types: ")
             for type in typeScore:
@@ -445,8 +270,6 @@ class dex:
                 elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == 1:
                     weaknesses.append((i, 1))
 
-            # print(weaknesses)
-
             for i, typei in enumerate(pk.universeMatrix):
                 typeScore.append(0) 
                 for j in weaknesses:
@@ -461,13 +284,10 @@ class dex:
                     else:
                         typeScore[i] += pk.universeMatrix[j[0]][i]
 
-            # print(typeScore)
-
             for i, type in enumerate(typeScore):
                 typeScore[i] = (typeScore[i], pk.types[i])
 
             typeScore = sorted(typeScore, key=lambda x: x[0], reverse=False)
-            # print(typeScore)
 
             print("Guessed Defensive Tera Types: ")
             for type in typeScore:
@@ -480,16 +300,18 @@ class dex:
                 else:
                     print(f"    {type[1]:>10}:      Provides a net {abs(type[0])} resistances to previously threating types (Dual type calculations factor in 4x weaknesses)")
 
-        return typeScore
+        return typeScore           
 
-                
-
+    #getter and setter for format
     def getFormat(self):
         return self.format
-    
     def setFormat(self, format):
         self.format = format
 
+    #columnExists(self, table, columnName) checks if a column exists in a table.
+    # Args: table refers to the table to search column for.
+    #     : columnName refers to which column to confirm the existance of.
+    # Returns: True it exists, or False it does not.
     def columnExists(self, table, columnName):
         if os.path.exists(table + '.db'):
             conn = sqlite3.connect(table + '.db')
@@ -504,7 +326,10 @@ class dex:
 
         else:
             return False
-        
+    
+    # pokemonExist(self, pokemon) is used to confirm whether a Pokemon exists at all. Useful to confirm so that user can view Pokemon illegal or never used in their selected format.
+    # Args: pokemon refers to the pokemon to confirm the existance of.
+    # Returns: True if the pokemon exists, False if it is mumbo jumbo garbage.
     def pokemonExist(self, pokemon):
 
         db = 'pokemon.db'
@@ -513,6 +338,7 @@ class dex:
 
         tryNames = []  
 
+        #naming shenanigans with farfetch'd and other similarly named pokemon
         if "'" in pokemon:
             newPokemon = ''
             skip = False
@@ -528,6 +354,7 @@ class dex:
 
             pokemon = newPokemon
 
+        #checking alternate spellings if the user inputs a pokemon with a space or -.
         if '-' in pokemon or ' ' in pokemon:
 
             tryNames.append(pokemon.replace(' ','-'))
@@ -540,12 +367,11 @@ class dex:
         else:
             tryNames.append(pokemon)
 
+        #try all names aganist pokemon.db. pokemon.db stores information on all pokemon as recent of 2024-05-22.
         if os.path.exists(db):
 
             conn = sqlite3.connect(db)
             cursor = conn.cursor()
-
-            print(tryNames)
 
             for name in tryNames:
 
@@ -559,12 +385,19 @@ class dex:
                     return True
             
             return False
-        
+    
+    #slashWeak(self, type1, type2) is used to determine the defensive matchups of a pokemons types. Uses typeMatrix.py for an immunityMatrix detailing immunity relationships between types and a universeMatrix detailing general relationships between types. Named based on the command /weak apokemon on Pokemon Showdown.
+    # Args: type1 refers to the primary type of a pokemon to return the defensive matchups for.
+    #     : type2 refers to the secondary type of a pokemon to guess the defensive matchups for.
+    # Returns: The defensive matchups of the pokemon as a list in the following form [immunities, weaknessesx4, weaknesses, neutral, resistances, resistancesx4].
     def slashWeak(self, type1, type2):
 
+        #all types have a corresponding type number on a "universeMatrix" from typeMatrix.py containing all type relationships.
+        #set t1 and t2 to the sentinal value -1.
         t1 = -1
         t2 = -1
 
+        #create empty lists for all possible type interactions even if pokemon only has one type.
         immunities = []
         weaknessesx4 = []
         weaknesses = []
@@ -572,14 +405,17 @@ class dex:
         resistances = []
         resistancesx4 = []
 
+        #assign the correct type values to t1 and t2 based on strings type1 and type2
         for i, type in enumerate(pk.types):
             if type.lower() == type1.lower():
                 t1 = i
             if type.lower() == type2.lower():
                 t2 = i
 
+        #if pokemon only has one type we can consider only immunities, weaknesses, neutral, and resistances
         if t2 == -1:
 
+            #based on immunities and net effectiveness we can sort each type into the above categories
             for i, typei in enumerate(pk.universeMatrix):
 
                 if pk.immunityMatrix[i][t1] == 1:
@@ -591,8 +427,10 @@ class dex:
                 elif pk.universeMatrix[i][t1] == -1:
                     resistances.append(pk.types[i])
 
+        #if pokemon has more than one type we can consider more categories as we can now have 4x weaknesses and 4x resistances.
         else:
 
+            #based on immunities and net effectiveness we can sort each type into the above categories
             for i, typei in enumerate(pk.universeMatrix):
 
                 if pk.immunityMatrix[i][t1] == 1 or pk.immunityMatrix[i][t2] == 1:
@@ -608,6 +446,7 @@ class dex:
                 elif pk.universeMatrix[i][t1] + pk.universeMatrix[i][t2] == -2:
                     resistancesx4.append(pk.types[i])
 
+        #sort each of these
         immunities = sorted(immunities)
         weaknessesx4 = sorted(weaknessesx4)
         weaknesses = sorted(weaknesses)
@@ -615,46 +454,10 @@ class dex:
         resistances = sorted(resistances)
         resistancesx4 = sorted(resistancesx4)
 
-        print("Defensive Matchups: ")
-        # immunities = []
-        if len(immunities) != 0:
-            print("    0x Immunities :", end=' ')
-            for type in immunities:
-                print(type, end=' ')
-            print("")
-        # weaknessesx4 = []
-        if len(weaknessesx4) != 0:
-            print("    4x Weaknesses :", end=' ')
-            for type in weaknessesx4:
-                print(type, end=' ')
-            print("")
-        # weaknesses = []
-        if len(weaknesses) != 0:
-            print("    2x Weaknesses :", end=' ')
-            for type in weaknesses:
-                print(type, end=' ')
-            print("")
-        # neutral = []
-        if len(neutral) != 0:
-            print("    Neutral :", end=' ')
-            for type in neutral:
-                print(type, end=' ')
-            print("")
-        # resistances = []
-        if len(resistances) != 0:
-            print("    1/2 Resistances :", end=' ')
-            for type in resistances:
-                print(type, end=' ')
-            print("")
-        # resistancesx4 = []
-        if len(resistancesx4) != 0:
-            print("    1/4x Resistances :", end=' ')
-            for type in resistancesx4:
-                print(type, end=' ')
-            print("")
-
+        #return the big list of everything!!!
         return [immunities, weaknessesx4, weaknesses, neutral, resistances, resistancesx4]
 
+    #not in final implementation but keeping it around for later
     def slashStrong(self, type1, type2):
 
         t1 = -1
@@ -777,26 +580,35 @@ class dex:
                         print(type, end=' ')
                     print("")
 
+    #pokemonInFormat(self, pokemon, format) checks whether a pokemon exists in a format. Called after a pokemon is confirmed to exist.
+    # Args: pokemon refers to a pokemon confirmed to exist but we would like to check if it appears in smogons statistical data.
+    #     : format refers to the format we are checking.
+    # Returns: True if a pokemon exists in provided format, False if the pokemon does not exist in the provided format.
     def pokemonInFormat(self, pokemon, format):
 
+        #always search in moveset.db as it contains information about pokemon configurations in different formats.
         db = 'moveset.db'
 
         pokemon = pokemon.title()
 
-        tryNames = []           
+        #fault checking if name could be spelt incorrectly
+        tryNames = []     
         if '-' in pokemon or ' ' in pokemon:
             tryNames.append(pokemon.replace(' ','-'))
             tryNames.append(pokemon.replace('-',' '))
         else:
             tryNames.append(pokemon)
 
+        #if db exists
         if os.path.exists(db):
 
             conn = sqlite3.connect(db)
             cursor = conn.cursor()
 
+            #try all names
             for name in tryNames:
 
+                #farfetch'd
                 if "'" in name:
                     name = name.capitalize()
 
@@ -807,82 +619,13 @@ class dex:
                 rows = cursor.fetchall()
 
                 if len(rows) >= 1:
-                    for row in rows:
-                        print(row)
                     return True
             
             return False
-        
-    def printPokemon(self, pokemon):
 
-        db = 'pokemon.db'
-
-        pokemon = pokemon.title()
-
-        tryNames = []           
-        if '-' in pokemon or ' ' in pokemon:
-            tryNames.append(pokemon.replace(' ','-'))
-            tryNames.append(pokemon.replace('-',' '))
-        else:
-            tryNames.append(pokemon)
-
-        if os.path.exists(db):
-
-            conn = sqlite3.connect(db)
-            cursor = conn.cursor()
-
-            for name in tryNames:
-
-                sqlCommand = f"SELECT * FROM pokemon WHERE Pokemon == '{name}'"
-
-                cursor.execute(sqlCommand)
-
-                rows = cursor.fetchall()
-
-                if rows is not None and len(rows) > 0:
-                    rows = rows[0]
-
-                if rows is not None and len(rows) > 12:
-
-                    #header
-                    print(f'{rows[1]} | Number: {rows[0]} Rank: N/A Usage: N/A')
-
-                    type1 = 'None'
-                    type2 = 'None'
-
-                    #type + weak
-                    print("Type: ", end='')
-                    if(len(rows[2]) > 0):
-                        print(rows[2].upper(), end='')
-                        type1 = rows[2]
-                    if(len(rows[3]) > 0):
-                        print(" " + rows[3].upper(), end='')
-                        type2 = rows[3]
-                    print("")
-
-                    self.slashWeak(type1, type2)
-
-                    #abilities
-                    print("Abilities: ")
-                    for i in range(10,13):
-                        if len(rows[i]) > 0:
-                            desc = self.ablFetch(rows[i])
-                            print(f"    {rows[i]} : {desc}")
-
-                    print('Pokemons Base Stats: ')
-
-                    stats = []
-                    stats.append(self.dexFetch('pokemon', pokemon, 'HP').upper())
-                    stats.append(self.dexFetch('pokemon', pokemon, 'ATK').upper())
-                    stats.append(self.dexFetch('pokemon', pokemon, 'DEF').upper())
-                    stats.append(self.dexFetch('pokemon', pokemon, 'SPATK').upper())
-                    stats.append(self.dexFetch('pokemon', pokemon, 'SPDEF').upper())
-                    stats.append(self.dexFetch('pokemon', pokemon, 'SPD').upper())
-
-                    for index, stat in enumerate(stats):
-                        bar = self.printStatBar(int(stat))
-                        print(f"{pk.stats[index]:>10}: {stat:>5}", end=bar + '\n')
-
+    #getNaturePlusMinus(self, aNature) takes a nature by name and returns what base stat it increases and decreases if any.
+    # Args: aNature refers to a nature to get the boon and bane of.
+    # Returns a list containing the increased and decreased stats. Or if the nature is gibberish and does not exist it returns an empty list.
     def getNaturePlusMinus(self, aNature):
 
         aNature = aNature.title()
@@ -893,10 +636,14 @@ class dex:
 
         return []
     
+    #similarNameTo(self, wrongPokemon) is a function to provide spellchecking functionality using fuzzywuzzy's WRatio.
+    # Args: wrongPokemon refers to a pokemon that is confirmed to not exist, or rather is most likely spelt incorrectly.
+    # Returns: A list of all pokemon in pokemon.db with a WRatio rating above 70, sorted by most to least similar.
     def similarNameTo(self, wrongPokemon):
 
         similarPokemon = []
 
+        #connect to pokemon.db
         if os.path.exists('pokemon.db'):
 
             conn = sqlite3.connect('pokemon.db')
@@ -905,19 +652,18 @@ class dex:
             cursor.execute(command)
             rows = cursor.fetchall()
 
+            #for every pokemon take its WRatio and if its above 70 add it to similarPokemon in the form [pokemon, pokemon image name, score].
             for row in rows:
                 pokemon = row[0]
                 score = fuzz.WRatio(pokemon, wrongPokemon)
                 if score > 70:
                     similarPokemon.append([pokemon, smogon.grabImage(pokemon.lower()), score])
-                    print(score, pokemon, wrongPokemon)
 
+        #sort to be most to least similar
         similarPokemon = sorted(similarPokemon, key=lambda x: x[-1], reverse=True)
-
-        print(similarPokemon)
 
         return similarPokemon
 
-    # tostring
+    # tostring, lol i never used this ever
     def __repr__(self):
         return str(self.format)

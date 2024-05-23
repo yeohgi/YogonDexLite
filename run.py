@@ -1,3 +1,5 @@
+#NOT NEEDED ANYMORE WE ARE NOT LONGER STUCK TO THE TERMINAL :D
+#run.py will not work anymore and was used as a prototype bound to a terminal, it was used for user testing with friends, and to confirm correct information when i was working on all the behind the scenes stuff.
 import smogon
 import dex
 import time
