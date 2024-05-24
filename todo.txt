@@ -7,3 +7,4 @@ polish code and remove not needed prints and blocks of code that are not longer 
 some comments
 make it say secure so i feel secure
 make preinstallformat, DONE
+fix illegal vs not used
