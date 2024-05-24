@@ -1,4 +1,5 @@
 #!/bin/bash
+# This script is an initialization script to be used when creating a EC2 instances. The script installs all dependencies, fetches source code, and launches a server listening on port 80.
 # install httpd (Linux 2 version)
 yum update -y
 
