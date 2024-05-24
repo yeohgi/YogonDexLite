@@ -48,8 +48,8 @@ YogonDexLite is an essential tool for new players venturing into the world of co
     
 
 # Contact
-Project Link: https://github.com/yeohgi/YogonDexLite
-Project Domain: http://www.yeohgi.com/
+* Project Link: https://github.com/yeohgi/YogonDexLite
+* Project Domain: http://www.yeohgi.com/
 
 # Acknowledgements
 I would like to express my gratitude to the following resources, libraries, contributors, and inspirations that have made this project possible:
