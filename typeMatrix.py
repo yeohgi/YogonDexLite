@@ -1,3 +1,4 @@
+#universe Matrix is a table containing all type relationships execluding immunities.
 universeMatrix = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, -1, 0],        #NORMAL
   [0, -1, -1, 0, 1, 1, 0, 0, 0, 0, 0, 1, -1, 0, -1, 0, 1, 0],      #FIRE
@@ -19,6 +20,7 @@ universeMatrix = [
   [0, -1, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 1, 1, -1, 0]        #FAIRY
 ]       
 
+#immunity Matrix is a table containing all type immnunities.
 immunityMatrix = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],           #NORMAL
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],           #FIRE
@@ -40,13 +42,16 @@ immunityMatrix = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]            #FAIRY
 ]           
 
+#a list of all types in pokemon
 types = ["Normal", "Fire", "Water", "Electric", "Grass", 
          "Ice", "Fighting", "Poison", "Ground", "Flying", 
          "Psychic", "Bug", "Rock", "Ghost", "Dragon", 
          "Dark", "Steel", "Fairy"]
 
+#a list of all base stats
 stats = ["HP", "ATK", "DEF", "SPATK", "SPDEF", "SPD"]
 
+#a list of all Natures along with the stats they increase and decrease
 natures = [
     ["Adamant", "ATK", "SPATK"],
     ["Bashful", "SPATK", "SPATK"],

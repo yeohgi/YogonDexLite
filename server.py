@@ -1,4 +1,5 @@
-# server.py
+# server.py contains get request routines to serve YogonDexLite on a browser. Currently configured to run on an EC2 instance on AWS.
+# usage: run using python3 server.py portnum. depending where the server is being executed access to YogonDexLite on a browser can be accessed in two ways. 1. If the server is being run locally you may access the application through the url localhost:58061/main.html. 2. If the server is run on an EC2 instance the application can be accessed through the instances public ip and port like the following url publicip:portnum/main.html.
 import sys
 import cgi
 import os
