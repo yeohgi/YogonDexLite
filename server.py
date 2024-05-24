@@ -24,8 +24,24 @@ class MyHandler( BaseHTTPRequestHandler ):
 
         parsed  = urlparse( self.path )
 
+        # give main as default
+        if parsed.path in [ '/' ]:
+
+            self.path = '/main.html'
+
+            fp = open( '.'+self.path )
+            content = fp.read()
+
+            self.send_response( 200 )
+            self.send_header( "Content-type", "text/html" )
+            self.send_header( "Content-length", len( content ) )
+            self.end_headers()
+
+            self.wfile.write( bytes( content, "utf-8" ) )
+            fp.close()
+
         # give main
-        if parsed.path in [ '/main.html' ]:
+        elif parsed.path in [ '/main.html' ]:
 
             fp = open( '.'+self.path )
             content = fp.read()
