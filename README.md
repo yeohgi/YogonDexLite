@@ -27,6 +27,7 @@ YogonDexLite is an essential tool for new players venturing into the world of co
     * Meta Shifts: Understand how the meta changes at different levels of competitive play.
 
 # Installation
+Installation is only nessacary to run the web application locally.
 1. Prerequisites
     * PHP
     * Python
@@ -41,8 +42,8 @@ YogonDexLite is an essential tool for new players venturing into the world of co
 
 # Usage
 * To run locally:
-    1. Run 'python server.py XXX' where XXX is a valid port number
-    2. Open localhost:XXX on a browser
+    1. Run 'python server.py XXX' where XXX is a valid port number.
+    2. Open localhost:XXX on a browser.
 * Alternatively, access through my domain:
     1. http://www.yeohgi.com/
     
