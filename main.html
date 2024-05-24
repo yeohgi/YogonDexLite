@@ -110,8 +110,8 @@
                             $("#pokemonlegal").text("Legal")
                             $("#pokemonlegal").attr("desc", "Legal to use in selected format.")
                         }else{
-                            $("#pokemonlegal").text("Illegal")
-                            $("#pokemonlegal").attr("desc", "Illegal to use in selected format.")
+                            $("#pokemonlegal").text("Illegal (Or Unused)")
+                            $("#pokemonlegal").attr("desc", "This Pokemon is not seen the selected format data because it is either illegal or never used. ")
                         }
 
                         //5 - update type
@@ -198,14 +198,19 @@
 
                         //9 - update spreads
                         $('#pokemonspreadstable tr:not(:first)').remove();
+                        percent = 100
                         for(var i = 0; i < info[9].length; i++){
 
                             if(info[9][i][2] < 20){
                                 if(i == 0){
                                     $('#pokemonspreadstable').append('<tr><td colspan="10">No spreads above 20% usage.</td></tr>')
+                                }else{
+                                    $('#pokemonspreadstable').append('<tr><td colspan="1">' + Math.round(percent * 1000)/1000 + '%</td><td class="otherCell" colspan="9">Other spreads under 20% usage.</td></tr>')
                                 }
                                 break
                             }
+
+                            percent -= info[9][i][2]
 
                             evs = info[9][i][1].split('/')
 
@@ -233,6 +238,8 @@
                             if(info[10][i][0] < 15){
                                 if(i == 0){
                                     $('#pokemonmovestable').append('<tr><td colspan="6">No moves above 15% usage.</td></tr>')
+                                }else{
+                                    $('#pokemonmovestable').append('<tr><td class="otherCell" colspan="6">Other moves under 15% usage.</td></tr>')
                                 }
                                 break
                             }
@@ -255,14 +262,19 @@
 
                         //11 - update items
                         $('#pokemonitemstable tr:not(:first)').remove();
+                        percent = 100
                         for(var i = 0; i < info[11].length; i++){
 
                             if(info[11][i][0] < 15){
                                 if(i == 0){
                                     $('#pokemonitemstable').append('<tr><td colspan="3">No items above 15% usage.</td></tr>')
+                                }else{
+                                    $('#pokemonitemstable').append('<tr><td class="otherCell" colspan="2">Other items under 15% usage.</td><td colspan="1">' + Math.round(percent * 1000)/1000 + '%</td></tr>')
                                 }
                                 break
                             }
+
+                            percent -= info[11][i][0]
 
                             searchName = info[11][i][1].replace(/ /g, '').toLowerCase();
 
@@ -283,6 +295,8 @@
                             if(info[12][i][0] < 15){
                                 if(i == 0){
                                     $('#pokemonteammatestable').append('<tr><td colspan="3">No teammates above 15% usage.</td></tr>')
+                                }else{
+                                    $('#pokemonteammatestable').append('<tr><td class="otherCell" colspan="3">Other teammates under 15% usage.</td></tr>')
                                 }
                                 break
                             }
@@ -1050,6 +1064,11 @@
 
             a{
                 color: orange;
+            }
+
+            .otherCell{
+                text-align: center !important;
+                font-weight: bold;
             }
 
         </style>
