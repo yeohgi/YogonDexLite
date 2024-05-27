@@ -229,6 +229,10 @@
 
                             $('#pokemonspreadstable').append(newSpread);
 
+                            if(i == info[9].length - 1 && info[9][i][2] < 100){
+                                $('#pokemonspreadstable').append('<tr><td colspan="1">' + Math.round(percent * 1000)/1000 + '%</td><td class="otherCell" colspan="9">Other spreads under 20% usage.</td></tr>')
+                            }
+
                         }
 
                         //10 - update moves
@@ -256,7 +260,10 @@
                             console.log(newMove)
 
                             $('#pokemonmovestable').append(newMove);
-                            // $('#pokemonmovestable tr:last').attr('desc', info[10][i][5]);
+
+                            if(i == info[10].length - 1 && info[10][i][0] < 100){
+                                $('#pokemonmovestable').append('<tr><td class="otherCell" colspan="6">Other moves under 15% usage.</td></tr>')
+                            }
 
                         }
 
@@ -285,7 +292,10 @@
                                         </tr>'
 
                             $('#pokemonitemstable').append(newItem);
-                            // $('#pokemonitemstable tr:last').attr('desc', info[11][i][2]);
+                            
+                            if(i == info[11].length - 1 && info[11][i][0] < 100){
+                                $('#pokemonitemstable').append('<tr><td class="otherCell" colspan="2">Other items under 15% usage.</td><td colspan="1">' + Math.round(percent * 1000)/1000 + '%</td></tr>')
+                            }
                         }
 
                         //12 - update teammates
@@ -308,6 +318,10 @@
                                             </tr>'
 
                             $('#pokemonteammatestable').append(newTeammate);
+
+                            if(i == info[12].length - 1 && info[12][i][0] < 100){
+                                $('#pokemonteammatestable').append('<tr><td class="otherCell" colspan="3">Other teammates under 15% usage.</td></tr>')
+                            }
 
                         }
 

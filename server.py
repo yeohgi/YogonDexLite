@@ -259,6 +259,11 @@ class MyHandler( BaseHTTPRequestHandler ):
                 #can only be provided if a pokemon exists in a format as they are entirely dictated by real players.
                 if returnStatus == 0:
                     spreads = pkdex.dexFetch('moveset', pokemon, 'Spreads').upper().split(';')
+
+                    #get rid of other
+                    if "OTHER" in spreads[-1]:
+                        spreads = spreads[:-1]
+
                     for i, spread in enumerate(spreads):
                         spreads[i] = spreads[i].replace(":", " ")
                         spreads[i] = spreads[i].split(" ")
