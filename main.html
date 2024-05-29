@@ -552,6 +552,7 @@
 
         </script>
         <style>
+
             body{
                 margin: 0;
                 margin-left: 35vw;
@@ -1095,6 +1096,40 @@
                 font-weight: bold;
             }
 
+            @media only screen and (max-width: 1000px) {
+
+                body {
+                    margin: 0;
+                    margin-left: 10vw;
+                    margin-right: 10vw;
+                    color: white;
+                    font-family: Arial, sans-serif;
+                    font-size: 18px;
+                    background: #424B54;
+                }
+
+                nav{
+                    margin-left: -10vw;
+                    margin-right: -10vw;
+                    align-items: center;
+                    background: #2C2F33;
+                    overflow: hidden;
+                    font-size: 18px;
+                    padding-bottom: 10px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    border-bottom: 2px solid white;
+                }
+
+                .userinput{
+                    font-size: 14;
+                }
+
+                .shrink{
+                    font-size: 14;
+                }
+            }
+
         </style>
 
     </head>
@@ -1105,11 +1140,11 @@
         <nav>
             <div class="divl">
                 <ul class="ulh">
-                    <li><p id="currentformat">Current Format: gen9doublesou</p></li>
+                    <li><p id="currentformat" class="shrink">Current Format: gen9doublesou</p></li>
                     <li><input id="getformat" class="userinput" value="gen9doublesou"><button class="userinput" onclick="setFormat()">Set Format</button><img id="loadingformat" class="loading" src="loading.gif" alt="Loading..."></li>
                 </ul>
                 <ul class="ulh">
-                    <li><p id="currentelo">Current Elo: 1000</p></li>
+                    <li><p id="currentelo" class="shrink">Current Elo: 1000</p></li>
                     <li><input id="getelo" class="userinput inputnumber" value="1000"><button class="userinput" onclick="setElo()">Set Elo</button></li>
                 </ul>
             </div>

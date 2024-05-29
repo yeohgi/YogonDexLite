@@ -393,9 +393,9 @@ class MyHandler( BaseHTTPRequestHandler ):
                 print("Sending content for", pokemon, elo, format)
 
                 #uncomment to see the content list being sent back
-                for i, item in enumerate(content):
-                    print("")
-                    print(i, item)
+                # for i, item in enumerate(content):
+                #     print("")
+                #     print(i, item)
 
                 content = json.dumps(content)
 
