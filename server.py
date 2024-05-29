@@ -393,9 +393,9 @@ class MyHandler( BaseHTTPRequestHandler ):
                 print("Sending content for", pokemon, elo, format)
 
                 #uncomment to see the content list being sent back
-                # for i, item in enumerate(content):
-                #     print("")
-                #     print(i, item)
+                for i, item in enumerate(content):
+                    print("")
+                    print(i, item)
 
                 content = json.dumps(content)
 
@@ -463,6 +463,27 @@ class MyHandler( BaseHTTPRequestHandler ):
 
         #return a typechart
         elif parsed.path in [ '/tctable.png' ]:
+
+            try:
+                fp = open('.' + self.path, 'rb')
+                content = fp.read()
+
+                self.send_response( 200 )
+                self.send_header( "Content-type", "image/png" )
+                self.send_header( "Content-length", len( content ) )
+                self.end_headers()
+
+                self.wfile.write( bytes(content) )
+                fp.close()
+            except FileNotFoundError:
+                self.send_error(404, "File Not Found: %s" % self.path)
+            except BrokenPipeError:
+                logging.error("Broken pipe error while writing response to client.")
+            except Exception as e:
+                logging.error(f"Unexpected error: {e}") 
+
+        #return a typechart
+        elif parsed.path in [ '/worker.png' ]:
 
             try:
                 fp = open('.' + self.path, 'rb')

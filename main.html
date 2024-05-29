@@ -131,7 +131,7 @@
                             if(info[6][i].length > 0){
                                 newRowPart1 =   '<tr>\
                                                 <td>'+ defRowMUs[i] +'</td>\
-                                                <td>'
+                                                <td><ul class="ulh"><li>'
 
                                 newRowPart2=''
 
@@ -139,7 +139,7 @@
                                     newRowPart2 += '<img class="typeimg" style="margin-left: 5px" src="https://play.pokemonshowdown.com/sprites/types/' + info[6][i][j] + '.png" alt="???">'
                                 }
 
-                                newRowPart2 += '</td></tr>'
+                                newRowPart2 += '</li></ul></td></tr>'
 
                                 newRow = newRowPart1 + newRowPart2
                             
@@ -537,6 +537,16 @@
                 }else{
                     $("#typecharttable").show()
                     typeChart = true;
+                }
+            }
+
+            function toggleHelpMenu(){
+                if(helpTable){
+                    $("#helptable").hide()
+                    helpTable = false;
+                }else{
+                    $("#helptable").show()
+                    helpTable = true;
                 }
             }
 
@@ -1108,7 +1118,7 @@
 
             <div class="divr navmiddle">
                 <button class="userinput" onclick="toggleTypeChart()">Type Chart</button>
-                <button class="userinput">Help</button>
+                <button class="userinput" onclick="toggleHelpMenu()">Help</button>
             </div>
         </nav>
 
@@ -1384,6 +1394,13 @@
                     </div>
                 </div>
 
+                <div style="height: 600px;"></div>
+
+                <div class="divc">
+                    <p>Made By: Yeohgi</p> 
+                    <p>Github: <a href="https://github.com/yeohgi">Click Here!</a></p>
+                </div>
+
             </div>
         </div>
 
@@ -1391,6 +1408,11 @@
         <div id="typecharttable" class="typechartdiv" style="position:absolute; right: 10px; top: 90px; display: none;">
             <div class="divc"><p>Type Chart</p></div>
             <img class="typechart" src="tctable.png">
+        </div>
+
+        <!-- typechart -->
+        <div id="helptable" class="typechartdiv" style="position:absolute; right: 10px; top: 90px; display: none;">
+            <div class ="divc" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;"><p>This tool is designed for use while playing on <a href="https://play.pokemonshowdown.com/"> Pokemon Showdown</a>, a popular battle simulator. It utilizes statistical data provided by Smogon, which can be found <a href="https://www.smogon.com/stats/">here</a>. Since each player's team of Pokemon is personally customized, newer players can use the data provided by Smogon to search for their opponents' Pokemon. This allows them to see the likelihood of those Pokemon using certain moves, items, and spreads to get a better understanding of what they are up aganist.</p></div>
         </div>
         
     </body>

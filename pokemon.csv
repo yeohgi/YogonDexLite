@@ -410,7 +410,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 333,Swablu,Normal,Flying,45,40,60,40,75,50,Natural Cure,,Cloud Nine
 334,Altaria,Dragon,Flying,75,70,90,70,105,80,Natural Cure,,Cloud Nine
 334,Altaria-Mega,Dragon,Fairy,75,110,110,110,105,80,Pixilate,,
-335,Zangoose,Normal,,73,115,60,60,60,90,Immunity,,Poison Rampage
+335,Zangoose,Normal,,73,115,60,60,60,90,Immunity,,Toxic Boost
 336,Seviper,Poison,,73,100,60,100,60,65,Shed Skin,,Infiltrator
 337,Lunatone,Rock,Psychic,90,55,65,95,85,70,Levitate,,
 338,Solrock,Rock,Psychic,90,95,85,55,65,70,Levitate,,
