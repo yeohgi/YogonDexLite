@@ -76,17 +76,20 @@ def grabOneFormat(format):
         subprocess.run(["mkdir", f'prepro/{formatDate}/moveset/'])
 
     #for each of the formats saved to be retrived, retrive their basic .txt files and special .txt files including info on leads, metagame, and moveset using grabBasic.php and grabSpecial.php
+
     for format in formats:
 
-        subprocess.Popen(f"php grabBasic.php {formatDate} {format}", shell = True, stdout = subprocess.PIPE)
+        if not ".gz" in format:
 
-        time.sleep(0.3)
-
-        for specialFolder in specialFolders:
-
-            subprocess.Popen(f"php grabSpecial.php {formatDate} {specialFolder} {format}", shell = True, stdout = subprocess.PIPE)
+            subprocess.Popen(f"php grabBasic.php {formatDate} {format}", shell = True, stdout = subprocess.PIPE)
 
             time.sleep(0.3)
+
+            for specialFolder in specialFolders:
+
+                subprocess.Popen(f"php grabSpecial.php {formatDate} {specialFolder} {format}", shell = True, stdout = subprocess.PIPE)
+
+                time.sleep(0.3)
 
 # checkForLatest(format) is a huge list of checks that can confirm if we have all the information we need about a format, useful so that the application does not have to fetch info if it already has it.
 # Args: format refers to the format we would like to check if we already have up to date information for.
