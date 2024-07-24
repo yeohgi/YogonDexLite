@@ -1180,9 +1180,7 @@ Number,Name,Type1,Type2,HP,ATK,DEF,SPATK,SPDEF,SPD,Ability1,Ability2,Hidden
 975,Cetitan,Ice,,170,113,65,45,55,73,Thick Fat,Slush Rush,Sheer Force
 976,Veluza,Water,Psychic,90,102,73,78,65,70,Mold Breaker,,Sharpness
 977,Dondozo,Water,,150,100,115,65,65,35,Unaware,Oblivious,Water Veil
-978,Tatsugiri-Curly,Dragon,Water,68,50,60,120,95,82,Commander,,Storm Drain
-978,Tatsugiri-Droopy,Dragon,Water,68,50,60,120,95,82,Commander,,Storm Drain
-978,Tatsugiri-Stretchy,Dragon,Water,68,50,60,120,95,82,Commander,,Storm Drain
+978,Tatsugiri,Dragon,Water,68,50,60,120,95,82,Commander,,Storm Drain
 979,Annihilape,Fighting,Ghost,110,115,80,50,90,90,Vital Spirit,Inner Focus,Defiant
 980,Clodsire,Poison,Ground,130,75,60,45,100,20,Poison Point,Water Absorb,Unaware
 981,Farigiraf,Normal,Psychic,120,90,70,110,70,60,Cud Chew,Armor Tail,Sap Sipper
