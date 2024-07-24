@@ -412,6 +412,50 @@ class MyHandler( BaseHTTPRequestHandler ):
             except Exception as e:
                 logging.error(f"Unexpected error: {e}") 
 
+        # return the top 25 ranked pokemon in a given format with respect to an elo rating
+        elif parsed.path.endswith(".ranks"):
+                
+            try:
+
+                print("Servicing rank request: ", parsed.path)
+
+                pokemon = parsed.path[:-6].strip('/')
+
+                pokemon = unquote(pokemon)
+
+                #we need to know the users selected format and elo which are sent as parameters
+                params = parse_qs(parsed.query)
+                format = params.get('format', [''])[0]
+                elo = params.get('elo', [''])[0]
+
+                content = []
+
+                #smogon provides statistics for 4 different levels of elo, we assign the elo rating we want to search from as the closest to the users elo
+                format += str('-') + str(smogon.assignElo(format, elo))
+
+                #make a dex
+                pkdex = dex.dex(format)
+                
+                #assign the content as the list returned by top25Pokemon()
+                content = pkdex.top25Pokemon(format)
+
+                print("Sending ranks content for", elo, format)
+
+                content = json.dumps(content)
+
+                self.send_response( 200 )
+                self.send_header( "Content-type", "application/json" )
+                self.send_header( "Content-length", len(content.encode('utf-8')) )
+                self.end_headers()
+
+                self.wfile.write( bytes(content, "utf-8") )
+            except FileNotFoundError:
+                self.send_error(404, "File Not Found: %s" % self.path)
+            except BrokenPipeError:
+                logging.error("Broken pipe error while writing response to client.")
+            except Exception as e:
+                logging.error(f"Unexpected error: {e}") 
+
         #get a pokemon img name, sometimes we dont want to get all the information about a pokemon and would only like to display its existance
         elif parsed.path.endswith(".pkimg"):
 

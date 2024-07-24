@@ -12,6 +12,7 @@
             shiny = false;
             typeChart = false;
             helpTable = false;
+            ranksLoaded = false;
 
             // format
             function setFormat(){
@@ -23,6 +24,7 @@
 
                     if(valid){
                         $('#currentformat').text("Current Format: " + format)
+                        unloadRanks();
                     }else{
                         console.log("no no no, bad format")
                     }
@@ -73,11 +75,12 @@
 
                 elo = $('#getelo').val()
                 
-                if(elo < 1000){
+                if(elo < 1000 || isNaN(elo)){
                     elo = 1000;
                 }
 
                 $('#currentelo').text("Current Elo: " + elo)
+                unloadRanks();
             }
 
             function searchPokemon(){
@@ -365,6 +368,39 @@
                 });
             }
 
+            function getRanks() {
+
+                var url = 'ranks' + ".ranks";
+                var params = {format: format, elo:elo};
+
+                console.log(params)
+
+                $.get(url, params, function(data) {
+                    console.log(data)
+
+                    $('#pokemonrankstable tr:not(:first)').remove();
+                        for(var i = 0; i < data.length; i++){
+
+                            newRank =   '<tr>\
+                                                <td class="rank">' + (i + 1) + '</td>\
+                                                <td><a href="javascript:"><img class="itemimg whiteimgoutline" src="https://play.pokemonshowdown.com/sprites/gen5/' + data[i][1] + '.png" alt="' + data[i][0] + '" onmousedown="searchTeammate(&quot;' + data[i][0] + '&quot;);"></a></td>\
+                                                <td class="name">' + data[i][0] + '</td>\
+                                                <td>' + data[i][2] + '%</td>\
+                                            </tr>'
+
+                            $('#pokemonrankstable').append(newRank);
+                        }
+
+                    $('#loadingranks').hide()
+                    $("#Ranks").toggle();
+                });
+            }
+
+            function unloadRanks(){
+                ranksLoaded = false;
+                $("#Ranks").hide();
+            }
+
             function updatePokemonSprite(){
                 if(shiny){
                     $("#pokemonimage").attr("src", "https://play.pokemonshowdown.com/sprites/gen5-shiny/" + showing + ".png")
@@ -380,6 +416,7 @@
             }
 
             $(document).ready(function(){
+                $("#Ranks").hide();
                 openTab($("#movetabbutton"), 'Moves');
                 $("#movetabbutton").addClass("active");
                 $('#searchpokemonfield').on('keydown', function(event) {
@@ -406,6 +443,16 @@
 
             function toggleStats(){
                 $("#Stats").toggle();
+            }
+
+            function toggleRanks(){
+                if (!$("#Ranks").is(":visible") && !ranksLoaded) {
+                    $('#loadingranks').show()
+                    getRanks();
+                    ranksLoaded = true;
+                }else{
+                    $("#Ranks").toggle();
+                }
             }
 
             function updateMinMinMaxMax(){
@@ -909,6 +956,21 @@
                 text-align: left;
             }
 
+            .rankstable {
+                width: 100%;
+                display: table;
+                border-collapse: separate;
+                box-sizing: border-box;
+                text-indent: initial;
+                unicode-bidi: isolate;
+                border-spacing: 2px;
+                border-color: gray;
+            }
+
+            .rankstable tr:hover{
+                background-color: #424B54;
+            }
+
             .spreadstable {
                 width: 100%;
                 display: table;
@@ -943,6 +1005,12 @@
 
             .usage {
                 width: 5vw;
+            }
+
+            .rank {
+                width: 3vw;
+                text-align: center;
+                font-weight: bold;
             }
 
             .number {
@@ -1424,6 +1492,27 @@
                                 <th>Nature</th>
                                 <th class="natureIncDec">Nature Increases</th>
                                 <th class="natureIncDec">Nature Decreases</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ranks -->
+                <div class="newsection">
+                    <div class="dropdown">
+                        <button class="tablinks" onclick="toggleRanks(event, 'Ranks')"><img id="loadingranks" style="margin-right: 10px;" class="loading" src="loading.gif" alt="Loading...">Format Rankings</button>
+                    </div>
+                </div>
+
+                <div id="Ranks" class="dropdowncontent">
+                    <div>
+                        <table id="pokemonrankstable" class="rankstable">
+                            <!-- header -->
+                            <tr>
+                                <th class="rank">Rank</th>
+                                <th class="tableimg">Image</th>
+                                <th></th>
+                                <th class="usage">Percent Usage</th>
                             </tr>
                         </table>
                     </div>

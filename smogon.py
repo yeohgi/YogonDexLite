@@ -369,6 +369,8 @@ def validFormat(format):
 # Returns: A pokemon image name to be used in a url if the pokemon name is found, if it is not found an empty string is returned.
 def grabImage(pokemon):
 
+    print(pokemon, 0000)
+
     #could improve later
     #note: just improved it a little more, should be alot faster
 
@@ -477,5 +479,7 @@ def similarFormatTo(wrongFormat):
     similarFormats = sorted(similarFormats, key=lambda x: x[-1], reverse=True)
 
     return similarFormats
+
+
 
 

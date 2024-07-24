@@ -663,6 +663,37 @@ class dex:
         similarPokemon = sorted(similarPokemon, key=lambda x: x[-1], reverse=True)
 
         return similarPokemon
+    
+    #top25Pokemon(self, wrongPokemon) is a function to provide the top 25 most used pokemon in a given format.
+    # Args: format refers to a verified format with an attached elo rating to be searched.
+    # Returns: A list of the top 25 pokemon in the given format.
+    def top25Pokemon(self, format):
+
+        topPokemon = []
+
+        print(0, format)
+
+        #connect to basic.db
+        if os.path.exists('basic.db'):
+
+            topPokemon = []
+
+            conn = sqlite3.connect('basic.db')
+            cursor = conn.cursor()
+            command = f"SELECT pokemon, usage FROM basic WHERE Rank < 26 AND Format = '{format}'"
+            cursor.execute(command)
+            rows = cursor.fetchall()
+
+            #go through the top 25 pokemon and create a list containing each of them in order along with their image name and usage.
+            for row in rows[0:25]:
+
+                pokemon = row[0]
+
+                usage = row[1]
+
+                topPokemon.append([pokemon, smogon.grabImage(pokemon.lower()), usage])
+
+        return topPokemon
 
     # tostring, lol i never used this ever
     def __repr__(self):
