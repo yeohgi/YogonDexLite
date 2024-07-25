@@ -22,10 +22,36 @@ logging.basicConfig(level=logging.INFO)
 # handler for our web-server - handles both GET and POST requests
 class MyHandler( BaseHTTPRequestHandler ):
 
+    def handle_one_request(self):
+        self.raw_requestline = self.rfile.readline(65537)
+        if len(self.raw_requestline) > 65536:
+            self.requestline = ''
+            self.request_version = ''
+            self.command = ''
+            self.send_error(414)
+            return
+
+        if not self.parse_request():
+            return
+
+        # Check the HTTP version
+        if self.request_version == "HTTP/2.0":
+            self.send_error(505, "HTTP Version Not Supported")
+            return
+
+        self.do_GET()
+
     #service get requests
     def do_GET(self):
 
-        parsed  = urlparse( self.path )
+        parsed = urlparse( self.path )
+
+        try:
+            if self.path == '/.git/HEAD' or self.path == '/favicon.ico':
+                self.send_error(404, "File Not Provided")
+        except Exception as e:
+            self.send_error(500, "Internal Server Error (git/HEAD & favicon.ico)")
+            print(f"Exception: {e}")
 
         # give main as default
         if parsed.path in [ '/' ]:
@@ -568,20 +594,6 @@ class MyHandler( BaseHTTPRequestHandler ):
             except Exception as e:
                 logging.error(f"Unexpected error: {e}") 
 
-        #return a star to symbolize shinyness (not used rn)
-        elif parsed.path in [ '/star.png' ]:
-
-            fp = open('.' + self.path, 'rb')
-            content = fp.read()
-
-            self.send_response( 200 )
-            self.send_header( "Content-type", "image/png" )
-            self.send_header( "Content-length", len( content ) )
-            self.end_headers()
-
-            self.wfile.write( bytes(content) )
-            fp.close()
-
         #return a loading gif, loaded early
         elif parsed.path in [ '/loading.gif' ]:
 
@@ -612,7 +624,7 @@ class MyHandler( BaseHTTPRequestHandler ):
     #I never need to use post so i dont, keeping it simple
     def do_POST(self):
 
-        parsed = urlparse( self.path )
+        # parsed = urlparse( self.path )
 
         self.send_response( 404 )
         self.end_headers()
