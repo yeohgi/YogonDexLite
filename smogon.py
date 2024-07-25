@@ -1,5 +1,4 @@
 #smogon.py is a library that retrieves and serves information related to smogon including data about formats, elo, and sprites.
-#although not explicitly mentioned smogon.py requires the installation of php to be able to generate important temporary files.
 import subprocess
 import shlex
 import time
@@ -9,55 +8,85 @@ import processAll
 import createSmogon
 import createPokemon
 
+import urllib.request
+from urllib.error import HTTPError, URLError
+
 from fuzzywuzzy import fuzz
 
 specialFolders = ["leads","metagame","moveset"]
+
+def grabDate():
+
+    #get format date
+    url = "https://www.smogon.com/stats/"
+
+    response = urllib.request.urlopen(url)
+    html_content = response.read().decode('utf-8')
+    lines = html_content.split('\n')
+
+    for line in lines:
+        if '"' in line:
+            lastLine = line
+
+    formatDate = lastLine.split('"')[1].strip('/')
+
+    return formatDate
+
+def grabFormatSet(format, date):
+
+    formats = []
+
+    #get format names and codes
+    url = "https://www.smogon.com/stats/" + date +"/"
+
+    response = urllib.request.urlopen(url)
+    html_content = response.read().decode('utf-8')
+    lines = html_content.split('\n')
+
+    for line in lines:
+        if format.lower() in line.lower():
+            formats.append(line.split('"')[1])
+
+    return formats
+
+def grabAllFormats(date):
+
+    formats = []
+
+    #get format names and codes
+    url = "https://www.smogon.com/stats/" + date +"/"
+
+    response = urllib.request.urlopen(url)
+    html_content = response.read().decode('utf-8')
+    lines = html_content.split('\n')
+
+    for line in lines:
+        if '"' in line:
+            formats.append(line.split('"')[1].split("-")[0])
+
+    return formats
 
 # grabOneFormat(format) is used to grab information about a format.
 # Args: format refers to the format which data must be retrived for.
 # Returns: does not return anything, files retrived if any are simply stored in /prepro.
 def grabOneFormat(format):
 
-    #get the latest folder/date by using a php script to get the html contents of https://www.smogon.com/stats/
-    subprocess.Popen("php grabDate.php", shell = True, stdout = subprocess.PIPE)
+    formatDate = grabDate()
 
-    time.sleep(0.3)
+    formats = []
 
-    #get the last line of the html saved
-    if os.path.exists('temp0.txt'):
-        with open("temp0.txt", "r") as pk1:
-            for line in pk1:
-                if '"' in line:
-                    lastLine = line
-    else:
-        print("Date could not be accessed")
-        return
+    #get format names and codes
+    # url = "https://www.smogon.com/stats/" + formatDate +"/"
 
-    formatDate = lastLine.split('"')[1].strip('/')
+    # response = urllib.request.urlopen(url)
+    # html_content = response.read().decode('utf-8')
+    # lines = html_content.split('\n')
 
-    #got the date
-    #clean up
-    subprocess.run(["rm", 'temp0.txt'])
+    # for line in lines:
+    #     if format.lower() in line.lower():
+    #         formats.append(line.split('"')[1])
 
-    #get all format names & codes by checking inside the most recent folder we just got the name/date of
-    subprocess.Popen(f"php grabFormatCodes.php {formatDate}", shell = True, stdout = subprocess.PIPE)
-
-    time.sleep(0.5)
-
-    #if the format provided as a parameter for this function appears in any line save that format to be retrived later
-    if os.path.exists('temp1.txt'):
-        formats = []
-        with open("temp1.txt", "r") as pk1:
-            for line in pk1:
-                if format.lower() in line.lower():
-                    formats.append(line.split('"')[1])
-    else:
-        print("Folder could not be accessed")
-        return
-    
-    #got the format names
-    #clean up
-    subprocess.run(["rm", 'temp1.txt'])
+    formats = grabFormatSet(format, formatDate)
 
     #make sure /prepro and all of its subfolders exist
     if not os.path.exists('prepro/'):
@@ -81,39 +110,34 @@ def grabOneFormat(format):
 
         if not ".gz" in format:
 
-            subprocess.Popen(f"php grabBasic.php {formatDate} {format}", shell = True, stdout = subprocess.PIPE)
+            url = "https://www.smogon.com/stats/" + formatDate + "/" + format
 
-            time.sleep(0.3)
+            # print("Grabbing Basic Format: ", url)
+
+            response = urllib.request.urlopen(url)
+            html_content = response.read().decode('utf-8')
+            filename = "prepro/" + formatDate + "/" + format + ".txt"
+            with open(filename, "w") as file:
+                file.write(html_content)
 
             for specialFolder in specialFolders:
 
-                subprocess.Popen(f"php grabSpecial.php {formatDate} {specialFolder} {format}", shell = True, stdout = subprocess.PIPE)
+                url = "https://www.smogon.com/stats/" + formatDate + "/" + specialFolder + "/" + format
 
-                time.sleep(0.3)
+                # print("Grabbing Special Format: ", url)
+
+                response = urllib.request.urlopen(url)
+                html_content = response.read().decode('utf-8')
+                filename = "prepro/" + formatDate + "/" + specialFolder + "/" + format + ".txt"
+                with open(filename, "w") as file:
+                    file.write(html_content)
 
 # checkForLatest(format) is a huge list of checks that can confirm if we have all the information we need about a format, useful so that the application does not have to fetch info if it already has it.
 # Args: format refers to the format we would like to check if we already have up to date information for.
 # Returns: True if nothing need to be retrived and no files are missing, False if anything at all is missing regarding the format and any smogon related database.
 def checkForLatest(format):
 
-    #get the latest folder/date by using a php script to get the html contents of https://www.smogon.com/stats/
-    subprocess.Popen("php grabDate.php", shell = True, stdout = subprocess.PIPE)
-
-    time.sleep(0.5)
-
-    if os.path.exists('temp0.txt'):
-        with open("temp0.txt", "r") as pk1:
-            for line in pk1:
-                if '"' in line:
-                    lastLine = line
-    else:
-        print("Date could not be accessed")
-        return
-
-    formatDate = lastLine.split('"')[1].strip('/')
-
-    #clean up
-    subprocess.run(["rm", 'temp0.txt'])
+    formatDate = grabDate()
 
     #check for data folder
     if not os.path.exists(f'prepro/{formatDate}'):
@@ -253,39 +277,9 @@ def assignElo(format, elo):
 
     elo = int(elo)
 
-    #get the latest folder/date by using a php script to get the html contents of https://www.smogon.com/stats/
-    subprocess.Popen("php grabDate.php", shell = True, stdout = subprocess.PIPE)
+    formatDate = grabDate()
 
-    time.sleep(0.5)
-
-    if os.path.exists('temp0.txt'):
-        with open("temp0.txt", "r") as pk1:
-            for line in pk1:
-                if '"' in line:
-                    lastLine = line
-    else:
-        print("Date could not be accessed")
-        return
-
-    formatDate = lastLine.split('"')[1].strip('/')
-
-    #clean up
-    subprocess.run(["rm", 'temp0.txt'])
-
-    #get format names/codes
-    subprocess.Popen(f"php grabFormatCodes.php {formatDate}", shell = True, stdout = subprocess.PIPE)
-
-    time.sleep(1)
-
-    if os.path.exists('temp1.txt'):
-        formats = []
-        with open("temp1.txt", "r") as pk1:
-            for line in pk1:
-                if format.lower() in line.lower():
-                    formats.append(line.split('"')[1])
-    else:
-        print("Folder could not be accessed")
-        return
+    formats = grabFormatSet(format, formatDate)
 
     #format names/codes contain their elo tier, in the form format-elo.txt, so we may split to get all the formats elo tiers
     eloBounds = []
@@ -312,9 +306,6 @@ def assignElo(format, elo):
                 useIndex = i
                 difference = abs(elo - eloBound)
 
-    #cleanup
-    subprocess.run(["rm", 'temp1.txt'])
-
     #return closest elo tier
     return eloBounds[useIndex]
 
@@ -323,39 +314,9 @@ def assignElo(format, elo):
 # Returns: A list containing the validity of the format, and a list of format codes. Validity is True if format is valid, False if the format is deemed not valid.
 def validFormat(format):
     
-    #get the latest folder/date by using a php script to get the html contents of https://www.smogon.com/stats/
-    subprocess.Popen("php grabDate.php", shell = True, stdout = subprocess.PIPE)
+    formatDate = grabDate()
 
-    time.sleep(0.3)
-
-    if os.path.exists('temp0.txt'):
-        with open("temp0.txt", "r") as pk1:
-            for line in pk1:
-                if '"' in line:
-                    lastLine = line
-    else:
-        print("Date could not be accessed")
-        return
-
-    formatDate = lastLine.split('"')[1].strip('/')
-
-    #clean up
-    subprocess.run(["rm", 'temp0.txt'])
-
-    #get format names/codes
-    subprocess.Popen(f"php grabFormatCodes.php {formatDate}", shell = True, stdout = subprocess.PIPE)
-
-    time.sleep(0.3)
-
-    if os.path.exists('temp1.txt'):
-        formats = []
-        with open("temp1.txt", "r") as pk1:
-            for line in pk1:
-                if format.lower() in line.lower():
-                    formats.append(line.split('"')[1])
-    else:
-        print("Folder could not be accessed")
-        return
+    formats = grabFormatSet(format, formatDate)
     
     #if the format we searched yields a list of formats greater than zero it must be valid
     if len(formats) == 0:
@@ -368,8 +329,6 @@ def validFormat(format):
 # Args: pokemon refers to the pokemon which we are trying to find the image for.
 # Returns: A pokemon image name to be used in a url if the pokemon name is found, if it is not found an empty string is returned.
 def grabImage(pokemon):
-
-    print(pokemon, 0000)
 
     #could improve later
     #note: just improved it a little more, should be alot faster
@@ -405,22 +364,24 @@ def grabImage(pokemon):
     #try all names and if one is successful stop the searching and return it
     for tryName in tryPokemon:
 
-        #using a php script named grabImage.php we decode a return value based on if the image name we tried was successful
-        process = subprocess.Popen(f"php grabImage.php {tryName}", shell = True, stdout = subprocess.PIPE)
+        url = "https://play.pokemonshowdown.com/sprites/gen5/" + tryName + ".png"
 
-        process.wait()
-
-        output = process.stdout.read().strip().decode("utf-8")
-
-        returnValue = int(output)
-
-        # print(tryName, returnValue)
-
-        #if the return value was 0 it was successful and can move forward using this image name
-        if returnValue == 0:
-            savedAs = tryName
-            break
-
+        try:
+            request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            response = urllib.request.urlopen(request)
+            if response.status == 200:
+                savedAs = tryName
+                break
+        except HTTPError as e:
+            if e.code == 404:
+                print("HTTP Error 404:", tryName, "Not Found")
+            else:
+                print(tryName, "HTTP Error:", tryName, e.code)
+        except URLError as e:
+            print(tryName, "URL Error:", tryName, e.reason)
+        except Exception as e:
+            print(tryName, "Error:", tryName, e)
+        
     #return image name
     return savedAs
 
@@ -429,43 +390,10 @@ def grabImage(pokemon):
 # Returns: A list of formats deemed similar from most to least similar, if no formats are deemed similar to wrongFormat the list will be empty.
 def similarFormatTo(wrongFormat):
 
-    #get the latest folder/date
-    subprocess.Popen("php grabDate.php", shell = True, stdout = subprocess.PIPE)
-
-    time.sleep(0.3)
-
-    if os.path.exists('temp0.txt'):
-        with open("temp0.txt", "r") as pk1:
-            for line in pk1:
-                if '"' in line:
-                    lastLine = line
-    else:
-        print("Date could not be accessed")
-        return
-
-    formatDate = lastLine.split('"')[1].strip('/')
-
-    #clean up
-    subprocess.run(["rm", 'temp0.txt'])
+    formatDate = grabDate()
     
     #get format names/codes
-    subprocess.Popen(f"php grabFormatCodes.php {formatDate}", shell = True, stdout = subprocess.PIPE)
-
-    time.sleep(0.5)
-
-    #create a list of all formats in the most recent folder
-    if os.path.exists('temp1.txt'):
-        formats = []
-        with open("temp1.txt", "r") as pk1:
-            for line in pk1:
-                if '"' in line:
-                    formats.append(line.split('"')[1].split("-")[0])
-    else:
-        print("Folder could not be accessed")
-        return ["Folder could not be accessed"]
-    
-    #clean up
-    subprocess.run(["rm", 'temp1.txt'])
+    formats = grabAllFormats(formatDate)
 
     #go through all format codes and compare with wrongFormat, if a format is deemed similar it is appended to similarFormats along with its similarity score.
     similarFormats = []
