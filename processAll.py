@@ -150,76 +150,159 @@ def processFolder():
     
           else:
 
-            indexPointer = 1
+            if "Tera Types" not in megaString:
 
-            while indexPointer + 8 < len(megaSplit):
-            
-              name = megaSplit[indexPointer]
-              raw = megaSplit[indexPointer + 1]
-              abilities = megaSplit[indexPointer + 2]
-              items = megaSplit[indexPointer + 3]
-              spreads = megaSplit[indexPointer+ 4]
-              moves = megaSplit[indexPointer+ 5]
-              teammates = megaSplit[indexPointer+ 6]
+              print("No tera in file", pk1)
 
-              # #name
-              nameFinal = name.strip('|').strip()
-              nameFinal = nameFinal.split("|")[0].strip()
-              # print(nameFinal)
+              indexPointer = 1
 
-              #name
-              rawFinal = raw.strip('|').strip()
-              rawFinal = rawFinal.split("|")[0].strip()
-              rawFinal = rawFinal.split(" ")[-1].strip()
-              # print(rawFinal)
-
-              #abilities
-              abilitiesFinal = ""
-              abilitiesPieces = abilities.split('||')
-              for index in range(1,len(abilitiesPieces)):
-                abilitiesFinal += abilitiesPieces[index].split("|")[0].strip().strip("%") + ';'
-              abilitiesFinal = abilitiesFinal.strip(';')
-              # print(abilitiesFinal)
-
-              #items
-              itemsFinal = ""
-              itemsPieces = items.split('||')
-              for index in range(1,len(itemsPieces)):
-                itemsFinal += itemsPieces[index].split("|")[0].strip().strip("%") + ';'
-              itemsFinal = itemsFinal.strip(';')
-              # print(itemsFinal)
-
-              #spreads
-              spreadsFinal = ""
-              spreadsPieces = spreads.split('||')
-              for index in range(1,len(spreadsPieces)):
-                spreadsFinal += spreadsPieces[index].split("|")[0].strip().strip("%") + ';'
-              spreadsFinal = spreadsFinal.strip(';')
-              # print(spreadsFinal)
-
-              #moves
-              movesFinal = ""
-              movesPieces = moves.split('||')
-              for index in range(1,len(movesPieces)):
-                movesFinal += movesPieces[index].split("|")[0].strip().strip("%") + ';'
-              movesFinal = movesFinal.strip(';')
-              # print(movesFinal)
-
-              #teammates
-              teammatesFinal = ""
-              teammatesPieces = teammates.split('||')
-              for index in range(1,len(teammatesPieces)):
-                teammatesFinal += teammatesPieces[index].split("|")[0].strip().strip("%") + ';'
-              teammatesFinal = teammatesFinal.strip(';')
-              # print(teammatesFinal)
-
-              final = nameFinal + ',' + rawFinal + ',' + abilitiesFinal + ',' + itemsFinal + ',' + spreadsFinal + ',' + movesFinal + ',' + teammatesFinal
-
-              # print(final + '\n')
-
-              pk2.write(final + '\n')
+              while indexPointer + 8 < len(megaSplit):
               
-              indexPointer = indexPointer + 9
+                name = megaSplit[indexPointer]
+                raw = megaSplit[indexPointer + 1]
+                abilities = megaSplit[indexPointer + 2]
+                items = megaSplit[indexPointer + 3]
+                spreads = megaSplit[indexPointer+ 4]
+                moves = megaSplit[indexPointer+ 5]
+                teammates = megaSplit[indexPointer+ 6]
+
+                # #name
+                nameFinal = name.strip('|').strip()
+                nameFinal = nameFinal.split("|")[0].strip()
+                # print(nameFinal)
+
+                #name
+                rawFinal = raw.strip('|').strip()
+                rawFinal = rawFinal.split("|")[0].strip()
+                rawFinal = rawFinal.split(" ")[-1].strip()
+                # print(rawFinal)
+
+                #abilities
+                abilitiesFinal = ""
+                abilitiesPieces = abilities.split('||')
+                for index in range(1,len(abilitiesPieces)):
+                  abilitiesFinal += abilitiesPieces[index].split("|")[0].strip().strip("%") + ';'
+                abilitiesFinal = abilitiesFinal.strip(';')
+                # print(abilitiesFinal)
+
+                #items
+                itemsFinal = ""
+                itemsPieces = items.split('||')
+                for index in range(1,len(itemsPieces)):
+                  itemsFinal += itemsPieces[index].split("|")[0].strip().strip("%") + ';'
+                itemsFinal = itemsFinal.strip(';')
+                # print(itemsFinal)
+
+                #spreads
+                spreadsFinal = ""
+                spreadsPieces = spreads.split('||')
+                for index in range(1,len(spreadsPieces)):
+                  spreadsFinal += spreadsPieces[index].split("|")[0].strip().strip("%") + ';'
+                spreadsFinal = spreadsFinal.strip(';')
+                # print(spreadsFinal)
+
+                #moves
+                movesFinal = ""
+                movesPieces = moves.split('||')
+                for index in range(1,len(movesPieces)):
+                  movesFinal += movesPieces[index].split("|")[0].strip().strip("%") + ';'
+                movesFinal = movesFinal.strip(';')
+                # print(movesFinal)
+
+                #teammates
+                teammatesFinal = ""
+                teammatesPieces = teammates.split('||')
+                for index in range(1,len(teammatesPieces)):
+                  teammatesFinal += teammatesPieces[index].split("|")[0].strip().strip("%") + ';'
+                teammatesFinal = teammatesFinal.strip(';')
+                # print(teammatesFinal)
+
+                final = nameFinal + ',' + rawFinal + ',' + abilitiesFinal + ',' + itemsFinal + ',' + spreadsFinal + ',' + movesFinal + ',' + teammatesFinal
+
+                # print(final + '\n')
+
+                pk2.write(final + '\n')
+                
+                indexPointer = indexPointer + 9
+
+            else:
+
+              print("Tera in file", pk1)
+
+              indexPointer = 1
+
+              while indexPointer + 9 < len(megaSplit):
+              
+                name = megaSplit[indexPointer]
+                raw = megaSplit[indexPointer + 1]
+                abilities = megaSplit[indexPointer + 2]
+                items = megaSplit[indexPointer + 3]
+                spreads = megaSplit[indexPointer+ 4]
+                moves = megaSplit[indexPointer+ 5]
+                teraTypes = megaSplit[indexPointer+ 6]
+                teammates = megaSplit[indexPointer+ 7]
+                
+
+                # #name
+                nameFinal = name.strip('|').strip()
+                nameFinal = nameFinal.split("|")[0].strip()
+                # print(nameFinal)
+
+                #name
+                rawFinal = raw.strip('|').strip()
+                rawFinal = rawFinal.split("|")[0].strip()
+                rawFinal = rawFinal.split(" ")[-1].strip()
+                # print(rawFinal)
+
+                #abilities
+                abilitiesFinal = ""
+                abilitiesPieces = abilities.split('||')
+                for index in range(1,len(abilitiesPieces)):
+                  abilitiesFinal += abilitiesPieces[index].split("|")[0].strip().strip("%") + ';'
+                abilitiesFinal = abilitiesFinal.strip(';')
+                # print(abilitiesFinal)
+
+                #items
+                itemsFinal = ""
+                itemsPieces = items.split('||')
+                for index in range(1,len(itemsPieces)):
+                  itemsFinal += itemsPieces[index].split("|")[0].strip().strip("%") + ';'
+                itemsFinal = itemsFinal.strip(';')
+                # print(itemsFinal)
+
+                #spreads
+                spreadsFinal = ""
+                spreadsPieces = spreads.split('||')
+                for index in range(1,len(spreadsPieces)):
+                  spreadsFinal += spreadsPieces[index].split("|")[0].strip().strip("%") + ';'
+                spreadsFinal = spreadsFinal.strip(';')
+                # print(spreadsFinal)
+
+                #moves
+                movesFinal = ""
+                movesPieces = moves.split('||')
+                for index in range(1,len(movesPieces)):
+                  movesFinal += movesPieces[index].split("|")[0].strip().strip("%") + ';'
+                movesFinal = movesFinal.strip(';')
+                # print(movesFinal)
+
+                #teammates
+                teammatesFinal = ""
+                teammatesPieces = teammates.split('||')
+                for index in range(1,len(teammatesPieces)):
+                  teammatesFinal += teammatesPieces[index].split("|")[0].strip().strip("%") + ';'
+                teammatesFinal = teammatesFinal.strip(';')
+                # print(teammatesFinal)
+
+                final = nameFinal + ',' + rawFinal + ',' + abilitiesFinal + ',' + itemsFinal + ',' + spreadsFinal + ',' + movesFinal + ',' + teammatesFinal
+
+                # print(final + '\n')
+
+                pk2.write(final + '\n')
+                
+                indexPointer = indexPointer + 10
+
+      
         
 
         
