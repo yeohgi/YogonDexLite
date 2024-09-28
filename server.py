@@ -5,6 +5,9 @@ import cgi
 import os
 import json
 import logging
+import threading
+import signal
+from datetime import datetime
 
 import smogon
 import dex
@@ -652,7 +655,38 @@ if __name__ == "__main__":
     else:
         print("-Found")
 
-    #start server
-    httpd = HTTPServer( ( '0.0.0.0', int(sys.argv[1]) ), MyHandler )
-    print( "Server listing in port:  ", int(sys.argv[1]) )
-    httpd.serve_forever()
+    def eightam():
+        now = datetime.now()
+        return now.hour == 8 and now.minute == 0
+
+    while(True):
+        processid = os.fork()
+        print("Created:", processid)
+        
+        #parent
+        if processid > 0:
+            while True:
+                if eightam():
+                    break 
+                else:
+                    print("Waiting... Current time:", datetime.now().strftime("%H:%M:%S"))
+                    time.sleep(30)
+            print("Killing: ", processid)
+            os.kill(processid, signal.SIGTERM)
+        else:
+            httpd = HTTPServer( ( '0.0.0.0', int(sys.argv[1]) ), MyHandler )
+            print( "Server listing in port:  ", int(sys.argv[1]) )
+            httpd.serve_forever()
+
+
+
+
+
+
+
+
+    
+
+
+
+    
